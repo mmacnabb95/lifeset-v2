@@ -1,0 +1,55 @@
+# EAS Build ignore file
+# Exclude files that aren't needed for the build process
+
+# Native folders (EAS will generate these)
+ios/
+android/
+
+# Legacy code
+legacy/
+
+# Large local video files (hosted on Firebase)
+exercise-videos/
+
+# Documentation
+*.md
+!README.md
+
+# Scripts
+scripts/
+
+# Git
+.git/
+.github/
+
+# IDE
+.vscode/
+.idea/
+
+# Development
+.expo/
+.expo-shared/
+
+# Build artifacts
+dist/
+build/
+web-build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+**/__tests__/
+**/__mocks__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+

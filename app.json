@@ -1,19 +1,29 @@
 {
   "expo": {
-    "name": "lifeset-v2",
+    "name": "LifeSet",
     "slug": "lifeset-v2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "description": "Your personal companion for building better habits, achieving fitness goals, and living your best life",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lifesetwellbeing.app",
+      "buildNumber": "1",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "LifeSet needs access to your photo library to upload profile pictures.",
+        "NSCameraUsageDescription": "LifeSet needs access to your camera to take profile pictures."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,10 +31,33 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.lifesetwellbeing.app",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "privacyPolicyUrl": "https://lifesetwellbeing.com/privacy",
+      "termsOfServiceUrl": "https://lifesetwellbeing.com/terms",
+      "eas": {
+        "projectId": "4829d6d8-9116-4dff-b833-409456b27883"
+      }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "LifeSet needs access to your photos to upload profile pictures."
+        }
+      ]
+    ]
   }
 }
