@@ -1,0 +1,99 @@
+{
+    "appName": "Modelo base",
+    "auth": {
+        "home":{
+            "loginButton": "Conecte-se",
+            "signUpButton": "Inscrever-se"
+        }
+    },
+    "menu":{
+        "dashboard": "Painel",
+        "categories": "Categorias",
+        "users": "Usuários",
+        "email": "E-mail",
+        "settings": "Definições"
+    },
+    "dashboard": {
+        "title": "Painel",
+        "welcome": "Bem-vindo",
+        "categories": "Categorias"
+    },
+    "settings": {
+        "title": "Definições",
+        "personalDetails": "Detalhes pessoais",
+        "security": "Segurança",
+        "fields": {
+            "username": "Nome de usuário",
+            "name": "Nome",
+            "email": "E-mail",
+            "phoneNumber": "Número de telefone",
+            "language": "Linguagem"
+        },
+        "saveSuccess": "Configurações salvas com sucesso",
+        "deleteAccount": "Excluir conta",
+        "updateBtn": "Atualizar configurações",
+        "loading": "Carregando..."
+    },
+    "changeUsername": {
+        "title": "Mudar nome de usuário",
+        "saveSuccess": "O nome de usuário foi alterado",
+        "saveBtn": "Salvar",
+        "fields": {
+            "username": "Digite um novo nome de usuário"
+        }
+    },
+    "changePhone": {
+        "title": "Confirmação do número de telefone",
+        "preamble": "Você será solicitado a confirmar este número por meio de uma mensagem de texto",
+        "saveBtn": "Enviar código"
+    },
+    "changeEmail": {
+        "title": "Mude o e-mail",
+        "preamble": "Você será solicitado a confirmar um novo endereço de e-mail",
+        "saveSuccess": "E-mail de confirmação foi enviado",
+        "saveBtn": "Mude o e-mail",
+        "fields": {
+            "email": "Digite um novo e-mail"
+        },
+        "emailChangeMessage": "Solicitação Enviada. Por favor verifique seu email."
+    },
+    "changePassword": {
+        "title": "Redefinição de senha",
+        "saveSuccess": "senha atualizada",
+        "loading": "Em processamento...",
+        "resetSuccess": "Redefinição de senha bem-sucedida.",
+        "resetError": "Por favor, digite e confirme uma nova senha.",
+        "saveBtn": "Enviar",
+        "fields": {
+            "password": "Senha",
+            "password2": "Repita a senha"
+        },
+        "validation": {
+            "bothRequired": "Por favor, preencha os dois campos",
+            "samePassword": "Certifique-se de que ambas as senhas sejam iguais"
+        }
+    },
+    "security": {
+        "title": "Segurança",
+        "twofaActive": "Dois fatores ativados",
+        "twofaDeactive": "Dois fatores desativados",
+        "changePasswordBtn": "Mudar senha",
+        "twofaBtn": "Autenticação de dois fatores",
+        "registerMobile": "Registre o número do celular",
+        "registrationIntro": "Você precisará registrar um número de celular antes de ativar a autenticação de dois fatores.",
+        "enterCode": "Digite o código do celular",
+        "noCode": "Nenhum código?",
+        "confirm": "confirme",
+        "codeAccepted": "Código aceito"
+    },
+    "fields": {
+        "required": "Requeridos",
+        "available": "Disponível",
+        "unavailable": "Indisponível"
+    },
+    "common": {
+        "error": "Um erro ocorreu",
+        "loading": "Carregando"
+    },
+    "logout": "Sair"
+}

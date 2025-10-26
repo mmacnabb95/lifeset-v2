@@ -1,0 +1,107 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if file is an image
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    // Helper function to check if file is a video
+    function isVideo() {
+      return request.resource.contentType.matches('video/.*');
+    }
+    
+    // Helper function to check if file is audio
+    function isAudio() {
+      return request.resource.contentType.matches('audio/.*');
+    }
+    
+    // Helper function to check file size (in MB)
+    function fileSizeUnder(mb) {
+      return request.resource.size < mb * 1024 * 1024;
+    }
+    
+    // User profile images
+    match /users/{userId}/profile/{filename} {
+      // Users can read their own profile images, and authenticated users can read others (for leaderboards, etc.)
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+                      request.auth.uid == userId && 
+                      isImage() && 
+                      fileSizeUnder(5); // Max 5MB
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Habit images/videos
+    match /users/{userId}/habits/{habitId}/{filename} {
+      // Users can read/write their own habit media
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && 
+                      request.auth.uid == userId && 
+                      (isImage() || isVideo()) && 
+                      fileSizeUnder(50); // Max 50MB
+    }
+    
+    // Journal images
+    match /users/{userId}/journal/{entryId}/{filename} {
+      // Users can read/write their own journal images
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && 
+                      request.auth.uid == userId && 
+                      isImage() && 
+                      fileSizeUnder(10); // Max 10MB
+    }
+    
+    // Workout images/videos
+    match /users/{userId}/workouts/{workoutId}/{filename} {
+      // Users can read/write their own workout media
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && 
+                      request.auth.uid == userId && 
+                      (isImage() || isVideo()) && 
+                      fileSizeUnder(100); // Max 100MB for workout videos
+    }
+    
+    // Community post images
+    match /community/{postId}/{filename} {
+      // Anyone authenticated can read community images
+      allow read: if isAuthenticated();
+      // Only post creator can write
+      allow write: if isAuthenticated() && 
+                      isImage() && 
+                      fileSizeUnder(10); // Max 10MB
+    }
+    
+    // Meditation audio files (read-only, uploaded by admins)
+    match /meditation/{sessionId}/{filename} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admins can upload via console
+    }
+    
+    // Recipe images (read-only, uploaded by admins)
+    match /recipes/{recipeId}/{filename} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admins can upload via console
+    }
+    
+    // Exercise videos/images - PUBLIC READ
+    match /exercises/{category}/{filename} {
+      // Anyone can read (no authentication required)
+      allow read: if true;
+      // Only admins can write via console
+      allow write: if false;
+    }
+    
+    // Deny all other access by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

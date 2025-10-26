@@ -1,0 +1,13 @@
+import constants from "src/themes/constants";
+
+export default {
+  icon: constants.black,
+  thumbnailHeight: 100,
+  thumbnailWidth: 100,
+  shadow: constants.shadowMedium,
+  radius: constants.radius,
+  containerMinHeight: 50,
+  containerMaxHeight: 100,
+  containerMaxWidth: 400,
+  textContainerHeight: 90,
+};

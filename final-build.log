@@ -1,0 +1,50 @@
+The field "cli.appVersionSource" is not set, but it will be required in the future. Learn more: https://docs.expo.dev/build-reference/app-versions/
+Resolved "development" environment for the build. Learn more: https://docs.expo.dev/eas/environment-variables/#setting-the-environment-for-your-builds
+No environment variables with visibility "Plain text" and "Sensitive" found for the "development" environment on EAS.
+
+The field "cli.appVersionSource" is not set, but it will be required in the future. Learn more: https://docs.expo.dev/build-reference/app-versions/
+✔ Using remote iOS credentials (Expo server)
+
+Distribution Certificate is not validated for non-interactive builds.
+Skipping Provisioning Profile validation on Apple Servers because we aren't authenticated.
+
+Project Credentials Configuration
+
+Project                   @matthewmacnabb/lifeset-v2
+Bundle Identifier         com.lifesetwellbeing.app
+                          
+Ad Hoc Configuration      
+                          
+Distribution Certificate  
+Serial Number             A77F5A8F87A2633FC5139797A40CFB8
+Expiration Date           Fri, 13 Mar 2026 11:14:52 UTC
+Apple Team                T8ZABRQYDT (LifeSet (Company/Organization))
+Updated                   7 months ago
+                          
+Provisioning Profile      
+Developer Portal ID       6VU5355VKR
+Status                    active
+Expiration                Fri, 13 Mar 2026 11:14:52 UTC
+Apple Team                T8ZABRQYDT (LifeSet (Company/Organization))
+Provisioned devices       - iPhone (UDID: 00008110-001421022612801E)
+Updated                   2 hours ago
+                          
+All credentials are ready to build @matthewmacnabb/lifeset-v2 (com.lifesetwellbeing.app)
+
+
+Compressing project files and uploading to EAS Build. Learn more: https://expo.fyi/eas-build-archive
+- Compressing project files
+Your project archive is 436 MB. You can reduce its size and the time it takes to upload by excluding files that are unnecessary for the build process in .easignore file. Learn more: https://expo.fyi/eas-build-archive
+- Uploading to EAS Build (0 / 436 MB)
+✔ Uploaded to EAS 1m 34s
+- Computing project fingerprint
+✔ Computed project fingerprint
+
+See logs: https://expo.dev/accounts/matthewmacnabb/projects/lifeset-v2/builds/e6d06608-3080-47f3-a09a-a0b15499f494
+
+Waiting for build to complete. You can press Ctrl+C to exit.
+- Waiting for build to complete.
+✖ Build failed
+
+🍏 iOS build failed:
+Unknown error. See logs of the Install dependencies build phase for more information.

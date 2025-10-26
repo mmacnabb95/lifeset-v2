@@ -1,0 +1,1892 @@
+[
+  {
+    "id": 1,
+    "name": "Air Twisting Crunch",
+    "category": "abs",
+    "description": "Air Twisting Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FAir%20Twisting%20Crunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Air Twisting Crunch.mp4"
+  },
+  {
+    "id": 2,
+    "name": "Alternate Heel Touchers",
+    "category": "abs",
+    "description": "Alternate Heel Touchers exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FAlternate%20Heel%20Touchers.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Alternate Heel Touchers.mp4"
+  },
+  {
+    "id": 3,
+    "name": "Bicycle Crunch",
+    "category": "abs",
+    "description": "Bicycle Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FBicycle%20Crunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bicycle Crunch.mp4"
+  },
+  {
+    "id": 4,
+    "name": "Bicycle Twisting Crunch",
+    "category": "abs",
+    "description": "Bicycle Twisting Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FBicycle%20Twisting%20Crunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bicycle Twisting Crunch.mp4"
+  },
+  {
+    "id": 5,
+    "name": "Cable Crunch",
+    "category": "abs",
+    "description": "Cable Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FCable%20Crunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Crunch.mp4"
+  },
+  {
+    "id": 6,
+    "name": "Captains Chair Straight Leg Raise",
+    "category": "abs",
+    "description": "Captains Chair Straight Leg Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FCaptains%20Chair%20Straight%20Leg%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Captains Chair Straight Leg Raise.mp4"
+  },
+  {
+    "id": 7,
+    "name": "Crunch (on Bench)",
+    "category": "abs",
+    "description": "Crunch (on Bench) exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FCrunch%20(on%20bench).mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Crunch (on bench).mp4"
+  },
+  {
+    "id": 8,
+    "name": "Crunch",
+    "category": "abs",
+    "description": "Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FCrunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Crunch.mp4"
+  },
+  {
+    "id": 9,
+    "name": "Decline Reverse Crunch",
+    "category": "abs",
+    "description": "Decline Reverse Crunch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FDecline%20Reverse%20Crunch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Decline Reverse Crunch.mp4"
+  },
+  {
+    "id": 10,
+    "name": "Incline Leg Hip Raise",
+    "category": "abs",
+    "description": "Incline Leg Hip Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FIncline%20Leg%20Hip%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Incline Leg Hip Raise.mp4"
+  },
+  {
+    "id": 11,
+    "name": "Lying Scissor Kick",
+    "category": "abs",
+    "description": "Lying Scissor Kick exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FLying%20Scissor%20Kick.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Scissor Kick.mp4"
+  },
+  {
+    "id": 12,
+    "name": "Assisted Pull Up",
+    "category": "back",
+    "description": "Assisted Pull Up exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FAssisted%20Pull%20up.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Assisted Pull up.mp4"
+  },
+  {
+    "id": 13,
+    "name": "Barbell Bent Over Row",
+    "category": "back",
+    "description": "Barbell Bent Over Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FBarbell%20Bent%20Over%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Bent Over Row.mp4"
+  },
+  {
+    "id": 14,
+    "name": "Barbell Bent Over Row",
+    "category": "back",
+    "description": "Barbell Bent Over Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FBarbell%20Bent%20Over%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Bent Over Row.mp4"
+  },
+  {
+    "id": 15,
+    "name": "Barbell Underhand Bent Over Row",
+    "category": "back",
+    "description": "Barbell Underhand Bent Over Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FBarbell%20Underhand%20Bent%20over%20row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Underhand Bent over row.mp4"
+  },
+  {
+    "id": 16,
+    "name": "Cable Bent Over Reverse Grip Row",
+    "category": "back",
+    "description": "Cable Bent Over Reverse Grip Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FCable%20Bent%20Over%20Reverse%20Grip%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Bent Over Reverse Grip Row.mp4"
+  },
+  {
+    "id": 17,
+    "name": "Cable Low Seated Row",
+    "category": "back",
+    "description": "Cable Low Seated Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FCable%20Low%20Seated%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Low Seated Row.mp4"
+  },
+  {
+    "id": 18,
+    "name": "Cable Seated Row",
+    "category": "back",
+    "description": "Cable Seated Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FCable%20Seated%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Seated Row.mp4"
+  },
+  {
+    "id": 19,
+    "name": "Dumbbell Bent Over Row",
+    "category": "back",
+    "description": "Dumbbell Bent Over Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FDumbbell%20Bent%20over%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Bent over Row.mp4"
+  },
+  {
+    "id": 20,
+    "name": "Lat Pulldown",
+    "category": "back",
+    "description": "Lat Pulldown exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FLat%20Pulldown.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lat Pulldown.mp4"
+  },
+  {
+    "id": 21,
+    "name": "One Arm Lat Pulldown",
+    "category": "back",
+    "description": "One Arm Lat Pulldown exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FOne%20Arm%20Lat%20Pulldown.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "One Arm Lat Pulldown.mp4"
+  },
+  {
+    "id": 22,
+    "name": "Rope Pulldown",
+    "category": "back",
+    "description": "Rope Pulldown exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FRope%20Pulldown.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Rope Pulldown.mp4"
+  },
+  {
+    "id": 23,
+    "name": "Smith Bent Over Row",
+    "category": "back",
+    "description": "Smith Bent Over Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FSmith%20Bent%20Over%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Bent Over Row.mp4"
+  },
+  {
+    "id": 24,
+    "name": "T Bar Row",
+    "category": "back",
+    "description": "T Bar Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FT-Bar%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "T-Bar Row.mp4"
+  },
+  {
+    "id": 25,
+    "name": "V Bar Pulldown",
+    "category": "back",
+    "description": "V Bar Pulldown exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "back"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fback%2FV-Bar%20Pulldown.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "V-Bar Pulldown.mp4"
+  },
+  {
+    "id": 26,
+    "name": "Assault Bike",
+    "category": "cardio",
+    "description": "Assault Bike exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FAssault%20Bike.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Assault Bike.mp4"
+  },
+  {
+    "id": 27,
+    "name": "Assault Run",
+    "category": "cardio",
+    "description": "Assault Run exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FAssault%20Run.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Assault Run.mp4"
+  },
+  {
+    "id": 28,
+    "name": "Elliptical Machine",
+    "category": "cardio",
+    "description": "Elliptical Machine exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FElliptical%20Machine.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Elliptical Machine.mp4"
+  },
+  {
+    "id": 29,
+    "name": "Incline Treadmill",
+    "category": "cardio",
+    "description": "Incline Treadmill exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FIncline%20Treadmill.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Incline Treadmill.mp4"
+  },
+  {
+    "id": 30,
+    "name": "Ski Ergometer",
+    "category": "cardio",
+    "description": "Ski Ergometer exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FSki%20Ergometer.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Ski Ergometer.mp4"
+  },
+  {
+    "id": 31,
+    "name": "Stationary Bike",
+    "category": "cardio",
+    "description": "Stationary Bike exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FStationary%20Bike.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Stationary Bike.mp4"
+  },
+  {
+    "id": 32,
+    "name": "Stepmill",
+    "category": "cardio",
+    "description": "Stepmill exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FStepmill.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Stepmill.mp4"
+  },
+  {
+    "id": 33,
+    "name": "Barbell Bench Press",
+    "category": "chest",
+    "description": "Barbell Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FBarbell%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Bench Press.mp4"
+  },
+  {
+    "id": 34,
+    "name": "Barbell Incline Bench Press",
+    "category": "chest",
+    "description": "Barbell Incline Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FBarbell%20Incline%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Incline Bench Press.mp4"
+  },
+  {
+    "id": 35,
+    "name": "Cable Incline Fly",
+    "category": "chest",
+    "description": "Cable Incline Fly exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FCable%20Incline%20Fly.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Incline Fly.mp4"
+  },
+  {
+    "id": 36,
+    "name": "Cable Middle Fly",
+    "category": "chest",
+    "description": "Cable Middle Fly exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FCable%20Middle%20Fly.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Middle Fly.mp4"
+  },
+  {
+    "id": 37,
+    "name": "Cable Standing Chest Press",
+    "category": "chest",
+    "description": "Cable Standing Chest Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FCable%20Standing%20Chest%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Standing Chest Press.mp4"
+  },
+  {
+    "id": 38,
+    "name": "Chest Dip",
+    "category": "chest",
+    "description": "Chest Dip exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FChest%20Dip.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Chest Dip.mp4"
+  },
+  {
+    "id": 39,
+    "name": "Lever Chest Press",
+    "category": "chest",
+    "description": "Lever Chest Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FLever%20Chest%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Chest Press.mp4"
+  },
+  {
+    "id": 40,
+    "name": "Smith Bench Press",
+    "category": "chest",
+    "description": "Smith Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FSmith%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Bench Press.mp4"
+  },
+  {
+    "id": 41,
+    "name": "Smith Close Grip Bench Press",
+    "category": "chest",
+    "description": "Smith Close Grip Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FSmith%20Close%20Grip%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Close Grip Bench Press.mp4"
+  },
+  {
+    "id": 42,
+    "name": "Smith Incline Bench Press",
+    "category": "chest",
+    "description": "Smith Incline Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "chest"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fchest%2FSmith%20Incline%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Incline Bench Press.mp4"
+  },
+  {
+    "id": 43,
+    "name": "Barbell Hip Thrust",
+    "category": "glutes",
+    "description": "Barbell Hip Thrust exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FBarbell%20Hip%20Thrust.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Hip Thrust.mp4"
+  },
+  {
+    "id": 44,
+    "name": "Cable Stiff Leg Deadlift From Stepbox",
+    "category": "glutes",
+    "description": "Cable Stiff Leg Deadlift From Stepbox exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FCable%20Stiff%20Leg%20Deadlift%20from%20Stepbox.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Stiff Leg Deadlift from Stepbox.mp4"
+  },
+  {
+    "id": 45,
+    "name": "Dumbbell Romanian Deadlift",
+    "category": "glutes",
+    "description": "Dumbbell Romanian Deadlift exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FDumbbell%20Romanian%20Deadlift.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Romanian Deadlift.mp4"
+  },
+  {
+    "id": 46,
+    "name": "Dumbbell Step Up",
+    "category": "glutes",
+    "description": "Dumbbell Step Up exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FDumbbell%20Step%20up.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Step up.mp4"
+  },
+  {
+    "id": 47,
+    "name": "Lever Seated Hip Abduction",
+    "category": "glutes",
+    "description": "Lever Seated Hip Abduction exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FLever%20Seated%20Hip%20Abduction.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Seated Hip Abduction.mp4"
+  },
+  {
+    "id": 48,
+    "name": "Lever Standing Hip Extension",
+    "category": "glutes",
+    "description": "Lever Standing Hip Extension exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FLever%20Standing%20Hip%20Extension.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Standing Hip Extension.mp4"
+  },
+  {
+    "id": 49,
+    "name": "Lever Standing Rear Kick",
+    "category": "glutes",
+    "description": "Lever Standing Rear Kick exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FLever%20Standing%20Rear%20Kick.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Standing Rear Kick.mp4"
+  },
+  {
+    "id": 50,
+    "name": "Smith Hip Thrust",
+    "category": "glutes",
+    "description": "Smith Hip Thrust exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "glutes"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fglutes%2FSmith%20Hip%20Thrust.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Hip Thrust.mp4"
+  },
+  {
+    "id": 51,
+    "name": "Barbell Calf Raise",
+    "category": "legs",
+    "description": "Barbell Calf Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Calf%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Calf Raise.mp4"
+  },
+  {
+    "id": 52,
+    "name": "Barbell Lunge",
+    "category": "legs",
+    "description": "Barbell Lunge exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Lunge.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Lunge.mp4"
+  },
+  {
+    "id": 53,
+    "name": "Barbell Romanian Deadlift",
+    "category": "legs",
+    "description": "Barbell Romanian Deadlift exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Romanian%20Deadlift.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Romanian Deadlift.mp4"
+  },
+  {
+    "id": 54,
+    "name": "Barbell Split Squat",
+    "category": "legs",
+    "description": "Barbell Split Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Split%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Split Squat.mp4"
+  },
+  {
+    "id": 55,
+    "name": "Barbell Squat",
+    "category": "legs",
+    "description": "Barbell Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Squat.mp4"
+  },
+  {
+    "id": 56,
+    "name": "Barbell Stiff Legged Deadlift",
+    "category": "legs",
+    "description": "Barbell Stiff Legged Deadlift exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBarbell%20Stiff%20Legged%20Deadlift.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Stiff Legged Deadlift.mp4"
+  },
+  {
+    "id": 57,
+    "name": "Bulgarian Split Squat",
+    "category": "legs",
+    "description": "Bulgarian Split Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FBulgarian%20Split%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bulgarian Split Squat.mp4"
+  },
+  {
+    "id": 58,
+    "name": "Dumbbell Single Leg Split Squat",
+    "category": "legs",
+    "description": "Dumbbell Single Leg Split Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FDumbbell%20Single%20Leg%20Split%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Single Leg Split Squat.mp4"
+  },
+  {
+    "id": 59,
+    "name": "Good Mornings",
+    "category": "legs",
+    "description": "Good Mornings exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FGood%20Mornings.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Good Mornings.mp4"
+  },
+  {
+    "id": 60,
+    "name": "Hack Squat",
+    "category": "legs",
+    "description": "Hack Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FHack%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Hack Squat.mp4"
+  },
+  {
+    "id": 61,
+    "name": "Hyperextension",
+    "category": "legs",
+    "description": "Hyperextension exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FHyperextension.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Hyperextension.mp4"
+  },
+  {
+    "id": 62,
+    "name": "Leg Press",
+    "category": "legs",
+    "description": "Leg Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FLeg%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Leg Press.mp4"
+  },
+  {
+    "id": 63,
+    "name": "Lever Leg Extension",
+    "category": "legs",
+    "description": "Lever Leg Extension exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FLever%20Leg%20Extension.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Leg Extension.mp4"
+  },
+  {
+    "id": 64,
+    "name": "Lever Lying Leg Curl",
+    "category": "legs",
+    "description": "Lever Lying Leg Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FLever%20Lying%20Leg%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Lying Leg Curl.mp4"
+  },
+  {
+    "id": 65,
+    "name": "Lever Seated Leg Curl",
+    "category": "legs",
+    "description": "Lever Seated Leg Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FLever%20Seated%20Leg%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Seated Leg Curl.mp4"
+  },
+  {
+    "id": 66,
+    "name": "Seated Calf Raise",
+    "category": "legs",
+    "description": "Seated Calf Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FSeated%20Calf%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Seated Calf Raise.mp4"
+  },
+  {
+    "id": 67,
+    "name": "Smith Chair Squat",
+    "category": "legs",
+    "description": "Smith Chair Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FSmith%20Chair%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Chair Squat.mp4"
+  },
+  {
+    "id": 68,
+    "name": "Standing Calf Raise",
+    "category": "legs",
+    "description": "Standing Calf Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "legs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Flegs%2FStanding%20Calf%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Standing Calf Raise.mp4"
+  },
+  {
+    "id": 69,
+    "name": "Barbell Overhead Press",
+    "category": "shoulders",
+    "description": "Barbell Overhead Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FBarbell%20Overhead%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Overhead Press.mp4"
+  },
+  {
+    "id": 70,
+    "name": "Barbell Shrug",
+    "category": "shoulders",
+    "description": "Barbell Shrug exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FBarbell%20Shrug.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Shrug.mp4"
+  },
+  {
+    "id": 71,
+    "name": "Cable Cross Over Revers Fly",
+    "category": "shoulders",
+    "description": "Cable Cross Over Revers Fly exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FCable%20Cross%20over%20Revers%20Fly.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Cross over Revers Fly.mp4"
+  },
+  {
+    "id": 72,
+    "name": "Cable Forward Raise",
+    "category": "shoulders",
+    "description": "Cable Forward Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FCable%20Forward%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Forward Raise.mp4"
+  },
+  {
+    "id": 73,
+    "name": "Cable One Arm Lateral Raise",
+    "category": "shoulders",
+    "description": "Cable One Arm Lateral Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FCable%20One%20Arm%20Lateral%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable One Arm Lateral Raise.mp4"
+  },
+  {
+    "id": 74,
+    "name": "Dumbbell Rear Delt Row",
+    "category": "shoulders",
+    "description": "Dumbbell Rear Delt Row exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FDumbbell%20Rear%20Delt%20Row.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Rear Delt Row.mp4"
+  },
+  {
+    "id": 75,
+    "name": "Dumbbell Seated Front Raise",
+    "category": "shoulders",
+    "description": "Dumbbell Seated Front Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FDumbbell%20Seated%20Front%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Seated Front Raise.mp4"
+  },
+  {
+    "id": 76,
+    "name": "Dumbbell Single Arm Leaning Lateral Raise",
+    "category": "shoulders",
+    "description": "Dumbbell Single Arm Leaning Lateral Raise exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FDumbbell%20Single%20arm%20Leaning%20Lateral%20Raise.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Single arm Leaning Lateral Raise.mp4"
+  },
+  {
+    "id": 77,
+    "name": "Lever Seated Hammer Grip Shoulder Press",
+    "category": "shoulders",
+    "description": "Lever Seated Hammer Grip Shoulder Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FLever%20Seated%20Hammer%20Grip%20Shoulder%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Seated Hammer Grip Shoulder Press.mp4"
+  },
+  {
+    "id": 78,
+    "name": "Machne Shoulder Press",
+    "category": "shoulders",
+    "description": "Machne Shoulder Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FMachne%20Shoulder%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Machne Shoulder Press.mp4"
+  },
+  {
+    "id": 79,
+    "name": "Seated Reverse Fly",
+    "category": "shoulders",
+    "description": "Seated Reverse Fly exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FSeated%20Reverse%20Fly.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Seated Reverse Fly.mp4"
+  },
+  {
+    "id": 80,
+    "name": "Smith Seated Shoulder Press",
+    "category": "shoulders",
+    "description": "Smith Seated Shoulder Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FSmith%20Seated%20Shoulder%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Seated Shoulder Press.mp4"
+  },
+  {
+    "id": 81,
+    "name": "Smith Shrug",
+    "category": "shoulders",
+    "description": "Smith Shrug exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "shoulders"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fshoulders%2FSmith%20Shrug.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Smith Shrug.mp4"
+  },
+  {
+    "id": 82,
+    "name": "Alternate Heel Touch Side Kick Squat",
+    "category": "stretching",
+    "description": "Alternate Heel Touch Side Kick Squat exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FAlternate%20Heel%20Touch%20Side%20Kick%20Squat.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Alternate Heel Touch Side Kick Squat.mp4"
+  },
+  {
+    "id": 83,
+    "name": "Back Forward Leg Swings",
+    "category": "stretching",
+    "description": "Back Forward Leg Swings exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBack%20Forward%20Leg%20Swings.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Back Forward Leg Swings.mp4"
+  },
+  {
+    "id": 84,
+    "name": "Back Stretch",
+    "category": "stretching",
+    "description": "Back Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBack%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Back Stretch.mp4"
+  },
+  {
+    "id": 85,
+    "name": "Barbell Seated Twist",
+    "category": "stretching",
+    "description": "Barbell Seated Twist exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBarbell%20Seated%20Twist.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Seated Twist.mp4"
+  },
+  {
+    "id": 86,
+    "name": "Basic Toe Touch",
+    "category": "stretching",
+    "description": "Basic Toe Touch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBasic%20Toe%20Touch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Basic Toe Touch.mp4"
+  },
+  {
+    "id": 87,
+    "name": "Bent Arm Chest Stretch",
+    "category": "stretching",
+    "description": "Bent Arm Chest Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBent%20Arm%20Chest%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bent Arm Chest Stretch.mp4"
+  },
+  {
+    "id": 88,
+    "name": "Bent Leg Side Kick (kneeling)",
+    "category": "stretching",
+    "description": "Bent Leg Side Kick (kneeling) exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBent%20Leg%20Side%20Kick%20(kneeling).mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bent Leg Side Kick (kneeling).mp4"
+  },
+  {
+    "id": 89,
+    "name": "Bent Over Twist",
+    "category": "stretching",
+    "description": "Bent Over Twist exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBent%20Over%20Twist.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bent Over Twist.mp4"
+  },
+  {
+    "id": 90,
+    "name": "Bent Knee Lying Twist",
+    "category": "stretching",
+    "description": "Bent Knee Lying Twist exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBent%20knee%20Lying%20Twist.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bent knee Lying Twist.mp4"
+  },
+  {
+    "id": 91,
+    "name": "Bridge Hip Abduction",
+    "category": "stretching",
+    "description": "Bridge Hip Abduction exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FBridge%20Hip%20Abduction.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Bridge Hip Abduction.mp4"
+  },
+  {
+    "id": 92,
+    "name": "Butterfly Yoga Pose",
+    "category": "stretching",
+    "description": "Butterfly Yoga Pose exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FButterfly%20Yoga%20Pose.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Butterfly Yoga Pose.mp4"
+  },
+  {
+    "id": 93,
+    "name": "Calf Stretch",
+    "category": "stretching",
+    "description": "Calf Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCalf%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Calf Stretch.mp4"
+  },
+  {
+    "id": 94,
+    "name": "Cat Stretch",
+    "category": "stretching",
+    "description": "Cat Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCat%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cat Stretch.mp4"
+  },
+  {
+    "id": 95,
+    "name": "Ceiling Look Stretch",
+    "category": "stretching",
+    "description": "Ceiling Look Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCeiling%20Look%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Ceiling Look Stretch.mp4"
+  },
+  {
+    "id": 96,
+    "name": "Chin To Chest Stretch",
+    "category": "stretching",
+    "description": "Chin To Chest Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FChin%20to%20chest%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Chin to chest Stretch.mp4"
+  },
+  {
+    "id": 97,
+    "name": "Circles Arm",
+    "category": "stretching",
+    "description": "Circles Arm exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCircles%20Arm.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Circles Arm.mp4"
+  },
+  {
+    "id": 98,
+    "name": "Circles Knee Stretch",
+    "category": "stretching",
+    "description": "Circles Knee Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCircles%20Knee%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Circles Knee Stretch.mp4"
+  },
+  {
+    "id": 99,
+    "name": "Cobra Yoga Pose",
+    "category": "stretching",
+    "description": "Cobra Yoga Pose exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCobra%20Yoga%20Pose.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cobra Yoga Pose.mp4"
+  },
+  {
+    "id": 100,
+    "name": "Crossover Kneeling Hip Flexor Stretch",
+    "category": "stretching",
+    "description": "Crossover Kneeling Hip Flexor Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FCrossover%20Kneeling%20Hip%20Flexor%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Crossover Kneeling Hip Flexor Stretch.mp4"
+  },
+  {
+    "id": 101,
+    "name": "Elbows Back Stretch",
+    "category": "stretching",
+    "description": "Elbows Back Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FElbows%20Back%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Elbows Back Stretch.mp4"
+  },
+  {
+    "id": 102,
+    "name": "Full Squat Mobility",
+    "category": "stretching",
+    "description": "Full Squat Mobility exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FFull%20Squat%20Mobility.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Full Squat Mobility.mp4"
+  },
+  {
+    "id": 103,
+    "name": "Hip Flexor Stretch",
+    "category": "stretching",
+    "description": "Hip Flexor Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FHip%20Flexor%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Hip Flexor Stretch.mp4"
+  },
+  {
+    "id": 104,
+    "name": "Iron Cross Stretch",
+    "category": "stretching",
+    "description": "Iron Cross Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FIron%20Cross%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Iron Cross Stretch.mp4"
+  },
+  {
+    "id": 105,
+    "name": "Kneeling Back Rotation Stretch",
+    "category": "stretching",
+    "description": "Kneeling Back Rotation Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FKneeling%20Back%20Rotation%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Kneeling Back Rotation Stretch.mp4"
+  },
+  {
+    "id": 106,
+    "name": "Kneeling Hip Flexor Stretch",
+    "category": "stretching",
+    "description": "Kneeling Hip Flexor Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FKneeling%20Hip%20Flexor%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Kneeling Hip Flexor Stretch.mp4"
+  },
+  {
+    "id": 107,
+    "name": "Lying Abductor Stretch",
+    "category": "stretching",
+    "description": "Lying Abductor Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FLying%20Abductor%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Abductor Stretch.mp4"
+  },
+  {
+    "id": 108,
+    "name": "Lying Cross Over Knee Pull Down Stretch",
+    "category": "stretching",
+    "description": "Lying Cross Over Knee Pull Down Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FLying%20Cross%20Over%20Knee%20Pull%20Down%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Cross Over Knee Pull Down Stretch.mp4"
+  },
+  {
+    "id": 109,
+    "name": "Lying Elbow To Knee",
+    "category": "stretching",
+    "description": "Lying Elbow To Knee exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FLying%20Elbow%20to%20Knee.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Elbow to Knee.mp4"
+  },
+  {
+    "id": 110,
+    "name": "Lying Glute Stretch",
+    "category": "stretching",
+    "description": "Lying Glute Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FLying%20Glute%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Glute Stretch.mp4"
+  },
+  {
+    "id": 111,
+    "name": "Lying Quadriceps Stretch",
+    "category": "stretching",
+    "description": "Lying Quadriceps Stretch exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "stretching"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fstretching%2FLying%20Quadriceps%20Stretch.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lying Quadriceps Stretch.mp4"
+  },
+  {
+    "id": 112,
+    "name": "Barbell Close Grip Bench Press",
+    "category": "triceps",
+    "description": "Barbell Close Grip Bench Press exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FBarbell%20Close%20Grip%20Bench%20Press.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Close Grip Bench Press.mp4"
+  },
+  {
+    "id": 113,
+    "name": "Barbell Skull Crusher",
+    "category": "triceps",
+    "description": "Barbell Skull Crusher exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FBarbell%20Skull%20Crusher.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Skull Crusher.mp4"
+  },
+  {
+    "id": 114,
+    "name": "Cable High Pulley Overhead Tricep Extension",
+    "category": "triceps",
+    "description": "Cable High Pulley Overhead Tricep Extension exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FCable%20High%20Pulley%20Overhead%20Tricep%20Extension.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable High Pulley Overhead Tricep Extension.mp4"
+  },
+  {
+    "id": 115,
+    "name": "Cable One Arm Side Triceps Pushdown",
+    "category": "triceps",
+    "description": "Cable One Arm Side Triceps Pushdown exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FCable%20One%20Arm%20Side%20Triceps%20Pushdown.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable One Arm Side Triceps Pushdown.mp4"
+  },
+  {
+    "id": 116,
+    "name": "Cable Kickback",
+    "category": "triceps",
+    "description": "Cable Kickback exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FCable%20kickback.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable kickback.mp4"
+  },
+  {
+    "id": 117,
+    "name": "Overhead Triceps Extension (rope Attachment)",
+    "category": "triceps",
+    "description": "Overhead Triceps Extension (rope Attachment) exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "triceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Ftriceps%2FOverhead%20Triceps%20Extension%20(rope%20attachment).mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Overhead Triceps Extension (rope attachment).mp4"
+  },
+  {
+    "id": 118,
+    "name": "Barbell Drag Curl",
+    "category": "biceps",
+    "description": "Barbell Drag Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FBarbell%20Drag%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Drag Curl.mp4"
+  },
+  {
+    "id": 119,
+    "name": "Barbell Preacher Curl",
+    "category": "biceps",
+    "description": "Barbell Preacher Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FBarbell%20Preacher%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Preacher Curl.mp4"
+  },
+  {
+    "id": 120,
+    "name": "Barbell Standing Close Grip Curl",
+    "category": "biceps",
+    "description": "Barbell Standing Close Grip Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FBarbell%20Standing%20Close%20Grip%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Barbell Standing Close Grip Curl.mp4"
+  },
+  {
+    "id": 121,
+    "name": "Cable Biceps Curl (sz Bar)",
+    "category": "biceps",
+    "description": "Cable Biceps Curl (sz Bar) exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FCable%20Biceps%20Curl%20(SZ%20bar).mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Biceps Curl (SZ bar).mp4"
+  },
+  {
+    "id": 122,
+    "name": "Cable Hammer Curl (with Rope)",
+    "category": "biceps",
+    "description": "Cable Hammer Curl (with Rope) exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FCable%20Hammer%20Curl%20(with-rope).mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Hammer Curl (with-rope).mp4"
+  },
+  {
+    "id": 123,
+    "name": "Cable Hammer Curl",
+    "category": "biceps",
+    "description": "Cable Hammer Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FCable%20Hammer%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable Hammer Curl.mp4"
+  },
+  {
+    "id": 124,
+    "name": "Cable One Arm Curl",
+    "category": "biceps",
+    "description": "Cable One Arm Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FCable%20One%20Arm%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Cable One Arm Curl.mp4"
+  },
+  {
+    "id": 125,
+    "name": "Dumbbell Biceps Curl",
+    "category": "biceps",
+    "description": "Dumbbell Biceps Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FDumbbell%20Biceps%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Dumbbell Biceps Curl.mp4"
+  },
+  {
+    "id": 126,
+    "name": "Lever Preacher Curl",
+    "category": "biceps",
+    "description": "Lever Preacher Curl exercise with video tutorial",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "biceps"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fbiceps%2FLever%20Preacher%20Curl.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Lever Preacher Curl.mp4"
+  }
+]

@@ -1,0 +1,200 @@
+{
+    "appName": "LifeSet",
+    "auth": {
+        "home":{
+            "getStarted": "Get started",
+            "loginButton": "Login",
+            "signUpButton": "Sign up"
+        }
+    },
+    "menu":{
+        "dashboard": "Dashboard",
+        "habits": "Habits",
+        "users": "Users",
+        "email": "Email",
+        "settings": "Settings"
+    },
+    "changeUsername": {
+        "title": "Change username",
+        "saveSuccess": "Username has been changed",
+        "saveBtn": "Save",
+        "fields": {
+            "username": "Enter a new username"
+        }
+    },
+    "changePhone": {
+        "title": "Phone number confirmation",
+        "preamble": "You will be asked to confirm this number via a text message",
+        "saveBtn": "Send code"
+    },
+    "changeEmail": {
+        "title": "Change email",
+        "preamble": "You will be asked to confirm a new email address",
+        "saveSuccess": "Confirmation email has been sent",
+        "saveBtn": "Change email",
+        "fields": {
+            "email": "Enter a new email"
+        },
+        "emailChangeMessage": "Please enter the security code sent to your new email address."
+    },
+    "changePassword": {
+        "title": "Password reset",
+        "saveSuccess": "Password updated",
+        "loading": "Processing...",
+        "resetSuccess": "Password reset successful.",
+        "resetError": "Please enter then confirm a new password.",
+        "saveBtn": "Submit",
+        "fields": {
+            "password": "Password",
+            "password2": "Repeat password"
+        },
+        "validation": {
+            "bothRequired": "Please fill in both fields",
+            "samePassword": "Please ensure both passwords are the same"
+        }
+    },
+    "fields": {
+        "required": "Required",
+        "available": "Available",
+        "unavailable": "Unavailable"
+    },
+    "security": {
+        "title": "Security",
+        "twofaActive": "Two factor activated",
+        "twofaDeactive": "Two factor deactivated",
+        "changePasswordBtn": "Change password",
+        "twofaBtn": "Two factor authentication",
+        "registerMobile": "Register mobile number",
+        "registrationIntro": "You will need to register a mobile number before you can enable two factor authentication.",
+        "enterCode": "Enter the security code sent to your phone",
+        "noCode": " ",
+        "confirm": "Confirm",
+        "codeAccepted": "Code accepted"
+    },
+    "settings": {
+        "title": "Settings",
+        "personalDetails": "Personal Details",
+        "security": "Security",
+        "fields": {
+            "username": "Username",
+            "name": "Name",
+            "email": "Email",
+            "phoneNumber": "Phone number",
+            "language": "Language"
+        },
+        "deleteAccount": "Delete account",
+        "saveSuccess": "Settings saved successfully",
+        "updateBtn": "Update Settings",
+        "loading": "Loading...",
+        "subscription": "Subscription"
+    },
+    "habits":{
+        "overall": {
+            "title": "Overall habits",
+            "subtitle": "Habits for"
+        },
+        "dailyHabits":{
+            "title": "My habits",
+            "addNew": "Add new habit"
+        },
+        "predefined":{
+            "title": "Choose your habit",
+            "addCustom": "Create custom habit"
+        }
+    },
+    "exerciseEditList":{
+        "title": " "
+    },
+    "workoutEditList":{
+        "title": " "
+    },
+    "companyEditList":{
+        "title": " "
+    },    
+    "benefitEditList":{
+        "title": " "
+    },
+    "benefitViewList":{
+        "title": " "
+    },
+    "workoutDayEditList":{
+        "title": "Days"
+    },
+    "workoutDayExerciseEditList":{
+        "title": "Exercises"
+    },
+    "workoutExerciseSetEditList":{
+        "title": "Sets"
+    },
+    "workoutDay":{
+        "onCreated": "Workout day created",
+        "onUpdated": "Workout day updated"
+    },
+    "workoutDayExercise":{
+        "onCreated": "Workout exercise created",
+        "onUpdated": "Workout exercise updated"
+    },
+    "workoutExerciseSet":{
+        "onCreated": "Set created",
+        "onUpdated": "Set updated"
+    },
+    "userWorkoutExerciseSet":{
+        "onCreated": "User's set created",
+        "onUpdated": "User's set updated"
+    },
+    "companyUser":{
+        "onCreated": "Company user created",
+        "onUpdated": "Company user updated",
+        "onDeleted": "Company user removed",
+        "deleteWarningText": "Are you sure you want to remove this user from the company?",
+        "deleteWarningTitle" : "Remove user from company"
+    },
+    "companyUserEditList":{
+        "title": " "
+    },
+    "habitPackEditList":{
+        "title": " "
+    },
+    "habitPackHabitEditList":{
+        "title": "Habits"
+    },
+    "habitPack": {
+        "onCreated": "Habit pack created",
+        "onUpdated": "Habit pack updated",
+        "onDeleted": "Habit pack deleted",
+        "deleteWarningTitle": "Delete habit pack",
+        "deleteWarningText": "Are you sure you want to delete this habit pack?"
+    },
+    "habitPackHabit": {
+        "onCreated": "Habit created",
+        "onUpdated": "Habit updated",
+        "onDeleted": "Habit deleted",
+        "deleteWarningTitle": "Delete habit",
+        "deleteWarningText": "Are you sure you want to delete this habit?"
+    },
+    "userHabitPack":{
+        "onCreated": "Habit pack created",
+        "onUpdated": "Habit pack updated",
+        "onDeleted": "Habit pack deleted",
+        "deleteWarningTitle": "Delete habit pack",
+        "deleteWarningText": "Are you sure you want to delete this habit pack?"
+    },
+    "userHabitPackHabit":{
+        "onCreated": "Habit definition created",
+        "onUpdated": "Habit definition updated",
+        "onDeleted": "Habit definition deleted",
+        "deleteWarningTitle": "Delete habit definition",
+        "deleteWarningText": "Are you sure you want to delete this habit pack habit definitionf?"
+    },
+    "userHabitPackEditList": {
+        "title": " "
+    },
+    "userHabitPackHabitEditList":{
+        "title": "Habits"
+    },
+    "subscriptionDescription": {
+        "termsLink": "https://www.lifesetwellbeing.com/end-user-licence-agreement",
+        "privacyPolicyLink": "https://www.lifesetwellbeing.com/privacy-policy",
+        "subscribeButtonText": "Subscribe"
+    }
+}

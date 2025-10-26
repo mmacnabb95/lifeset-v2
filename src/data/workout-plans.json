@@ -1,0 +1,142 @@
+[
+  {
+    "id": "beginner-full-body",
+    "name": "Beginner Full Body Workout",
+    "description": "Perfect for beginners getting started with strength training. 3 days per week, full body compound movements.",
+    "difficulty": "beginner",
+    "durationWeeks": 8,
+    "daysPerWeek": 3,
+    "category": "strength",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 55, "sets": 3, "reps": 10, "restSeconds": 90, "order": 1, "note": "Barbell Squat" },
+      { "exerciseId": 33, "sets": 3, "reps": 10, "restSeconds": 90, "order": 2, "note": "Barbell Bench Press" },
+      { "exerciseId": 13, "sets": 3, "reps": 10, "restSeconds": 90, "order": 3, "note": "Barbell Bent Over Row" },
+      { "exerciseId": 69, "sets": 3, "reps": 8, "restSeconds": 90, "order": 4, "note": "Barbell Overhead Press" },
+      { "exerciseId": 53, "sets": 3, "reps": 10, "restSeconds": 60, "order": 5, "note": "Romanian Deadlift" },
+      { "exerciseId": 3, "sets": 3, "reps": 15, "restSeconds": 45, "order": 6, "note": "Bicycle Crunch" }
+    ],
+    "tags": ["beginner", "strength", "full-body", "compound"]
+  },
+  {
+    "id": "upper-lower-split",
+    "name": "Upper/Lower Split",
+    "description": "4-day split focusing on upper body and lower body days. Great for intermediate lifters looking to build muscle.",
+    "difficulty": "intermediate",
+    "durationWeeks": 12,
+    "daysPerWeek": 4,
+    "category": "strength",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 33, "sets": 4, "reps": 8, "restSeconds": 120, "order": 1, "note": "Upper Day - Barbell Bench Press" },
+      { "exerciseId": 13, "sets": 4, "reps": 8, "restSeconds": 120, "order": 2, "note": "Upper Day - Barbell Bent Over Row" },
+      { "exerciseId": 34, "sets": 3, "reps": 10, "restSeconds": 90, "order": 3, "note": "Upper Day - Incline Bench Press" },
+      { "exerciseId": 12, "sets": 3, "reps": 10, "restSeconds": 90, "order": 4, "note": "Upper Day - Assisted Pull Up" },
+      { "exerciseId": 69, "sets": 3, "reps": 10, "restSeconds": 90, "order": 5, "note": "Upper Day - Overhead Press" },
+      { "exerciseId": 119, "sets": 3, "reps": 12, "restSeconds": 60, "order": 6, "note": "Upper Day - Barbell Preacher Curl" },
+      { "exerciseId": 113, "sets": 3, "reps": 12, "restSeconds": 60, "order": 7, "note": "Upper Day - Skull Crusher" },
+      { "exerciseId": 55, "sets": 4, "reps": 8, "restSeconds": 180, "order": 8, "note": "Lower Day - Barbell Squat" },
+      { "exerciseId": 53, "sets": 4, "reps": 8, "restSeconds": 120, "order": 9, "note": "Lower Day - Romanian Deadlift" },
+      { "exerciseId": 52, "sets": 3, "reps": 10, "restSeconds": 90, "order": 10, "note": "Lower Day - Barbell Lunge" },
+      { "exerciseId": 43, "sets": 4, "reps": 12, "restSeconds": 90, "order": 11, "note": "Lower Day - Hip Thrust" },
+      { "exerciseId": 51, "sets": 4, "reps": 15, "restSeconds": 60, "order": 12, "note": "Lower Day - Calf Raise" }
+    ],
+    "tags": ["intermediate", "strength", "split", "muscle-building"]
+  },
+  {
+    "id": "push-pull-legs",
+    "name": "Push/Pull/Legs (PPL)",
+    "description": "Advanced 6-day split for serious muscle growth. Push (chest/shoulders/triceps), Pull (back/biceps), Legs/Glutes.",
+    "difficulty": "advanced",
+    "durationWeeks": 16,
+    "daysPerWeek": 6,
+    "category": "strength",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 33, "sets": 4, "reps": 8, "restSeconds": 120, "order": 1, "note": "Push Day - Barbell Bench Press" },
+      { "exerciseId": 34, "sets": 4, "reps": 10, "restSeconds": 90, "order": 2, "note": "Push Day - Incline Bench Press" },
+      { "exerciseId": 69, "sets": 4, "reps": 8, "restSeconds": 90, "order": 3, "note": "Push Day - Overhead Press" },
+      { "exerciseId": 73, "sets": 3, "reps": 12, "restSeconds": 60, "order": 4, "note": "Push Day - Lateral Raise" },
+      { "exerciseId": 113, "sets": 3, "reps": 12, "restSeconds": 60, "order": 5, "note": "Push Day - Skull Crusher" },
+      { "exerciseId": 114, "sets": 3, "reps": 12, "restSeconds": 60, "order": 6, "note": "Push Day - Overhead Tricep Extension" },
+      { "exerciseId": 13, "sets": 4, "reps": 8, "restSeconds": 120, "order": 7, "note": "Pull Day - Barbell Row" },
+      { "exerciseId": 12, "sets": 4, "reps": 10, "restSeconds": 120, "order": 8, "note": "Pull Day - Assisted Pull Up" },
+      { "exerciseId": 17, "sets": 3, "reps": 10, "restSeconds": 90, "order": 9, "note": "Pull Day - Cable Seated Row" },
+      { "exerciseId": 74, "sets": 3, "reps": 12, "restSeconds": 60, "order": 10, "note": "Pull Day - Rear Delt Row" },
+      { "exerciseId": 119, "sets": 3, "reps": 12, "restSeconds": 60, "order": 11, "note": "Pull Day - Preacher Curl" },
+      { "exerciseId": 122, "sets": 3, "reps": 12, "restSeconds": 60, "order": 12, "note": "Pull Day - Hammer Curl" },
+      { "exerciseId": 55, "sets": 5, "reps": 5, "restSeconds": 180, "order": 13, "note": "Leg Day - Barbell Squat" },
+      { "exerciseId": 53, "sets": 4, "reps": 8, "restSeconds": 120, "order": 14, "note": "Leg Day - Romanian Deadlift" },
+      { "exerciseId": 52, "sets": 4, "reps": 10, "restSeconds": 90, "order": 15, "note": "Leg Day - Barbell Lunge" },
+      { "exerciseId": 43, "sets": 4, "reps": 12, "restSeconds": 90, "order": 16, "note": "Leg Day - Hip Thrust" },
+      { "exerciseId": 51, "sets": 4, "reps": 15, "restSeconds": 60, "order": 17, "note": "Leg Day - Calf Raise" }
+    ],
+    "tags": ["advanced", "strength", "muscle-building", "split", "ppl"]
+  },
+  {
+    "id": "home-bodyweight",
+    "name": "Home Bodyweight Workout",
+    "description": "No equipment needed! Build strength and endurance at home with bodyweight exercises. Perfect for working out anywhere.",
+    "difficulty": "beginner",
+    "durationWeeks": 6,
+    "daysPerWeek": 4,
+    "category": "strength",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 3, "sets": 3, "reps": 20, "restSeconds": 45, "order": 1, "note": "Bicycle Crunch" },
+      { "exerciseId": 1, "sets": 3, "reps": 15, "restSeconds": 45, "order": 2, "note": "Air Twisting Crunch" },
+      { "exerciseId": 2, "sets": 3, "reps": 20, "restSeconds": 45, "order": 3, "note": "Alternate Heel Touchers" },
+      { "exerciseId": 8, "sets": 3, "reps": 15, "restSeconds": 60, "order": 4, "note": "Crunch" }
+    ],
+    "tags": ["beginner", "bodyweight", "home", "no-equipment", "abs"]
+  },
+  {
+    "id": "hiit-cardio-blast",
+    "name": "HIIT Cardio Blast",
+    "description": "High-intensity interval training for fat loss and cardiovascular fitness. Short, intense 20-30 minute sessions.",
+    "difficulty": "intermediate",
+    "durationWeeks": 6,
+    "daysPerWeek": 4,
+    "category": "cardio",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 39, "sets": 5, "reps": 30, "restSeconds": 30, "order": 1, "note": "Burpees - 30 sec on/30 rest" },
+      { "exerciseId": 40, "sets": 5, "reps": 30, "restSeconds": 30, "order": 2, "note": "Jumping Jacks - 30 sec on/30 rest" },
+      { "exerciseId": 41, "sets": 5, "reps": 30, "restSeconds": 30, "order": 3, "note": "Mountain Climbers - 30 sec on/30 rest" },
+      { "exerciseId": 3, "sets": 3, "reps": 20, "restSeconds": 30, "order": 4, "note": "Bicycle Crunch" },
+      { "exerciseId": 1, "sets": 3, "reps": 20, "restSeconds": 30, "order": 5, "note": "Air Twisting Crunch" }
+    ],
+    "tags": ["cardio", "hiit", "fat-loss", "conditioning", "intermediate"]
+  },
+  {
+    "id": "flexibility-mobility",
+    "name": "Daily Flexibility & Mobility",
+    "description": "Improve your flexibility, reduce stress, and prevent injuries with daily stretching. Great for recovery days!",
+    "difficulty": "beginner",
+    "durationWeeks": 4,
+    "daysPerWeek": 7,
+    "category": "flexibility",
+    "isTemplate": true,
+    "createdBy": "LifeSet",
+    "imageUrl": null,
+    "exercises": [
+      { "exerciseId": 82, "sets": 3, "reps": 30, "restSeconds": 15, "order": 1, "note": "Cat Cow Stretch - 30 seconds" },
+      { "exerciseId": 83, "sets": 3, "reps": 30, "restSeconds": 15, "order": 2, "note": "Child Pose - 30 seconds" },
+      { "exerciseId": 84, "sets": 2, "reps": 30, "restSeconds": 15, "order": 3, "note": "Cobra Stretch - 30 seconds each side" },
+      { "exerciseId": 93, "sets": 2, "reps": 30, "restSeconds": 15, "order": 4, "note": "Hamstring Stretch - 30 seconds each side" },
+      { "exerciseId": 100, "sets": 2, "reps": 30, "restSeconds": 15, "order": 5, "note": "Quad Stretch - 30 seconds each side" },
+      { "exerciseId": 108, "sets": 2, "reps": 30, "restSeconds": 15, "order": 6, "note": "Shoulder Stretch - 30 seconds each side" }
+    ],
+    "tags": ["flexibility", "stretching", "mobility", "recovery", "beginner"]
+  }
+]

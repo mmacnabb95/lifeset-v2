@@ -1,0 +1,98 @@
+{
+  "categories": {
+    "CALM": {
+      "name": "Calm",
+      "description": "Find peace and tranquility in your daily life"
+    },
+    "MENTAL_CLARITY": {
+      "name": "Mental Clarity",
+      "description": "Sharpen your focus and clear your mind"
+    },
+    "VISUALISATION": {
+      "name": "Visualisation",
+      "description": "Manifest your goals through guided imagery"
+    },
+    "SLEEP": {
+      "name": "Sleep",
+      "description": "Drift into peaceful, restful sleep"
+    },
+    "BREATHWORK": {
+      "name": "Breathwork",
+      "description": "Connect with your breath and find balance"
+    }
+  },
+  "sessions": [
+    {
+      "id": "calm-1",
+      "title": "Morning Tranquility",
+      "description": "Start your day with a peaceful, centering meditation",
+      "category": "CALM",
+      "audioFile": "Morning Tranquility.mp3",
+      "duration": 3
+    },
+    {
+      "id": "calm-2",
+      "title": "Afternoon Reset",
+      "description": "Take a break and find your center",
+      "category": "CALM",
+      "audioFile": "Calm.mp3",
+      "duration": 2
+    },
+    {
+      "id": "mental-1",
+      "title": "Focus Flow",
+      "description": "Enhance your concentration and mental clarity",
+      "category": "MENTAL_CLARITY",
+      "audioFile": "Clarity.mp3",
+      "duration": 3
+    },
+    {
+      "id": "mental-2",
+      "title": "Clear Mind",
+      "description": "Release mental fog and find clarity",
+      "category": "MENTAL_CLARITY",
+      "audioFile": "Clear Mind.mp3",
+      "duration": 2
+    },
+    {
+      "id": "visual-1",
+      "title": "Goal Achievement",
+      "description": "Visualize your success and manifest your goals",
+      "category": "VISUALISATION",
+      "audioFile": "Visualise Future You.mp3",
+      "duration": 2
+    },
+    {
+      "id": "visual-2",
+      "title": "Future Self",
+      "description": "Connect with your ideal future self",
+      "category": "VISUALISATION",
+      "audioFile": "Meeting Future You.mp3",
+      "duration": 3
+    },
+    {
+      "id": "sleep-1",
+      "title": "Peaceful Night",
+      "description": "Drift into a peaceful sleep",
+      "category": "SLEEP",
+      "audioFile": "Peaceful Night.mp3",
+      "duration": 4
+    },
+    {
+      "id": "sleep-2",
+      "title": "Deep Rest",
+      "description": "Release tension and prepare for deep sleep",
+      "category": "SLEEP",
+      "audioFile": "Deep Sleep.mp3",
+      "duration": 3
+    },
+    {
+      "id": "breathwork-1",
+      "title": "Calming Breathwork",
+      "description": "Use breathing techniques to calm your mind and body",
+      "category": "BREATHWORK",
+      "audioFile": "Calming Breathework.mp3",
+      "duration": 5
+    }
+  ]
+}

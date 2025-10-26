@@ -1,0 +1,130 @@
+# Paste your gs:// URLs here (one per line)
+# Example:
+# gs://lifeset-v2.firebasestorage.app/exercises/abs/45 Side Bend.mp4
+# gs://lifeset-v2.firebasestorage.app/exercises/chest/Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Air Twisting Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Alternate Heel Touchers.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Bicycle Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Bicycle Twisting Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Cable Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Captains Chair Straight Leg Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Crunch (on bench).mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Decline Reverse Crunch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Incline Leg Hip Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/abs/Lying Scissor Kick.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Assisted Pull up.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Barbell Bent Over Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Barbell Bent Over Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Barbell Underhand Bent over row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Cable Bent Over Reverse Grip Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Cable Low Seated Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Cable Seated Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Dumbbell Bent over Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Lat Pulldown.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/One Arm Lat Pulldown.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Rope Pulldown.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/Smith Bent Over Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/T-Bar Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/back/V-Bar Pulldown.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Assault Bike.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Assault Run.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Elliptical Machine.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Incline Treadmill.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Ski Ergometer.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Stationary Bike.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/cardio/Stepmill.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Barbell Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Barbell Incline Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Cable Incline Fly.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Cable Middle Fly.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Cable Standing Chest Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Chest Dip.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Lever Chest Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Smith Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Smith Close Grip Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/chest/Smith Incline Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Barbell Hip Thrust.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Cable Stiff Leg Deadlift from Stepbox.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Dumbbell Romanian Deadlift.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Dumbbell Step up.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Lever Seated Hip Abduction.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Lever Standing Hip Extension.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Lever Standing Rear Kick.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/glutes/Smith Hip Thrust.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Calf Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Lunge.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Romanian Deadlift.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Split Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Barbell Stiff Legged Deadlift.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Bulgarian Split Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Dumbbell Single Leg Split Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Good Mornings.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Hack Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Hyperextension.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Leg Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Lever Leg Extension.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Lever Lying Leg Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Lever Seated Leg Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Seated Calf Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Smith Chair Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/legs/Standing Calf Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Barbell Overhead Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Barbell Shrug.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Cable Cross over Revers Fly.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Cable Forward Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Cable One Arm Lateral Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Dumbbell Rear Delt Row.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Dumbbell Seated Front Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Dumbbell Single arm Leaning Lateral Raise.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Lever Seated Hammer Grip Shoulder Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Machne Shoulder Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Seated Reverse Fly.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Smith Seated Shoulder Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/shoulders/Smith Shrug.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Alternate Heel Touch Side Kick Squat.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Back Forward Leg Swings.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Back Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Barbell Seated Twist.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Basic Toe Touch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Bent Arm Chest Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Bent Leg Side Kick (kneeling).mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Bent Over Twist.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Bent knee Lying Twist.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Bridge Hip Abduction.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Butterfly Yoga Pose.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Calf Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Cat Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Ceiling Look Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Chin to chest Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Circles Arm.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Circles Knee Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Cobra Yoga Pose.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Crossover Kneeling Hip Flexor Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Elbows Back Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Full Squat Mobility.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Hip Flexor Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Iron Cross Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Kneeling Back Rotation Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Kneeling Hip Flexor Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Lying Abductor Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Lying Cross Over Knee Pull Down Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Lying Elbow to Knee.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Lying Glute Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/stretching/Lying Quadriceps Stretch.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Barbell Close Grip Bench Press.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Barbell Skull Crusher.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Cable High Pulley Overhead Tricep Extension.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Cable One Arm Side Triceps Pushdown.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Cable kickback.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/triceps/Overhead Triceps Extension (rope attachment).mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Barbell Drag Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Barbell Preacher Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Barbell Standing Close Grip Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Cable Biceps Curl (SZ bar).mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Cable Hammer Curl (with-rope).mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Cable Hammer Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Cable One Arm Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Dumbbell Biceps Curl.mp4
+gs://lifeset-v2.firebasestorage.app/exercises/biceps/Lever Preacher Curl.mp4
