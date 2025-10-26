@@ -16,7 +16,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.lifesetwellbeing.lifeset",
-      "buildNumber": "8",
+      "buildNumber": "9",
+      "icon": "./assets/lifeset-icon.png",
       "config": {
         "usesNonExemptEncryption": false
       },

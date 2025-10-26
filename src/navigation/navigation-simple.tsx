@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator } from "react-native";
@@ -30,6 +30,9 @@ import { OnboardingCarousel } from "src/pages/onboarding/OnboardingCarousel";
 import { PaywallScreen } from "src/pages/paywall/paywall-screen";
 import { PrivacyPolicyScreen } from "src/pages/legal/privacy-policy";
 import { TermsOfServiceScreen } from "src/pages/legal/terms-of-service";
+import { WelcomeScreen } from "src/pages/auth/welcome-screen";
+import { SignUpScreen } from "src/pages/auth/signup-screen";
+import { LoginScreen } from "src/pages/auth/login-screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -179,6 +182,7 @@ const RootNavigator = () => {
   const { isSubscribed, loading: subLoading } = useSubscription();
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+  const navigationRef = useRef<any>(null);
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -190,6 +194,8 @@ const RootNavigator = () => {
           console.error('Error checking onboarding:', error);
           setHasCompletedOnboarding(false);
         }
+      } else {
+        setHasCompletedOnboarding(null);
       }
       setCheckingOnboarding(false);
     };
@@ -198,8 +204,24 @@ const RootNavigator = () => {
       checkOnboarding();
     } else {
       setCheckingOnboarding(false);
+      setHasCompletedOnboarding(null);
     }
   }, [userId]);
+
+  // Navigate when auth state changes
+  useEffect(() => {
+    if (!checkingOnboarding && !subLoading && navigationRef.current) {
+      if (userId && hasCompletedOnboarding === false) {
+        navigationRef.current?.navigate('Onboarding');
+      } else if (userId && hasCompletedOnboarding && !isSubscribed) {
+        navigationRef.current?.navigate('Paywall');
+      } else if (userId && hasCompletedOnboarding && isSubscribed) {
+        navigationRef.current?.navigate('Home');
+      } else if (!userId) {
+        navigationRef.current?.navigate('Welcome');
+      }
+    }
+  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading]);
 
   // Show loading while checking status
   if (checkingOnboarding || subLoading) {
@@ -212,7 +234,7 @@ const RootNavigator = () => {
   }
 
   // Determine initial route
-  let initialRouteName = 'Success';
+  let initialRouteName = 'Welcome';
   
   if (userId && hasCompletedOnboarding === false) {
     initialRouteName = 'Onboarding';
@@ -228,8 +250,9 @@ const RootNavigator = () => {
       screenOptions={{ headerShown: false }}
     >
       {/* Auth screens */}
-      <Stack.Screen name="Success" component={SuccessScreen} />
-      <Stack.Screen name="Login" component={TestLoginScreen} />
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
       
       {/* Onboarding & Paywall */}
       <Stack.Screen 

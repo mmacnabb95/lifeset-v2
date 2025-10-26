@@ -186,22 +186,22 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
       >
 
       {/* Dynamic Percentile Badge with XP */}
-      {userProfile && userProfile.xp > 0 && (
+      {userProfile && (
         <View style={styles.percentileBadge}>
           <View style={styles.percentileBadgeTop}>
             <Text style={styles.percentileText}>
-              🌍 Top {getPercentile(userProfile.xp)}% of Self-Improvers Worldwide
+              🌍 Top {getPercentile(userProfile.xp || 0)}% of Self-Improvers Worldwide
             </Text>
           </View>
           <View style={styles.percentileStats}>
             <View style={styles.percentileStat}>
-              <Text style={styles.percentileStatValue}>⚡ {userProfile.xp}</Text>
+              <Text style={styles.percentileStatValue}>⚡ {userProfile.xp || 0}</Text>
               <Text style={styles.percentileStatLabel}>XP</Text>
             </View>
             <View style={styles.percentileStatDivider} />
             <View style={styles.percentileStat}>
-              <Text style={styles.percentileStatValue}>🎖️ {userProfile.level}</Text>
-              <Text style={styles.percentileStatLabel}>{getTierName(userProfile.xp)}</Text>
+              <Text style={styles.percentileStatValue}>🎖️ {userProfile.level || 1}</Text>
+              <Text style={styles.percentileStatLabel}>{getTierName(userProfile.xp || 0)}</Text>
             </View>
             <View style={styles.percentileStatDivider} />
             <View style={styles.percentileStat}>
