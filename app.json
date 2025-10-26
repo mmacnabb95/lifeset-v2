@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lifesetwellbeing.app",
+      "bundleIdentifier": "com.lifesetwellbeing.lifeset",
       "buildNumber": "1",
       "config": {
         "usesNonExemptEncryption": false
@@ -32,7 +32,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.lifesetwellbeing.app",
+      "package": "com.lifesetwellbeing.lifeset",
       "versionCode": 1,
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
