@@ -188,7 +188,7 @@ const RootNavigator = () => {
   // Wait for Firebase Auth to initialize before making routing decisions
   // Use a combination of timeout AND userId change detection for reliability
   useEffect(() => {
-    console.log('🔐 Auth initialization check - userId:', userId ? 'EXISTS' : 'NONE');
+    console.log('🔐 Auth initialization check - userId:', userId ? 'EXISTS' : 'NONE', 'authInitialized:', authInitialized);
     
     // If userId is already present (user logged in), mark as initialized immediately
     if (userId) {
@@ -200,7 +200,7 @@ const RootNavigator = () => {
     // Otherwise, wait for auth to settle (handles fresh app start)
     console.log('⏳ Waiting 3 seconds for Firebase Auth to restore session...');
     const timer = setTimeout(() => {
-      console.log('⏰ Auth timeout complete, proceeding with navigation');
+      console.log('⏰ Auth timeout complete, proceeding with navigation (userId still:', userId ? 'EXISTS' : 'NONE', ')');
       setAuthInitialized(true);
     }, 3000); // 3 seconds for production builds to restore persisted session
 
@@ -231,20 +231,26 @@ const RootNavigator = () => {
     }
   }, [userId]);
 
-  // Navigate when auth state changes
+  // Navigate when auth state changes - BUT ONLY after auth is initialized
   useEffect(() => {
-    if (!checkingOnboarding && !subLoading && navigationRef.current) {
+    if (!checkingOnboarding && !subLoading && authInitialized && navigationRef.current) {
+      console.log('🧭 Navigation effect running - userId:', userId ? 'EXISTS' : 'NONE', 'onboarding:', hasCompletedOnboarding, 'subscribed:', isSubscribed);
+      
       if (userId && hasCompletedOnboarding === false) {
+        console.log('🧭 Navigating to Onboarding');
         navigationRef.current?.navigate('Onboarding');
       } else if (userId && hasCompletedOnboarding && !isSubscribed) {
+        console.log('🧭 Navigating to Paywall');
         navigationRef.current?.navigate('Paywall');
       } else if (userId && hasCompletedOnboarding && isSubscribed) {
+        console.log('🧭 Navigating to Home');
         navigationRef.current?.navigate('Home');
       } else if (!userId) {
+        console.log('🧭 Navigating to Welcome (no user)');
         navigationRef.current?.navigate('Welcome');
       }
     }
-  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading]);
+  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized]);
 
   // Show loading while checking status or waiting for auth to initialize
   if (checkingOnboarding || subLoading || !authInitialized) {
