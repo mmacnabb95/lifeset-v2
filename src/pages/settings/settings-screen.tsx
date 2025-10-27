@@ -4,6 +4,7 @@ import { Button, ButtonTypes } from "src/components/common/button-simple";
 import { logOut } from "src/services/firebase/auth";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
 import { useSubscription, restorePurchases } from "src/hooks/useSubscription";
+import { NotificationSettings } from "src/components/NotificationSettings";
 
 export const SettingsScreen = ({ navigation }: { navigation: any }) => {
   const { user, userId } = useFirebaseUser();
@@ -130,21 +131,11 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
 
-        {/* App Settings */}
+        {/* Notifications Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>App Settings</Text>
+          <Text style={styles.sectionTitle}>Notifications</Text>
           <View style={styles.card}>
-            <TouchableOpacity style={styles.settingItem}>
-              <Text style={styles.settingLabel}>🔔 Notifications</Text>
-              <Text style={styles.settingValue}>Coming Soon</Text>
-            </TouchableOpacity>
-            
-            <View style={styles.divider} />
-            
-            <TouchableOpacity style={styles.settingItem}>
-              <Text style={styles.settingLabel}>🌍 Language</Text>
-              <Text style={styles.settingValue}>English</Text>
-            </TouchableOpacity>
+            <NotificationSettings />
           </View>
         </View>
 

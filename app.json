@@ -23,7 +23,8 @@
       },
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "LifeSet needs access to your photo library to upload profile pictures.",
-        "NSCameraUsageDescription": "LifeSet needs access to your camera to take profile pictures."
+        "NSCameraUsageDescription": "LifeSet needs access to your camera to take profile pictures.",
+        "NSUserNotificationsUsageDescription": "LifeSet sends daily reminders to help you stay on track with your habits."
       }
     },
     "android": {
