@@ -194,14 +194,27 @@ export const deleteWorkoutPlan = async (planId: string): Promise<void> => {
 
 /**
  * Start a workout plan (track progress)
+ * Accepts either a planId (string) for Firestore plans, or a full plan object for template plans
  */
 export const startWorkoutPlan = async (
   userId: string,
-  workoutPlanId: string
+  workoutPlanIdOrPlan: string | WorkoutPlan
 ): Promise<string> => {
   try {
-    // Get the plan to calculate total workouts
-    const plan = await getWorkoutPlan(workoutPlanId);
+    let plan: WorkoutPlan | null = null;
+    let workoutPlanId: string;
+
+    // Check if we received a plan object (template) or just an ID (Firestore)
+    if (typeof workoutPlanIdOrPlan === 'string') {
+      // It's a Firestore plan ID - fetch it
+      workoutPlanId = workoutPlanIdOrPlan;
+      plan = await getWorkoutPlan(workoutPlanId);
+    } else {
+      // It's a template plan object
+      plan = workoutPlanIdOrPlan;
+      workoutPlanId = plan.id!;
+    }
+
     if (!plan) {
       throw new Error('Workout plan not found');
     }

@@ -88,7 +88,8 @@ export default function WorkoutPlanDetailScreen() {
           onPress: async () => {
             try {
               setStarting(true);
-              await startWorkoutPlan(userId, plan.id!);
+              // Pass the full plan object (works for both templates and Firestore plans)
+              await startWorkoutPlan(userId, plan);
               Alert.alert(
                 'Success!',
                 'Workout plan started! You can track your progress from the home screen.',
