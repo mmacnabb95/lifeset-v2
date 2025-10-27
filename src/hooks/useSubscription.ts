@@ -59,13 +59,22 @@ export const useSubscription = (): SubscriptionStatus => {
       }
     } catch (error: any) {
       console.error('Error checking subscription status:', error);
+      
+      // In development (Expo Go), treat as subscribed to allow testing
+      // In production builds, RevenueCat will work correctly
+      const isDevelopment = __DEV__ && error.message?.includes('no singleton instance');
+      
       setStatus({
-        isSubscribed: false,
+        isSubscribed: isDevelopment, // True in dev, false in prod
         isInTrial: false,
         expirationDate: null,
         loading: false,
-        error: error.message || 'Failed to check subscription',
+        error: isDevelopment ? null : (error.message || 'Failed to check subscription'),
       });
+      
+      if (isDevelopment) {
+        console.log('🔧 Development mode: Treating user as subscribed for testing');
+      }
     }
   };
 

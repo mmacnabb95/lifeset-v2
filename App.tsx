@@ -31,9 +31,14 @@ function AppContent() {
       try {
         const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
         await Purchases.configure({ apiKey });
-        console.log('RevenueCat initialized successfully');
-      } catch (error) {
-        console.error('Failed to initialize RevenueCat:', error);
+        console.log('✅ RevenueCat initialized successfully');
+      } catch (error: any) {
+        // Expected in Expo Go - RevenueCat requires native build
+        if (__DEV__ && error.message?.includes('no singleton instance')) {
+          console.log('🔧 Development mode: RevenueCat unavailable in Expo Go (will work in production build)');
+        } else {
+          console.error('❌ Failed to initialize RevenueCat:', error);
+        }
       }
     };
 
@@ -51,9 +56,12 @@ function AppContent() {
         // Set RevenueCat user ID to Firebase UID
         try {
           await Purchases.logIn(user.uid);
-          console.log('RevenueCat user logged in:', user.uid);
-        } catch (error) {
-          console.error('Failed to log in RevenueCat user:', error);
+          console.log('✅ RevenueCat user logged in:', user.uid);
+        } catch (error: any) {
+          // Expected in Expo Go development
+          if (!(__DEV__ && error.message?.includes('no singleton instance'))) {
+            console.error('❌ Failed to log in RevenueCat user:', error);
+          }
         }
         
         // User is signed in
@@ -68,9 +76,12 @@ function AppContent() {
         // Log out RevenueCat user
         try {
           await Purchases.logOut();
-          console.log('RevenueCat user logged out');
-        } catch (error) {
-          console.error('Failed to log out RevenueCat user:', error);
+          console.log('✅ RevenueCat user logged out');
+        } catch (error: any) {
+          // Expected in Expo Go development
+          if (!(__DEV__ && error.message?.includes('no singleton instance'))) {
+            console.error('❌ Failed to log out RevenueCat user:', error);
+          }
         }
         
         // User is signed out
