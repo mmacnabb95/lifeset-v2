@@ -162,11 +162,18 @@ export const SignUpScreen = ({ navigation }: { navigation: any }) => {
           </View>
 
           {/* Terms */}
-          <Text style={styles.terms}>
-            By creating an account, you agree to our{' '}
-            <Text style={styles.termsLink}>Terms of Service</Text> and{' '}
-            <Text style={styles.termsLink}>Privacy Policy</Text>
-          </Text>
+          <View style={styles.termsContainer}>
+            <Text style={styles.terms}>
+              By creating an account, you agree to our{' '}
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('TermsOfService')}>
+              <Text style={styles.termsLink}>Terms of Service</Text>
+            </TouchableOpacity>
+            <Text style={styles.terms}> and </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')}>
+              <Text style={styles.termsLink}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -262,16 +269,23 @@ const styles = StyleSheet.create({
     color: '#667eea',
     fontWeight: '600',
   },
+  termsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 30,
+    paddingHorizontal: 20,
+  },
   terms: {
     fontSize: 12,
     color: '#999',
-    textAlign: 'center',
-    marginTop: 30,
     lineHeight: 18,
   },
   termsLink: {
+    fontSize: 12,
     color: '#667eea',
     textDecorationLine: 'underline',
+    lineHeight: 18,
   },
 });
 

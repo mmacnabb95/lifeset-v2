@@ -12,6 +12,8 @@ import { useFirebaseUser } from 'src/hooks/useFirebaseUser';
 import { WorkoutPlan, startWorkoutPlan, duplicateWorkoutPlan, getActiveWorkoutPlans, completeWorkoutSession, WorkoutPlanProgress, deleteWorkoutPlan } from 'src/services/firebase/workout-plans';
 import { useXPRewards } from 'src/hooks/useXPRewards';
 import exercisesData from '../../data/exercises.json';
+import { db } from 'src/services/firebase/config';
+import { doc, updateDoc } from 'firebase/firestore';
 
 interface Exercise {
   id: number;
@@ -197,6 +199,41 @@ export default function WorkoutPlanDetailScreen() {
               Alert.alert('Error', error.message || 'Failed to complete workout');
             } finally {
               setCompleting(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleStopPlan = () => {
+    if (!activeProgress) return;
+
+    Alert.alert(
+      'Stop Program',
+      `Are you sure you want to stop "${plan.name}"? Your progress will be saved.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Stop Program',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const progressRef = doc(db, 'users', userId!, 'workout_progress', activeProgress.id!);
+              await updateDoc(progressRef, {
+                isActive: false,
+              });
+              
+              // Refresh to update UI
+              const activePlans = await getActiveWorkoutPlans(userId!);
+              const updatedProgress = activePlans.find(p => p.workoutPlanId === plan.id);
+              setActiveProgress(updatedProgress || null);
+              
+              Alert.alert('Stopped', 'Program stopped. You can restart it anytime!', [
+                { text: 'OK', onPress: () => navigation.navigate('WorkoutPlans' as never) },
+              ]);
+            } catch (error: any) {
+              Alert.alert('Error', error.message || 'Failed to stop program');
             }
           },
         },
@@ -467,7 +504,7 @@ export default function WorkoutPlanDetailScreen() {
       {/* Bottom Actions */}
       <View style={styles.bottomBar}>
         {activeProgress ? (
-          // Plan is active - show complete button
+          // Plan is active - show complete button + stop button
           <>
             <TouchableOpacity
               style={styles.completeButton}
@@ -477,6 +514,12 @@ export default function WorkoutPlanDetailScreen() {
               <Text style={styles.completeButtonText}>
                 {completing ? 'Completing...' : '✓ Complete Workout'}
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.stopButton}
+              onPress={handleStopPlan}
+            >
+              <Text style={styles.stopButtonText}>⏹ Stop</Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -772,7 +815,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   completeButton: {
-    flex: 1,
+    flex: 3,
     backgroundColor: '#4CAF50',
     paddingVertical: 16,
     borderRadius: 12,
@@ -787,6 +830,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  stopButton: {
+    flex: 1,
+    backgroundColor: '#ff5252',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  stopButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   progressSection: {
     margin: 16,

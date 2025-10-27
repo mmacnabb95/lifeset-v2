@@ -11,12 +11,31 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { signIn } from 'src/services/firebase/auth';
+import { signIn, sendPasswordReset } from 'src/services/firebase/auth';
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Email Required', 'Please enter your email address first');
+      return;
+    }
+
+    try {
+      await sendPasswordReset(email.trim());
+      Alert.alert(
+        'Email Sent!',
+        'Check your email for instructions to reset your password.',
+        [{ text: 'OK' }]
+      );
+    } catch (error: any) {
+      console.error('Password reset error:', error);
+      Alert.alert('Error', error.message || 'Failed to send password reset email');
+    }
+  };
 
   const handleLogin = async () => {
     // Validation
@@ -109,7 +128,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
           </View>
 
           {/* Forgot Password Link */}
-          <TouchableOpacity style={styles.forgotPassword}>
+          <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
 

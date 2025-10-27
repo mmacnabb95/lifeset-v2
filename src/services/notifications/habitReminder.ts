@@ -9,7 +9,7 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldSetBadge: false, // Disable badge to prevent red notification dot
   }),
 });
 
@@ -133,7 +133,6 @@ export const scheduleDailyReminder = async (
         title: 'LifeSet Reminder',
         body: getRandomMessage(),
         sound: 'default',
-        badge: 1,
         data: { 
           type: 'habit_reminder',
           userId, // Pass userId for background check
@@ -229,6 +228,44 @@ export const sendTestNotification = async (): Promise<void> => {
   } catch (error) {
     console.error('Error sending test notification:', error);
     throw error;
+  }
+};
+
+/**
+ * Clear all notifications and reset badge count
+ * Call this on app launch to remove stale notifications from previous app versions
+ */
+export const clearAllNotifications = async (): Promise<void> => {
+  try {
+    // Cancel all scheduled notifications
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    
+    // Dismiss all delivered notifications from notification center
+    await Notifications.dismissAllNotificationsAsync();
+    
+    // Reset badge count
+    await Notifications.setBadgeCountAsync(0);
+    
+    console.log('✅ All notifications cleared and badge reset');
+  } catch (error) {
+    console.error('Error clearing notifications:', error);
+  }
+};
+
+/**
+ * Get saved notification settings from AsyncStorage
+ */
+export const getNotificationSettings = async (): Promise<{
+  enabled: boolean;
+  time: { hour: number; minute: number };
+}> => {
+  try {
+    const enabled = await areNotificationsEnabled();
+    const time = await getNotificationTime();
+    return { enabled, time };
+  } catch (error) {
+    console.error('Error getting notification settings:', error);
+    return { enabled: false, time: { hour: 20, minute: 0 } };
   }
 };
 

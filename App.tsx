@@ -17,6 +17,9 @@ import { onAuthStateChange } from './src/services/firebase/auth';
 // CHANGE: Import the correct actions from your auth slice
 import { setFirebaseUser, clearFirebaseUser } from './src/redux/features/auth/slice';
 
+// Import notification helper to clear old notifications
+import { clearAllNotifications } from './src/services/notifications/habitReminder';
+
 // RevenueCat API Keys - Replace with your actual keys
 const REVENUECAT_IOS_KEY = 'appl_PpDkMoSSuzCvuUuGACErzjreTvb';
 const REVENUECAT_ANDROID_KEY = 'goog_YOUR_ANDROID_KEY_HERE';
@@ -25,9 +28,10 @@ const REVENUECAT_ANDROID_KEY = 'goog_YOUR_ANDROID_KEY_HERE';
 function AppContent() {
   const dispatch = useDispatch();
 
-  // Initialize RevenueCat
+  // Initialize RevenueCat and clear old notifications
   useEffect(() => {
-    const initRevenueCat = async () => {
+    const initApp = async () => {
+      // Initialize RevenueCat
       try {
         const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
         await Purchases.configure({ apiKey });
@@ -40,9 +44,17 @@ function AppContent() {
           console.error('❌ Failed to initialize RevenueCat:', error);
         }
       }
+
+      // Clear any stale notifications from previous app versions or old bundle IDs
+      try {
+        await clearAllNotifications();
+        console.log('✅ Old notifications cleared on app launch');
+      } catch (error) {
+        console.error('❌ Failed to clear old notifications:', error);
+      }
     };
 
-    initRevenueCat();
+    initApp();
   }, []);
 
   // Listen for Firebase auth state changes

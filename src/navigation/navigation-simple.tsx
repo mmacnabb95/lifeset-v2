@@ -301,7 +301,11 @@ const RootNavigator = () => {
       />
 
       {/* Main app screens */}
-      <Stack.Screen name="Home" component={HomeDashboard} />
+      <Stack.Screen 
+        name="Home" 
+        component={HomeDashboard} 
+        options={{ gestureEnabled: false }} 
+      />
       <Stack.Screen name="Habits" component={HabitsScreen} />
       <Stack.Screen name="AddHabit" component={AddHabitScreen} />
       <Stack.Screen name="Journal" component={JournalSimpleScreen} />
