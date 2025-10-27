@@ -12,6 +12,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { db } from './config';
+import workoutPlansData from '../../data/workout-plans.json';
 
 export interface WorkoutPlanExercise {
   exerciseId: number;
@@ -272,10 +273,21 @@ export const getActiveWorkoutPlans = async (
       return b.startedAt.getTime() - a.startedAt.getTime();
     });
 
-    // Fetch the actual plans
+    // Fetch the actual plans (check templates first, then Firestore)
+    const templatePlans = workoutPlansData as WorkoutPlan[];
     const results = await Promise.all(
       progressList.map(async (progress) => {
         try {
+          // First, check if it's a template plan
+          const templatePlan = templatePlans.find(p => p.id === progress.workoutPlanId);
+          if (templatePlan) {
+            return {
+              ...progress,
+              plan: templatePlan,
+            };
+          }
+          
+          // If not a template, fetch from Firestore
           const plan = await getWorkoutPlan(progress.workoutPlanId);
           if (plan) {
             return {
