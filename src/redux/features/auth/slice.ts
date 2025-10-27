@@ -25,6 +25,7 @@ const initialState: AuthState = {
   pinAuthed: undefined,
   hasPin: undefined,
   firebaseUser: undefined,
+  authInitialized: false,
 };
 
 // Firebase login - KEEP THIS
@@ -88,6 +89,7 @@ const authSlice = createSlice({
       state.userId = action.payload.uid;
       state.username = action.payload.displayName || action.payload.email;
       state.status = "fulfilled";
+      state.authInitialized = true;
     },
     clearFirebaseUser(state) {
       state.firebaseUser = undefined;
@@ -95,6 +97,7 @@ const authSlice = createSlice({
       state.userId = undefined;
       state.username = undefined;
       state.status = "idle";
+      state.authInitialized = true;
     },
   },
   extraReducers: (builder) => {
@@ -130,6 +133,7 @@ export const isOtpRequired = (state: AppState) => state.auth.otp_required === 1;
 export const otpToken = (state: AppState) => state.auth.otp_token;
 export const selectFirebaseUser = (state: AppState) => state.auth.firebaseUser;
 export const selectUserId = (state: AppState) => state.auth.userId || state.auth.firebaseUser?.uid;
+export const selectAuthInitialized = (state: AppState) => state.auth.authInitialized;
 
 export { authUser, invalidateAuth };
 

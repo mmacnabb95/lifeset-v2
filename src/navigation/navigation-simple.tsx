@@ -6,6 +6,8 @@ import { signIn, signUp } from "src/services/firebase/auth";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
 import { getOnboardingStatus, setOnboardingCompleted } from "src/services/firebase/user";
 import { useSubscription } from "src/hooks/useSubscription";
+import { useSelector } from "react-redux";
+import { selectAuthInitialized } from "src/redux/features/auth/slice";
 
 // Import screens
 import { HomeDashboard } from "src/pages/home/home-dashboard";
@@ -180,25 +182,17 @@ const TestLoginScreen = ({ navigation }: any) => {
 const RootNavigator = () => {
   const { userId } = useFirebaseUser();
   const { isSubscribed, loading: subLoading } = useSubscription();
+  const authInitialized = useSelector(selectAuthInitialized);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
-  const [authInitialized, setAuthInitialized] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
   const navigationRef = useRef<any>(null);
 
-  // Wait for Firebase Auth to provide initial state
-  // The auth listener in App.tsx will dispatch setFirebaseUser or clearFirebaseUser
-  // We need to wait for at least one of those to fire before making routing decisions
+  // Log when auth initialization state changes
   useEffect(() => {
-    // Give Firebase Auth a moment to restore session from AsyncStorage
-    // The listener in App.tsx fires almost immediately after app loads
-    const timer = setTimeout(() => {
-      console.log('🔐 Auth initialization complete - userId:', userId ? 'EXISTS' : 'NONE');
-      setAuthInitialized(true);
-    }, 500); // Short delay to allow auth listener to fire first
-
-    return () => clearTimeout(timer);
-  }, []); // Only run once on mount
+    if (authInitialized) {
+      console.log('✅ Auth initialized via Redux - userId:', userId ? 'EXISTS' : 'NONE');
+    }
+  }, [authInitialized, userId]);
 
   useEffect(() => {
     const checkOnboarding = async () => {
