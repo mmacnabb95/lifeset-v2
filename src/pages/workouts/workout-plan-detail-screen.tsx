@@ -207,7 +207,7 @@ export default function WorkoutPlanDetailScreen() {
   };
 
   const handleStopPlan = () => {
-    if (!activeProgress || !userId || !plan.id) return;
+    if (!activeProgress || !activeProgress.id) return;
 
     Alert.alert(
       'Stop Program',
@@ -219,30 +219,18 @@ export default function WorkoutPlanDetailScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              // Find the progress document by workoutPlanId instead of using activeProgress.id
-              const progressQuery = query(
-                collection(db, 'users', userId, 'workout_progress'),
-                where('workoutPlanId', '==', plan.id),
-                where('isActive', '==', true)
-              );
-              
-              const progressSnapshot = await getDocs(progressQuery);
-              
-              if (progressSnapshot.empty) {
-                Alert.alert('Error', 'No active progress found for this workout plan');
-                return;
-              }
-              
-              // Update the first (and should be only) matching document
-              const progressDoc = progressSnapshot.docs[0];
-              await updateDoc(progressDoc.ref, {
+              // Use the correct collection name (workoutPlanProgress, not workout_progress)
+              const progressRef = doc(db, 'workoutPlanProgress', activeProgress.id);
+              await updateDoc(progressRef, {
                 isActive: false,
               });
               
               // Refresh to update UI
-              const activePlans = await getActiveWorkoutPlans(userId);
-              const updatedProgress = activePlans.find(p => p.workoutPlanId === plan.id);
-              setActiveProgress(updatedProgress || null);
+              if (userId) {
+                const activePlans = await getActiveWorkoutPlans(userId);
+                const updatedProgress = activePlans.find(p => p.workoutPlanId === plan.id);
+                setActiveProgress(updatedProgress || null);
+              }
               
               Alert.alert('Stopped', 'Program stopped. You can restart it anytime!', [
                 { text: 'OK', onPress: () => navigation.navigate('WorkoutPlans' as never) },
