@@ -182,7 +182,17 @@ const RootNavigator = () => {
   const { isSubscribed, loading: subLoading } = useSubscription();
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+  const [authInitialized, setAuthInitialized] = useState(false);
   const navigationRef = useRef<any>(null);
+
+  // Wait for Firebase Auth to initialize before making routing decisions
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAuthInitialized(true);
+    }, 500); // Give Firebase 500ms to restore persisted auth session
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const checkOnboarding = async () => {
@@ -223,8 +233,8 @@ const RootNavigator = () => {
     }
   }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading]);
 
-  // Show loading while checking status
-  if (checkingOnboarding || subLoading) {
+  // Show loading while checking status or waiting for auth to initialize
+  if (checkingOnboarding || subLoading || !authInitialized) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />
