@@ -104,7 +104,13 @@ export const getUserProfile = async (userId: string) => {
  * Listen to auth state changes
  */
 export const onAuthStateChange = (callback: (user: User | null) => void) => {
-  return auth.onAuthStateChanged(callback);
+  console.log('🔧 Registering Firebase onAuthStateChanged listener');
+  console.log('🔧 Auth persistence enabled:', auth.config.persistence);
+  
+  return auth.onAuthStateChanged((user) => {
+    console.log('🔔 onAuthStateChanged fired - User:', user ? user.uid : 'NULL');
+    callback(user);
+  });
 };
 
 /**
