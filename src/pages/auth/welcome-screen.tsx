@@ -9,7 +9,11 @@ export const WelcomeScreen = ({ navigation }: { navigation: any }) => {
       style={styles.container}
     >
       <View style={styles.content}>
-        <Text style={styles.logo}>✨</Text>
+        <Image 
+          source={require('../../../assets/lifeset-icon.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.title}>Welcome to LifeSet</Text>
         <Text style={styles.subtitle}>
           Your personal companion for building better habits and living your best life
@@ -46,8 +50,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   logo: {
-    fontSize: 80,
-    marginBottom: 20,
+    width: 120,
+    height: 120,
+    marginBottom: 30,
   },
   title: {
     fontSize: 36,

@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "description": "Your personal companion for building better habits, achieving fitness goals, and living your best life",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/lifeset-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
