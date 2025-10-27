@@ -19,6 +19,7 @@ import { setFirebaseUser, clearFirebaseUser } from './src/redux/features/auth/sl
 
 // Import notification helper to clear old notifications
 import { clearAllNotifications } from './src/services/notifications/habitReminder';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // RevenueCat API Keys - Replace with your actual keys
 const REVENUECAT_IOS_KEY = 'appl_PpDkMoSSuzCvuUuGACErzjreTvb';
@@ -31,6 +32,15 @@ function AppContent() {
   // Initialize RevenueCat and clear old notifications
   useEffect(() => {
     const initApp = async () => {
+      // Test AsyncStorage to verify it's working
+      try {
+        await AsyncStorage.setItem('test_key', 'test_value');
+        const testValue = await AsyncStorage.getItem('test_key');
+        console.log('✅ AsyncStorage test:', testValue === 'test_value' ? 'WORKING' : 'FAILED');
+      } catch (error) {
+        console.error('❌ AsyncStorage test FAILED:', error);
+      }
+      
       // Initialize RevenueCat
       try {
         const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
