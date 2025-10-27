@@ -314,16 +314,6 @@ export default function ExerciseDetailScreen() {
             </View>
           )}
 
-          {exercise.equipment.length === 0 && (
-            <View style={styles.section}>
-              <View style={styles.noEquipmentBanner}>
-                <Text style={styles.noEquipmentText}>
-                  ✨ No equipment needed!
-                </Text>
-              </View>
-            </View>
-          )}
-
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Instructions</Text>
             <Text style={styles.instructionText}>
