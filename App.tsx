@@ -47,11 +47,13 @@ function AppContent() {
 
   // Listen for Firebase auth state changes
   useEffect(() => {
-    console.log('🔧 Setting up Firebase auth listener...');
+    const startTime = Date.now();
+    console.log('🔧 [0ms] Setting up Firebase auth listener...');
     
     const unsubscribe = onAuthStateChange(async (user) => {
+      const elapsed = Date.now() - startTime;
       if (user) {
-        console.log('✅ User authenticated on app start:', user.uid);
+        console.log(`✅ [${elapsed}ms] User authenticated on app start:`, user.uid);
         
         // Set RevenueCat user ID to Firebase UID
         try {
@@ -71,7 +73,7 @@ function AppContent() {
           displayName: user.displayName,
         }));
       } else {
-        console.log('⚠️ No user authenticated (logged out or fresh start)');
+        console.log(`⚠️ [${elapsed}ms] No user authenticated (logged out or fresh start)`);
         
         // Log out RevenueCat user
         try {
