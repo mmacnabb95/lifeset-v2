@@ -61,11 +61,20 @@ function AppContent() {
   useEffect(() => {
     const startTime = Date.now();
     console.log('🔧 [0ms] Setting up Firebase auth listener...');
+    console.log('🔧 Auth listener mounted at:', new Date().toISOString());
     
     const unsubscribe = onAuthStateChange(async (user) => {
       const elapsed = Date.now() - startTime;
+      const timestamp = new Date().toISOString();
+      
+      console.log(`\n========== AUTH STATE CHANGE [${elapsed}ms] ==========`);
+      console.log('Timestamp:', timestamp);
+      console.log('User:', user ? user.uid : 'NULL');
+      console.log('Email:', user ? user.email : 'N/A');
+      
       if (user) {
         console.log(`✅ [${elapsed}ms] User authenticated on app start:`, user.uid);
+        console.log('📝 Dispatching setFirebaseUser to Redux...');
         
         // Set RevenueCat user ID to Firebase UID
         try {
@@ -84,8 +93,10 @@ function AppContent() {
           email: user.email,
           displayName: user.displayName,
         }));
+        console.log('✅ setFirebaseUser dispatched - authInitialized should be TRUE now');
       } else {
         console.log(`⚠️ [${elapsed}ms] No user authenticated (logged out or fresh start)`);
+        console.log('📝 Dispatching clearFirebaseUser to Redux...');
         
         // Log out RevenueCat user
         try {
@@ -100,7 +111,9 @@ function AppContent() {
         
         // User is signed out
         dispatch(clearFirebaseUser());
+        console.log('✅ clearFirebaseUser dispatched - authInitialized should be TRUE now');
       }
+      console.log(`========== END AUTH STATE CHANGE ==========\n`);
     });
 
     // Cleanup subscription on unmount

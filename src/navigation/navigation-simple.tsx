@@ -189,10 +189,21 @@ const RootNavigator = () => {
 
   // Log when auth initialization state changes
   useEffect(() => {
+    console.log('\n========== NAVIGATION STATE ==========');
+    console.log('authInitialized:', authInitialized);
+    console.log('userId:', userId ? 'EXISTS' : 'NONE');
+    console.log('checkingOnboarding:', checkingOnboarding);
+    console.log('subLoading:', subLoading);
+    console.log('hasCompletedOnboarding:', hasCompletedOnboarding);
+    console.log('isSubscribed:', isSubscribed);
+    console.log('======================================\n');
+    
     if (authInitialized) {
       console.log('✅ Auth initialized via Redux - userId:', userId ? 'EXISTS' : 'NONE');
+    } else {
+      console.log('⏳ Waiting for auth initialization...');
     }
-  }, [authInitialized, userId]);
+  }, [authInitialized, userId, checkingOnboarding, subLoading, hasCompletedOnboarding, isSubscribed]);
 
   useEffect(() => {
     const checkOnboarding = async () => {
