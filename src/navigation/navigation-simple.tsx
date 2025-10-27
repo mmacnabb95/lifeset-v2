@@ -183,17 +183,22 @@ const RootNavigator = () => {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [authInitialized, setAuthInitialized] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const navigationRef = useRef<any>(null);
 
-  // Wait for Firebase Auth to initialize before making routing decisions
-  // Mark as initialized immediately when userId changes (including to null)
+  // Wait for Firebase Auth to provide initial state
+  // The auth listener in App.tsx will dispatch setFirebaseUser or clearFirebaseUser
+  // We need to wait for at least one of those to fire before making routing decisions
   useEffect(() => {
-    console.log('🔐 Auth state change detected - userId:', userId ? 'EXISTS' : 'NONE');
-    
-    // Auth state has been determined (either logged in or logged out)
-    // Set initialized to true so navigation can proceed
-    setAuthInitialized(true);
-  }, [userId]);
+    // Give Firebase Auth a moment to restore session from AsyncStorage
+    // The listener in App.tsx fires almost immediately after app loads
+    const timer = setTimeout(() => {
+      console.log('🔐 Auth initialization complete - userId:', userId ? 'EXISTS' : 'NONE');
+      setAuthInitialized(true);
+    }, 500); // Short delay to allow auth listener to fire first
+
+    return () => clearTimeout(timer);
+  }, []); // Only run once on mount
 
   useEffect(() => {
     const checkOnboarding = async () => {
