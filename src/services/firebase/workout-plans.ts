@@ -374,6 +374,8 @@ export const duplicateWorkoutPlan = async (
       throw new Error('Source plan not found');
     }
 
+    console.log('Duplicating plan:', sourcePlanId, 'for user:', userId);
+
     const newPlan: Omit<WorkoutPlan, 'id' | 'createdAt' | 'updatedAt'> = {
       ...planToDuplicate,
       name: newName || `${planToDuplicate.name} (Copy)`,
@@ -382,7 +384,9 @@ export const duplicateWorkoutPlan = async (
       isTemplate: false,
     };
 
-    return await createWorkoutPlan(userId, newPlan);
+    const newPlanId = await createWorkoutPlan(userId, newPlan);
+    console.log('✅ Plan duplicated successfully! Old ID:', sourcePlanId, '→ New ID:', newPlanId);
+    return newPlanId;
   } catch (error) {
     console.error('Error duplicating workout plan:', error);
     throw error;
