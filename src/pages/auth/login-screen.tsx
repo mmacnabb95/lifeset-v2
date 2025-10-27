@@ -11,7 +11,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { signIn, sendPasswordReset } from 'src/services/firebase/auth';
+import { signIn, resetPassword } from 'src/services/firebase/auth';
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
     }
 
     try {
-      await sendPasswordReset(email.trim());
+      await resetPassword(email.trim());
       Alert.alert(
         'Email Sent!',
         'Check your email for instructions to reset your password.',
