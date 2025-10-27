@@ -13,7 +13,7 @@ import { WorkoutPlan, startWorkoutPlan, duplicateWorkoutPlan, getActiveWorkoutPl
 import { useXPRewards } from 'src/hooks/useXPRewards';
 import exercisesData from '../../data/exercises.json';
 import { db } from 'src/services/firebase/config';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 interface Exercise {
   id: number;
@@ -207,7 +207,7 @@ export default function WorkoutPlanDetailScreen() {
   };
 
   const handleStopPlan = () => {
-    if (!activeProgress) return;
+    if (!activeProgress || !userId || !plan.id) return;
 
     Alert.alert(
       'Stop Program',
@@ -219,13 +219,28 @@ export default function WorkoutPlanDetailScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              const progressRef = doc(db, 'users', userId!, 'workout_progress', activeProgress.id!);
-              await updateDoc(progressRef, {
+              // Find the progress document by workoutPlanId instead of using activeProgress.id
+              const progressQuery = query(
+                collection(db, 'users', userId, 'workout_progress'),
+                where('workoutPlanId', '==', plan.id),
+                where('isActive', '==', true)
+              );
+              
+              const progressSnapshot = await getDocs(progressQuery);
+              
+              if (progressSnapshot.empty) {
+                Alert.alert('Error', 'No active progress found for this workout plan');
+                return;
+              }
+              
+              // Update the first (and should be only) matching document
+              const progressDoc = progressSnapshot.docs[0];
+              await updateDoc(progressDoc.ref, {
                 isActive: false,
               });
               
               // Refresh to update UI
-              const activePlans = await getActiveWorkoutPlans(userId!);
+              const activePlans = await getActiveWorkoutPlans(userId);
               const updatedProgress = activePlans.find(p => p.workoutPlanId === plan.id);
               setActiveProgress(updatedProgress || null);
               
@@ -233,6 +248,7 @@ export default function WorkoutPlanDetailScreen() {
                 { text: 'OK', onPress: () => navigation.navigate('WorkoutPlans' as never) },
               ]);
             } catch (error: any) {
+              console.error('Stop plan error:', error);
               Alert.alert('Error', error.message || 'Failed to stop program');
             }
           },
