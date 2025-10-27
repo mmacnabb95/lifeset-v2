@@ -252,6 +252,11 @@ const RootNavigator = () => {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />
         <Text style={styles.loadingText}>Loading...</Text>
+        {__DEV__ && (
+          <Text style={styles.debugText}>
+            Auth: {authInitialized ? '✓' : '⏳'} | User: {userId ? '✓' : '✗'} | Sub: {subLoading ? '⏳' : '✓'}
+          </Text>
+        )}
       </View>
     );
   }
@@ -340,6 +345,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     color: '#666',
+  },
+  debugText: {
+    marginTop: 12,
+    fontSize: 12,
+    color: '#999',
+    fontFamily: 'monospace',
   },
   title: {
     fontSize: 24,
