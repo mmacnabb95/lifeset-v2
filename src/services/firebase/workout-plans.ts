@@ -112,23 +112,31 @@ export const getWorkoutPlans = async (
         ...userPlansSnapshot.docs,
       ];
 
-      return allPlans.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate(),
-        updatedAt: doc.data().updatedAt?.toDate(),
-      })) as WorkoutPlan[];
+      return allPlans.map((doc) => {
+        const data = doc.data();
+        const { id: _, ...dataWithoutId } = data;
+        return {
+          id: doc.id, // Always use Firestore document ID
+          ...dataWithoutId,
+          createdAt: data.createdAt?.toDate(),
+          updatedAt: data.updatedAt?.toDate(),
+        } as WorkoutPlan;
+      });
     } else {
       // Get only templates (for logged-out users)
       q = query(plansRef, where('isTemplate', '==', true));
       const snapshot = await getDocs(q);
 
-      return snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate(),
-        updatedAt: doc.data().updatedAt?.toDate(),
-      })) as WorkoutPlan[];
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const { id: _, ...dataWithoutId } = data;
+        return {
+          id: doc.id, // Always use Firestore document ID
+          ...dataWithoutId,
+          createdAt: data.createdAt?.toDate(),
+          updatedAt: data.updatedAt?.toDate(),
+        } as WorkoutPlan;
+      });
     }
   } catch (error) {
     console.error('Error fetching workout plans:', error);
@@ -148,11 +156,15 @@ export const getWorkoutPlan = async (planId: string): Promise<WorkoutPlan | null
       return null;
     }
 
+    const data = planDoc.data();
+    // Remove the 'id' field from data to prevent overwriting the document ID
+    const { id: _, ...dataWithoutId } = data;
+
     return {
-      id: planDoc.id,
-      ...planDoc.data(),
-      createdAt: planDoc.data().createdAt?.toDate(),
-      updatedAt: planDoc.data().updatedAt?.toDate(),
+      id: planDoc.id, // Always use the Firestore document ID
+      ...dataWithoutId,
+      createdAt: data.createdAt?.toDate(),
+      updatedAt: data.updatedAt?.toDate(),
     } as WorkoutPlan;
   } catch (error) {
     console.error('Error fetching workout plan:', error);
