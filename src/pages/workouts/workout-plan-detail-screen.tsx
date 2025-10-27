@@ -265,6 +265,8 @@ export default function WorkoutPlanDetailScreen() {
   const handleDeletePlan = () => {
     if (!plan.id) return;
 
+    console.log('🗑️ Attempting to delete plan with ID:', plan.id, 'isTemplate:', plan.isTemplate, 'userId:', plan.userId);
+
     Alert.alert(
       'Delete Workout Plan',
       `Are you sure you want to delete "${plan.name}"? This cannot be undone.`,
@@ -275,11 +277,13 @@ export default function WorkoutPlanDetailScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
+              console.log('🗑️ Calling deleteWorkoutPlan with ID:', plan.id);
               await deleteWorkoutPlan(plan.id!);
               Alert.alert('Deleted', 'Workout plan deleted successfully', [
                 { text: 'OK', onPress: () => navigation.navigate('WorkoutPlans' as never) },
               ]);
             } catch (error: any) {
+              console.error('🗑️ Delete failed for plan ID:', plan.id, 'Error:', error);
               Alert.alert('Error', error.message || 'Failed to delete workout plan');
             }
           },
