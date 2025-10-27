@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Air Twisting Crunch",
     "category": "abs",
-    "description": "Air Twisting Crunch exercise with video tutorial",
+    "description": "Lie on your back and perform crunches while twisting your torso, bringing opposite elbow to knee. Great for obliques and core stability.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -18,7 +18,7 @@
     "id": 2,
     "name": "Alternate Heel Touchers",
     "category": "abs",
-    "description": "Alternate Heel Touchers exercise with video tutorial",
+    "description": "Lie on your back with knees bent, reach side to side touching your heels. Targets obliques and upper abs.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -33,7 +33,7 @@
     "id": 3,
     "name": "Bicycle Crunch",
     "category": "abs",
-    "description": "Bicycle Crunch exercise with video tutorial",
+    "description": "Lie on your back and perform a pedaling motion while bringing opposite elbow to knee. Excellent full ab workout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -48,7 +48,7 @@
     "id": 4,
     "name": "Bicycle Twisting Crunch",
     "category": "abs",
-    "description": "Bicycle Twisting Crunch exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -63,7 +63,7 @@
     "id": 5,
     "name": "Cable Crunch",
     "category": "abs",
-    "description": "Cable Crunch exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -78,7 +78,7 @@
     "id": 6,
     "name": "Captains Chair Straight Leg Raise",
     "category": "abs",
-    "description": "Captains Chair Straight Leg Raise exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -93,7 +93,7 @@
     "id": 7,
     "name": "Crunch (on Bench)",
     "category": "abs",
-    "description": "Crunch (on Bench) exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -108,7 +108,7 @@
     "id": 8,
     "name": "Crunch",
     "category": "abs",
-    "description": "Crunch exercise with video tutorial",
+    "description": "Lie on your back and perform crunches while twisting your torso, bringing opposite elbow to knee. Great for obliques and core stability.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -123,7 +123,7 @@
     "id": 9,
     "name": "Decline Reverse Crunch",
     "category": "abs",
-    "description": "Decline Reverse Crunch exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -138,7 +138,7 @@
     "id": 10,
     "name": "Incline Leg Hip Raise",
     "category": "abs",
-    "description": "Incline Leg Hip Raise exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -153,7 +153,7 @@
     "id": 11,
     "name": "Lying Scissor Kick",
     "category": "abs",
-    "description": "Lying Scissor Kick exercise with video tutorial",
+    "description": "Perform this exercise to strengthen your core and abdominal muscles. Focus on controlled movements and proper form.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -168,7 +168,7 @@
     "id": 12,
     "name": "Assisted Pull Up",
     "category": "back",
-    "description": "Assisted Pull Up exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -183,7 +183,7 @@
     "id": 13,
     "name": "Barbell Bent Over Row",
     "category": "back",
-    "description": "Barbell Bent Over Row exercise with video tutorial",
+    "description": "Hinge at hips with weights, pull them to your torso. Builds back thickness and strength.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -198,7 +198,7 @@
     "id": 14,
     "name": "Barbell Bent Over Row",
     "category": "back",
-    "description": "Barbell Bent Over Row exercise with video tutorial",
+    "description": "Hinge at hips with weights, pull them to your torso. Builds back thickness and strength.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -213,7 +213,7 @@
     "id": 15,
     "name": "Barbell Underhand Bent Over Row",
     "category": "back",
-    "description": "Barbell Underhand Bent Over Row exercise with video tutorial",
+    "description": "Hinge at hips with weights, pull them to your torso. Builds back thickness and strength.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -228,7 +228,7 @@
     "id": 16,
     "name": "Cable Bent Over Reverse Grip Row",
     "category": "back",
-    "description": "Cable Bent Over Reverse Grip Row exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -243,7 +243,7 @@
     "id": 17,
     "name": "Cable Low Seated Row",
     "category": "back",
-    "description": "Cable Low Seated Row exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -258,7 +258,7 @@
     "id": 18,
     "name": "Cable Seated Row",
     "category": "back",
-    "description": "Cable Seated Row exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -273,7 +273,7 @@
     "id": 19,
     "name": "Dumbbell Bent Over Row",
     "category": "back",
-    "description": "Dumbbell Bent Over Row exercise with video tutorial",
+    "description": "Hinge at hips with weights, pull them to your torso. Builds back thickness and strength.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -288,7 +288,7 @@
     "id": 20,
     "name": "Lat Pulldown",
     "category": "back",
-    "description": "Lat Pulldown exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -303,7 +303,7 @@
     "id": 21,
     "name": "One Arm Lat Pulldown",
     "category": "back",
-    "description": "One Arm Lat Pulldown exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -318,7 +318,7 @@
     "id": 22,
     "name": "Rope Pulldown",
     "category": "back",
-    "description": "Rope Pulldown exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -333,7 +333,7 @@
     "id": 23,
     "name": "Smith Bent Over Row",
     "category": "back",
-    "description": "Smith Bent Over Row exercise with video tutorial",
+    "description": "Hinge at hips with weights, pull them to your torso. Builds back thickness and strength.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -348,7 +348,7 @@
     "id": 24,
     "name": "T Bar Row",
     "category": "back",
-    "description": "T Bar Row exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -363,7 +363,7 @@
     "id": 25,
     "name": "V Bar Pulldown",
     "category": "back",
-    "description": "V Bar Pulldown exercise with video tutorial",
+    "description": "Strengthens your back muscles and improves posture. Focus on squeezing shoulder blades together at the peak.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -378,7 +378,7 @@
     "id": 26,
     "name": "Assault Bike",
     "category": "cardio",
-    "description": "Assault Bike exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -393,7 +393,7 @@
     "id": 27,
     "name": "Assault Run",
     "category": "cardio",
-    "description": "Assault Run exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -408,7 +408,7 @@
     "id": 28,
     "name": "Elliptical Machine",
     "category": "cardio",
-    "description": "Elliptical Machine exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -423,7 +423,7 @@
     "id": 29,
     "name": "Incline Treadmill",
     "category": "cardio",
-    "description": "Incline Treadmill exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -438,7 +438,7 @@
     "id": 30,
     "name": "Ski Ergometer",
     "category": "cardio",
-    "description": "Ski Ergometer exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -453,7 +453,7 @@
     "id": 31,
     "name": "Stationary Bike",
     "category": "cardio",
-    "description": "Stationary Bike exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -468,7 +468,7 @@
     "id": 32,
     "name": "Stepmill",
     "category": "cardio",
-    "description": "Stepmill exercise with video tutorial",
+    "description": "Cardiovascular exercise to boost heart rate and burn calories. Maintain intensity throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -483,7 +483,7 @@
     "id": 33,
     "name": "Barbell Bench Press",
     "category": "chest",
-    "description": "Barbell Bench Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -498,7 +498,7 @@
     "id": 34,
     "name": "Barbell Incline Bench Press",
     "category": "chest",
-    "description": "Barbell Incline Bench Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -513,7 +513,7 @@
     "id": 35,
     "name": "Cable Incline Fly",
     "category": "chest",
-    "description": "Cable Incline Fly exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -528,7 +528,7 @@
     "id": 36,
     "name": "Cable Middle Fly",
     "category": "chest",
-    "description": "Cable Middle Fly exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -543,7 +543,7 @@
     "id": 37,
     "name": "Cable Standing Chest Press",
     "category": "chest",
-    "description": "Cable Standing Chest Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -558,7 +558,7 @@
     "id": 38,
     "name": "Chest Dip",
     "category": "chest",
-    "description": "Chest Dip exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -573,7 +573,7 @@
     "id": 39,
     "name": "Lever Chest Press",
     "category": "chest",
-    "description": "Lever Chest Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -588,7 +588,7 @@
     "id": 40,
     "name": "Smith Bench Press",
     "category": "chest",
-    "description": "Smith Bench Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -603,7 +603,7 @@
     "id": 41,
     "name": "Smith Close Grip Bench Press",
     "category": "chest",
-    "description": "Smith Close Grip Bench Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -618,7 +618,7 @@
     "id": 42,
     "name": "Smith Incline Bench Press",
     "category": "chest",
-    "description": "Smith Incline Bench Press exercise with video tutorial",
+    "description": "A chest exercise that builds upper body strength. Keep your core engaged and maintain proper alignment throughout.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -633,7 +633,7 @@
     "id": 43,
     "name": "Barbell Hip Thrust",
     "category": "glutes",
-    "description": "Barbell Hip Thrust exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -648,7 +648,7 @@
     "id": 44,
     "name": "Cable Stiff Leg Deadlift From Stepbox",
     "category": "glutes",
-    "description": "Cable Stiff Leg Deadlift From Stepbox exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -663,7 +663,7 @@
     "id": 45,
     "name": "Dumbbell Romanian Deadlift",
     "category": "glutes",
-    "description": "Dumbbell Romanian Deadlift exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -678,7 +678,7 @@
     "id": 46,
     "name": "Dumbbell Step Up",
     "category": "glutes",
-    "description": "Dumbbell Step Up exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -693,7 +693,7 @@
     "id": 47,
     "name": "Lever Seated Hip Abduction",
     "category": "glutes",
-    "description": "Lever Seated Hip Abduction exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -708,7 +708,7 @@
     "id": 48,
     "name": "Lever Standing Hip Extension",
     "category": "glutes",
-    "description": "Lever Standing Hip Extension exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -723,7 +723,7 @@
     "id": 49,
     "name": "Lever Standing Rear Kick",
     "category": "glutes",
-    "description": "Lever Standing Rear Kick exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -738,7 +738,7 @@
     "id": 50,
     "name": "Smith Hip Thrust",
     "category": "glutes",
-    "description": "Smith Hip Thrust exercise with video tutorial",
+    "description": "Targets glute muscles for lower body strength. Focus on squeezing at the top of the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -753,7 +753,7 @@
     "id": 51,
     "name": "Barbell Calf Raise",
     "category": "legs",
-    "description": "Barbell Calf Raise exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -768,7 +768,7 @@
     "id": 52,
     "name": "Barbell Lunge",
     "category": "legs",
-    "description": "Barbell Lunge exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -783,7 +783,7 @@
     "id": 53,
     "name": "Barbell Romanian Deadlift",
     "category": "legs",
-    "description": "Barbell Romanian Deadlift exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -798,7 +798,7 @@
     "id": 54,
     "name": "Barbell Split Squat",
     "category": "legs",
-    "description": "Barbell Split Squat exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -813,7 +813,7 @@
     "id": 55,
     "name": "Barbell Squat",
     "category": "legs",
-    "description": "Barbell Squat exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -828,7 +828,7 @@
     "id": 56,
     "name": "Barbell Stiff Legged Deadlift",
     "category": "legs",
-    "description": "Barbell Stiff Legged Deadlift exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -843,7 +843,7 @@
     "id": 57,
     "name": "Bulgarian Split Squat",
     "category": "legs",
-    "description": "Bulgarian Split Squat exercise with video tutorial",
+    "description": "Rear foot elevated on bench, lower into a lunge. Targets quads and glutes intensely.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -858,7 +858,7 @@
     "id": 58,
     "name": "Dumbbell Single Leg Split Squat",
     "category": "legs",
-    "description": "Dumbbell Single Leg Split Squat exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -873,7 +873,7 @@
     "id": 59,
     "name": "Good Mornings",
     "category": "legs",
-    "description": "Good Mornings exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -888,7 +888,7 @@
     "id": 60,
     "name": "Hack Squat",
     "category": "legs",
-    "description": "Hack Squat exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -903,7 +903,7 @@
     "id": 61,
     "name": "Hyperextension",
     "category": "legs",
-    "description": "Hyperextension exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -918,7 +918,7 @@
     "id": 62,
     "name": "Leg Press",
     "category": "legs",
-    "description": "Leg Press exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -933,7 +933,7 @@
     "id": 63,
     "name": "Lever Leg Extension",
     "category": "legs",
-    "description": "Lever Leg Extension exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -948,7 +948,7 @@
     "id": 64,
     "name": "Lever Lying Leg Curl",
     "category": "legs",
-    "description": "Lever Lying Leg Curl exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -963,7 +963,7 @@
     "id": 65,
     "name": "Lever Seated Leg Curl",
     "category": "legs",
-    "description": "Lever Seated Leg Curl exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -978,7 +978,7 @@
     "id": 66,
     "name": "Seated Calf Raise",
     "category": "legs",
-    "description": "Seated Calf Raise exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -993,7 +993,7 @@
     "id": 67,
     "name": "Smith Chair Squat",
     "category": "legs",
-    "description": "Smith Chair Squat exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1008,7 +1008,7 @@
     "id": 68,
     "name": "Standing Calf Raise",
     "category": "legs",
-    "description": "Standing Calf Raise exercise with video tutorial",
+    "description": "Lower body exercise targeting legs and glutes. Maintain balance and control throughout the movement.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1023,7 +1023,7 @@
     "id": 69,
     "name": "Barbell Overhead Press",
     "category": "shoulders",
-    "description": "Barbell Overhead Press exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1038,7 +1038,7 @@
     "id": 70,
     "name": "Barbell Shrug",
     "category": "shoulders",
-    "description": "Barbell Shrug exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1053,7 +1053,7 @@
     "id": 71,
     "name": "Cable Cross Over Revers Fly",
     "category": "shoulders",
-    "description": "Cable Cross Over Revers Fly exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1068,7 +1068,7 @@
     "id": 72,
     "name": "Cable Forward Raise",
     "category": "shoulders",
-    "description": "Cable Forward Raise exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1083,7 +1083,7 @@
     "id": 73,
     "name": "Cable One Arm Lateral Raise",
     "category": "shoulders",
-    "description": "Cable One Arm Lateral Raise exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1098,7 +1098,7 @@
     "id": 74,
     "name": "Dumbbell Rear Delt Row",
     "category": "shoulders",
-    "description": "Dumbbell Rear Delt Row exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1113,7 +1113,7 @@
     "id": 75,
     "name": "Dumbbell Seated Front Raise",
     "category": "shoulders",
-    "description": "Dumbbell Seated Front Raise exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1128,7 +1128,7 @@
     "id": 76,
     "name": "Dumbbell Single Arm Leaning Lateral Raise",
     "category": "shoulders",
-    "description": "Dumbbell Single Arm Leaning Lateral Raise exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1143,7 +1143,7 @@
     "id": 77,
     "name": "Lever Seated Hammer Grip Shoulder Press",
     "category": "shoulders",
-    "description": "Lever Seated Hammer Grip Shoulder Press exercise with video tutorial",
+    "description": "Press weights overhead from shoulder height. Primary shoulder builder.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1158,7 +1158,7 @@
     "id": 78,
     "name": "Machne Shoulder Press",
     "category": "shoulders",
-    "description": "Machne Shoulder Press exercise with video tutorial",
+    "description": "Press weights overhead from shoulder height. Primary shoulder builder.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1173,7 +1173,7 @@
     "id": 79,
     "name": "Seated Reverse Fly",
     "category": "shoulders",
-    "description": "Seated Reverse Fly exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1188,7 +1188,7 @@
     "id": 80,
     "name": "Smith Seated Shoulder Press",
     "category": "shoulders",
-    "description": "Smith Seated Shoulder Press exercise with video tutorial",
+    "description": "Press weights overhead from shoulder height. Primary shoulder builder.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1203,7 +1203,7 @@
     "id": 81,
     "name": "Smith Shrug",
     "category": "shoulders",
-    "description": "Smith Shrug exercise with video tutorial",
+    "description": "Builds shoulder strength and stability. Keep core tight and avoid using momentum.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1218,7 +1218,7 @@
     "id": 82,
     "name": "Alternate Heel Touch Side Kick Squat",
     "category": "stretching",
-    "description": "Alternate Heel Touch Side Kick Squat exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1233,7 +1233,7 @@
     "id": 83,
     "name": "Back Forward Leg Swings",
     "category": "stretching",
-    "description": "Back Forward Leg Swings exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1248,7 +1248,7 @@
     "id": 84,
     "name": "Back Stretch",
     "category": "stretching",
-    "description": "Back Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1263,7 +1263,7 @@
     "id": 85,
     "name": "Barbell Seated Twist",
     "category": "stretching",
-    "description": "Barbell Seated Twist exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1278,7 +1278,7 @@
     "id": 86,
     "name": "Basic Toe Touch",
     "category": "stretching",
-    "description": "Basic Toe Touch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1293,7 +1293,7 @@
     "id": 87,
     "name": "Bent Arm Chest Stretch",
     "category": "stretching",
-    "description": "Bent Arm Chest Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1308,7 +1308,7 @@
     "id": 88,
     "name": "Bent Leg Side Kick (kneeling)",
     "category": "stretching",
-    "description": "Bent Leg Side Kick (kneeling) exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1323,7 +1323,7 @@
     "id": 89,
     "name": "Bent Over Twist",
     "category": "stretching",
-    "description": "Bent Over Twist exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1338,7 +1338,7 @@
     "id": 90,
     "name": "Bent Knee Lying Twist",
     "category": "stretching",
-    "description": "Bent Knee Lying Twist exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1353,7 +1353,7 @@
     "id": 91,
     "name": "Bridge Hip Abduction",
     "category": "stretching",
-    "description": "Bridge Hip Abduction exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1368,7 +1368,7 @@
     "id": 92,
     "name": "Butterfly Yoga Pose",
     "category": "stretching",
-    "description": "Butterfly Yoga Pose exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1383,7 +1383,7 @@
     "id": 93,
     "name": "Calf Stretch",
     "category": "stretching",
-    "description": "Calf Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1398,7 +1398,7 @@
     "id": 94,
     "name": "Cat Stretch",
     "category": "stretching",
-    "description": "Cat Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1413,7 +1413,7 @@
     "id": 95,
     "name": "Ceiling Look Stretch",
     "category": "stretching",
-    "description": "Ceiling Look Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1428,7 +1428,7 @@
     "id": 96,
     "name": "Chin To Chest Stretch",
     "category": "stretching",
-    "description": "Chin To Chest Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1443,7 +1443,7 @@
     "id": 97,
     "name": "Circles Arm",
     "category": "stretching",
-    "description": "Circles Arm exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1458,7 +1458,7 @@
     "id": 98,
     "name": "Circles Knee Stretch",
     "category": "stretching",
-    "description": "Circles Knee Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1473,7 +1473,7 @@
     "id": 99,
     "name": "Cobra Yoga Pose",
     "category": "stretching",
-    "description": "Cobra Yoga Pose exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1488,7 +1488,7 @@
     "id": 100,
     "name": "Crossover Kneeling Hip Flexor Stretch",
     "category": "stretching",
-    "description": "Crossover Kneeling Hip Flexor Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1503,7 +1503,7 @@
     "id": 101,
     "name": "Elbows Back Stretch",
     "category": "stretching",
-    "description": "Elbows Back Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1518,7 +1518,7 @@
     "id": 102,
     "name": "Full Squat Mobility",
     "category": "stretching",
-    "description": "Full Squat Mobility exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1533,7 +1533,7 @@
     "id": 103,
     "name": "Hip Flexor Stretch",
     "category": "stretching",
-    "description": "Hip Flexor Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1548,7 +1548,7 @@
     "id": 104,
     "name": "Iron Cross Stretch",
     "category": "stretching",
-    "description": "Iron Cross Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1563,7 +1563,7 @@
     "id": 105,
     "name": "Kneeling Back Rotation Stretch",
     "category": "stretching",
-    "description": "Kneeling Back Rotation Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1578,7 +1578,7 @@
     "id": 106,
     "name": "Kneeling Hip Flexor Stretch",
     "category": "stretching",
-    "description": "Kneeling Hip Flexor Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1593,7 +1593,7 @@
     "id": 107,
     "name": "Lying Abductor Stretch",
     "category": "stretching",
-    "description": "Lying Abductor Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1608,7 +1608,7 @@
     "id": 108,
     "name": "Lying Cross Over Knee Pull Down Stretch",
     "category": "stretching",
-    "description": "Lying Cross Over Knee Pull Down Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1623,7 +1623,7 @@
     "id": 109,
     "name": "Lying Elbow To Knee",
     "category": "stretching",
-    "description": "Lying Elbow To Knee exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1638,7 +1638,7 @@
     "id": 110,
     "name": "Lying Glute Stretch",
     "category": "stretching",
-    "description": "Lying Glute Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1653,7 +1653,7 @@
     "id": 111,
     "name": "Lying Quadriceps Stretch",
     "category": "stretching",
-    "description": "Lying Quadriceps Stretch exercise with video tutorial",
+    "description": "Flexibility and mobility exercise. Hold stretches for 20-30 seconds and breathe deeply.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1668,7 +1668,7 @@
     "id": 112,
     "name": "Barbell Close Grip Bench Press",
     "category": "triceps",
-    "description": "Barbell Close Grip Bench Press exercise with video tutorial",
+    "description": "Builds the back of the upper arm. Focus on the squeeze at full extension.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1683,7 +1683,7 @@
     "id": 113,
     "name": "Barbell Skull Crusher",
     "category": "triceps",
-    "description": "Barbell Skull Crusher exercise with video tutorial",
+    "description": "Builds the back of the upper arm. Focus on the squeeze at full extension.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1698,7 +1698,7 @@
     "id": 114,
     "name": "Cable High Pulley Overhead Tricep Extension",
     "category": "triceps",
-    "description": "Cable High Pulley Overhead Tricep Extension exercise with video tutorial",
+    "description": "Hold weight overhead with both hands, lower behind head and extend. Hits long head of triceps.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1713,7 +1713,7 @@
     "id": 115,
     "name": "Cable One Arm Side Triceps Pushdown",
     "category": "triceps",
-    "description": "Cable One Arm Side Triceps Pushdown exercise with video tutorial",
+    "description": "Builds the back of the upper arm. Focus on the squeeze at full extension.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1728,7 +1728,7 @@
     "id": 116,
     "name": "Cable Kickback",
     "category": "triceps",
-    "description": "Cable Kickback exercise with video tutorial",
+    "description": "Builds the back of the upper arm. Focus on the squeeze at full extension.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1743,7 +1743,7 @@
     "id": 117,
     "name": "Overhead Triceps Extension (rope Attachment)",
     "category": "triceps",
-    "description": "Overhead Triceps Extension (rope Attachment) exercise with video tutorial",
+    "description": "Builds the back of the upper arm. Focus on the squeeze at full extension.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1758,7 +1758,7 @@
     "id": 118,
     "name": "Barbell Drag Curl",
     "category": "biceps",
-    "description": "Barbell Drag Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1773,7 +1773,7 @@
     "id": 119,
     "name": "Barbell Preacher Curl",
     "category": "biceps",
-    "description": "Barbell Preacher Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1788,7 +1788,7 @@
     "id": 120,
     "name": "Barbell Standing Close Grip Curl",
     "category": "biceps",
-    "description": "Barbell Standing Close Grip Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1803,7 +1803,7 @@
     "id": 121,
     "name": "Cable Biceps Curl (sz Bar)",
     "category": "biceps",
-    "description": "Cable Biceps Curl (sz Bar) exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1818,7 +1818,7 @@
     "id": 122,
     "name": "Cable Hammer Curl (with Rope)",
     "category": "biceps",
-    "description": "Cable Hammer Curl (with Rope) exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1833,7 +1833,7 @@
     "id": 123,
     "name": "Cable Hammer Curl",
     "category": "biceps",
-    "description": "Cable Hammer Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1848,7 +1848,7 @@
     "id": 124,
     "name": "Cable One Arm Curl",
     "category": "biceps",
-    "description": "Cable One Arm Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1863,7 +1863,7 @@
     "id": 125,
     "name": "Dumbbell Biceps Curl",
     "category": "biceps",
-    "description": "Dumbbell Biceps Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
@@ -1878,7 +1878,7 @@
     "id": 126,
     "name": "Lever Preacher Curl",
     "category": "biceps",
-    "description": "Lever Preacher Curl exercise with video tutorial",
+    "description": "Isolates bicep muscles for arm development. Avoid swinging and keep elbows stable.",
     "difficulty": "intermediate",
     "equipment": [],
     "muscleGroups": [
