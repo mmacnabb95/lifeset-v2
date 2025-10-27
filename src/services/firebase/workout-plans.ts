@@ -186,6 +186,15 @@ export const updateWorkoutPlan = async (
 export const deleteWorkoutPlan = async (planId: string): Promise<void> => {
   try {
     const planRef = doc(db, 'workoutPlans', planId);
+    
+    // Debug: Check if the document exists and has userId
+    const planDoc = await getDoc(planRef);
+    if (!planDoc.exists()) {
+      throw new Error('Workout plan not found');
+    }
+    
+    console.log('Attempting to delete plan:', planId, 'with data:', planDoc.data());
+    
     await deleteDoc(planRef);
     console.log('Workout plan deleted:', planId);
   } catch (error) {
