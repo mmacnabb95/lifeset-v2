@@ -16,8 +16,9 @@ import workoutPlansData from '../../data/workout-plans.json';
 
 export interface WorkoutPlanExercise {
   exerciseId: number;
-  sets: number;
-  reps: number;
+  sets?: number; // Optional for cardio exercises
+  reps?: number; // Optional for cardio exercises
+  durationSeconds?: number; // For cardio and timed exercises
   restSeconds: number;
   order: number;
   note?: string;

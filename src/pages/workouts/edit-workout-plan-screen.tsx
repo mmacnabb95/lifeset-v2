@@ -70,11 +70,17 @@ export default function EditWorkoutPlanScreen() {
   const handleAddExercise = (exerciseId: number) => {
     if (!plan) return;
 
+    // Find exercise details to check if it's cardio
+    const exerciseDetails = exercises.find(ex => ex.id === exerciseId);
+    const isCardio = exerciseDetails?.category === 'cardio';
+
     const newExercise: WorkoutPlanExercise = {
       exerciseId,
-      sets: 3,
-      reps: 10,
-      restSeconds: 60,
+      ...(isCardio 
+        ? { durationSeconds: 1800 } // Default 30 minutes for cardio
+        : { sets: 3, reps: 10 }      // Default sets/reps for strength
+      ),
+      restSeconds: isCardio ? 0 : 60, // No rest for cardio
       order: plan.exercises.length + 1,
       note: selectedDay, // Add the day/split info
     };
@@ -302,37 +308,59 @@ export default function EditWorkoutPlanScreen() {
                 </View>
 
                 <View style={styles.exerciseInputs}>
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Sets</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={String(planEx.sets)}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        if (!isNaN(num) && num > 0) {
-                          handleUpdateExercise(index, { sets: num });
-                        }
-                      }}
-                      keyboardType="number-pad"
-                      maxLength={2}
-                    />
-                  </View>
+                  {exerciseDetails.category === 'cardio' ? (
+                    // Duration input for cardio
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Duration (min)</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={String(Math.floor((planEx.durationSeconds || 0) / 60))}
+                        onChangeText={(text) => {
+                          const minutes = parseInt(text);
+                          if (!isNaN(minutes) && minutes >= 0) {
+                            handleUpdateExercise(index, { durationSeconds: minutes * 60 });
+                          }
+                        }}
+                        keyboardType="number-pad"
+                        maxLength={3}
+                      />
+                    </View>
+                  ) : (
+                    // Sets and Reps for strength exercises
+                    <>
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Sets</Text>
+                        <TextInput
+                          style={styles.input}
+                          value={String(planEx.sets || 0)}
+                          onChangeText={(text) => {
+                            const num = parseInt(text);
+                            if (!isNaN(num) && num > 0) {
+                              handleUpdateExercise(index, { sets: num });
+                            }
+                          }}
+                          keyboardType="number-pad"
+                          maxLength={2}
+                        />
+                      </View>
 
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Reps</Text>
-                    <TextInput
-                      style={styles.input}
-                      value={String(planEx.reps)}
-                      onChangeText={(text) => {
-                        const num = parseInt(text);
-                        if (!isNaN(num) && num > 0) {
-                          handleUpdateExercise(index, { reps: num });
-                        }
-                      }}
-                      keyboardType="number-pad"
-                      maxLength={3}
-                    />
-                  </View>
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Reps</Text>
+                        <TextInput
+                          style={styles.input}
+                          value={String(planEx.reps || 0)}
+                          onChangeText={(text) => {
+                            const num = parseInt(text);
+                            if (!isNaN(num) && num > 0) {
+                              handleUpdateExercise(index, { reps: num });
+                            }
+                          }}
+                          keyboardType="number-pad"
+                          maxLength={3}
+                        />
+                      </View>
+                    </>
+                  )}
 
                   <View style={styles.inputGroup}>
                     <Text style={styles.inputLabel}>Rest (s)</Text>

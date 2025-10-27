@@ -419,7 +419,9 @@ export default function WorkoutPlanDetailScreen() {
                       </Text>
                       <View style={styles.exerciseDetails}>
                         <Text style={styles.exerciseDetailText}>
-                          {planEx.sets} sets × {planEx.reps} reps
+                          {planEx.exerciseDetails.category === 'cardio' || planEx.durationSeconds
+                            ? `${Math.floor((planEx.durationSeconds || 0) / 60)}:${String((planEx.durationSeconds || 0) % 60).padStart(2, '0')} min`
+                            : `${planEx.sets || 0} sets × ${planEx.reps || 0} reps`}
                         </Text>
                         {planEx.restSeconds > 0 && (
                           <>
