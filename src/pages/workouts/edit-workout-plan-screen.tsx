@@ -316,6 +316,10 @@ export default function EditWorkoutPlanScreen() {
                         style={styles.input}
                         value={String(Math.floor((planEx.durationSeconds || 0) / 60))}
                         onChangeText={(text) => {
+                          if (text === '') {
+                            handleUpdateExercise(index, { durationSeconds: 0 });
+                            return;
+                          }
                           const minutes = parseInt(text);
                           if (!isNaN(minutes) && minutes >= 0) {
                             handleUpdateExercise(index, { durationSeconds: minutes * 60 });
@@ -323,6 +327,7 @@ export default function EditWorkoutPlanScreen() {
                         }}
                         keyboardType="number-pad"
                         maxLength={3}
+                        selectTextOnFocus={true}
                       />
                     </View>
                   ) : (
@@ -334,6 +339,10 @@ export default function EditWorkoutPlanScreen() {
                           style={styles.input}
                           value={String(planEx.sets || 0)}
                           onChangeText={(text) => {
+                            if (text === '') {
+                              handleUpdateExercise(index, { sets: 1 });
+                              return;
+                            }
                             const num = parseInt(text);
                             if (!isNaN(num) && num > 0) {
                               handleUpdateExercise(index, { sets: num });
@@ -341,6 +350,7 @@ export default function EditWorkoutPlanScreen() {
                           }}
                           keyboardType="number-pad"
                           maxLength={2}
+                          selectTextOnFocus={true}
                         />
                       </View>
 
@@ -350,6 +360,10 @@ export default function EditWorkoutPlanScreen() {
                           style={styles.input}
                           value={String(planEx.reps || 0)}
                           onChangeText={(text) => {
+                            if (text === '') {
+                              handleUpdateExercise(index, { reps: 1 });
+                              return;
+                            }
                             const num = parseInt(text);
                             if (!isNaN(num) && num > 0) {
                               handleUpdateExercise(index, { reps: num });
@@ -357,6 +371,7 @@ export default function EditWorkoutPlanScreen() {
                           }}
                           keyboardType="number-pad"
                           maxLength={3}
+                          selectTextOnFocus={true}
                         />
                       </View>
                     </>
@@ -368,6 +383,11 @@ export default function EditWorkoutPlanScreen() {
                       style={styles.input}
                       value={String(planEx.restSeconds)}
                       onChangeText={(text) => {
+                        // Allow empty string while typing
+                        if (text === '') {
+                          handleUpdateExercise(index, { restSeconds: 0 });
+                          return;
+                        }
                         const num = parseInt(text);
                         if (!isNaN(num) && num >= 0) {
                           handleUpdateExercise(index, { restSeconds: num });
@@ -375,6 +395,7 @@ export default function EditWorkoutPlanScreen() {
                       }}
                       keyboardType="number-pad"
                       maxLength={3}
+                      selectTextOnFocus={true}
                     />
                   </View>
                 </View>
