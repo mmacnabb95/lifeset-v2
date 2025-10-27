@@ -256,11 +256,12 @@ const RootNavigator = () => {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />
         <Text style={styles.loadingText}>Loading...</Text>
-        {__DEV__ && (
-          <Text style={styles.debugText}>
-            Auth: {authInitialized ? '✓' : '⏳'} | User: {userId ? '✓' : '✗'} | Sub: {subLoading ? '⏳' : '✓'}
-          </Text>
-        )}
+        <Text style={styles.debugText}>
+          Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
+        </Text>
+        <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
+          Build 13 - Redux Auth Flag
+        </Text>
       </View>
     );
   }
