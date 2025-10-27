@@ -125,17 +125,34 @@ export default function WorkoutPlanDetailScreen() {
             try {
               // Pass the plan object directly for local templates
               const newPlanId = await duplicateWorkoutPlan(userId, plan.id!, plan);
+              
+              // Fetch the newly created plan from Firestore
+              const { getWorkoutPlan } = await import('src/services/firebase/workout-plans');
+              const newPlan = await getWorkoutPlan(newPlanId);
+              
+              if (!newPlan) {
+                throw new Error('Failed to fetch duplicated plan');
+              }
+              
               Alert.alert(
                 'Success!',
                 'Custom plan created! You can now edit it.',
                 [
                   {
-                    text: 'OK',
+                    text: 'Edit Now',
                     onPress: () => navigation.navigate('EditWorkoutPlan' as never, { planId: newPlanId } as never),
+                  },
+                  {
+                    text: 'View Plan',
+                    onPress: () => {
+                      // Navigate to the NEW plan detail screen
+                      navigation.replace('WorkoutPlanDetail' as never, { plan: newPlan } as never);
+                    },
                   },
                 ]
               );
             } catch (error: any) {
+              console.error('Customise error:', error);
               Alert.alert('Error', error.message || 'Failed to customise plan');
             }
           },
