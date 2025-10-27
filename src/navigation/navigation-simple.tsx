@@ -186,13 +186,21 @@ const RootNavigator = () => {
   const navigationRef = useRef<any>(null);
 
   // Wait for Firebase Auth to initialize before making routing decisions
+  // Use a combination of timeout AND userId change detection for reliability
   useEffect(() => {
+    // If userId is already present (user logged in), mark as initialized immediately
+    if (userId) {
+      setAuthInitialized(true);
+      return;
+    }
+
+    // Otherwise, wait for auth to settle (handles fresh app start)
     const timer = setTimeout(() => {
       setAuthInitialized(true);
-    }, 500); // Give Firebase 500ms to restore persisted auth session
+    }, 1500); // 1.5 seconds for production builds to restore persisted session
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [userId]); // Re-run if userId changes (auth restored)
 
   useEffect(() => {
     const checkOnboarding = async () => {
