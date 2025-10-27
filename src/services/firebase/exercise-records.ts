@@ -15,9 +15,14 @@ export interface ExerciseRecord {
   userId: string;
   exerciseId: number;
   exerciseName: string;
-  maxWeight: number;
+  exerciseCategory?: string; // 'cardio', 'strength', etc.
+  // For strength exercises
+  maxWeight?: number;
   lastWeight?: number;
   lastReps?: number;
+  // For cardio exercises
+  maxDurationSeconds?: number;
+  lastDurationSeconds?: number;
   lastUpdated: any;
 }
 
@@ -63,13 +68,15 @@ export const getAllExerciseRecords = async (userId: string): Promise<ExerciseRec
 
 /**
  * Update or create an exercise record
+ * For strength exercises: provide weight and reps
+ * For cardio exercises: provide durationSeconds
  */
 export const updateExerciseRecord = async (
   userId: string,
   exerciseId: number,
   exerciseName: string,
-  weight: number,
-  reps?: number
+  exerciseCategory: string,
+  data: { weight?: number; reps?: number; durationSeconds?: number }
 ): Promise<void> => {
   try {
     const recordRef = doc(db, 'users', userId, 'exercise_records', exerciseId.toString());
@@ -79,41 +86,36 @@ export const updateExerciseRecord = async (
       userId,
       exerciseId,
       exerciseName,
-      maxWeight: existingRecord.exists() 
-        ? Math.max(existingRecord.data().maxWeight || 0, weight)
-        : weight,
-      lastWeight: weight,
+      exerciseCategory,
       lastUpdated: serverTimestamp(),
     };
     
-    // Only add lastReps if provided (avoid undefined)
-    if (reps !== undefined) {
-      recordData.lastReps = reps;
+    // Handle strength exercises (weight-based)
+    if (data.weight !== undefined) {
+      recordData.maxWeight = existingRecord.exists() 
+        ? Math.max(existingRecord.data().maxWeight || 0, data.weight)
+        : data.weight;
+      recordData.lastWeight = data.weight;
+      
+      if (data.reps !== undefined) {
+        recordData.lastReps = data.reps;
+      }
+    }
+    
+    // Handle cardio exercises (duration-based)
+    if (data.durationSeconds !== undefined) {
+      recordData.maxDurationSeconds = existingRecord.exists() 
+        ? Math.max(existingRecord.data().maxDurationSeconds || 0, data.durationSeconds)
+        : data.durationSeconds;
+      recordData.lastDurationSeconds = data.durationSeconds;
     }
     
     await setDoc(recordRef, recordData);
-    console.log(`Updated record for ${exerciseName}: ${weight}kg`);
+    console.log(`Updated record for ${exerciseName}:`, data);
   } catch (error) {
     console.error('Update exercise record error:', error);
     throw new Error('Failed to update exercise record');
   }
 };
 
-/**
- * Bulk update exercise records (after completing a workout)
- */
-export const updateMultipleExerciseRecords = async (
-  userId: string,
-  exercises: { exerciseId: number; exerciseName: string; weight: number; reps?: number }[]
-): Promise<void> => {
-  try {
-    const updates = exercises.map(ex => 
-      updateExerciseRecord(userId, ex.exerciseId, ex.exerciseName, ex.weight, ex.reps)
-    );
-    await Promise.all(updates);
-  } catch (error) {
-    console.error('Bulk update exercise records error:', error);
-    throw new Error('Failed to update exercise records');
-  }
-};
 

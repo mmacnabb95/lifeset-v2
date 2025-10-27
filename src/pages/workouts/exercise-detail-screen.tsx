@@ -37,10 +37,12 @@ export default function ExerciseDetailScreen() {
   const video = useRef<Video>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [record, setRecord] = useState<ExerciseRecord | null>(null);
-  const [editingWeight, setEditingWeight] = useState(false);
-  const [weightInput, setWeightInput] = useState('');
+  const [editingRecord, setEditingRecord] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
+
+  const isCardio = exercise.category === 'cardio';
 
   // Load exercise record
   useEffect(() => {
@@ -49,29 +51,54 @@ export default function ExerciseDetailScreen() {
       const exerciseRecord = await getExerciseRecord(userId, exercise.id);
       setRecord(exerciseRecord);
       if (exerciseRecord) {
-        setWeightInput(exerciseRecord.lastWeight?.toString() || '');
+        if (isCardio) {
+          // For cardio, show duration in minutes
+          setInputValue(Math.floor((exerciseRecord.lastDurationSeconds || 0) / 60).toString());
+        } else {
+          // For strength, show weight
+          setInputValue(exerciseRecord.lastWeight?.toString() || '');
+        }
       }
     };
     loadRecord();
-  }, [userId, exercise.id]);
+  }, [userId, exercise.id, isCardio]);
 
-  const handleSaveWeight = async () => {
+  const handleSaveRecord = async () => {
     if (!userId) {
       Alert.alert('Login Required', 'Please login to save your records');
       return;
     }
 
-    const weight = parseFloat(weightInput);
-    if (isNaN(weight) || weight <= 0) {
-      Alert.alert('Invalid Weight', 'Please enter a valid weight');
+    const value = parseFloat(inputValue);
+    if (isNaN(value) || value <= 0) {
+      Alert.alert('Invalid Input', `Please enter a valid ${isCardio ? 'duration' : 'weight'}`);
       return;
     }
 
     try {
-      await updateExerciseRecord(userId, exercise.id, exercise.name, weight);
+      if (isCardio) {
+        // Save duration in seconds
+        await updateExerciseRecord(
+          userId, 
+          exercise.id, 
+          exercise.name, 
+          exercise.category,
+          { durationSeconds: value * 60 } // Convert minutes to seconds
+        );
+      } else {
+        // Save weight
+        await updateExerciseRecord(
+          userId, 
+          exercise.id, 
+          exercise.name, 
+          exercise.category,
+          { weight: value }
+        );
+      }
+      
       const updatedRecord = await getExerciseRecord(userId, exercise.id);
       setRecord(updatedRecord);
-      setEditingWeight(false);
+      setEditingRecord(false);
       Alert.alert('✓ Saved!', `Your record for ${exercise.name} has been updated!`);
     } catch (err: any) {
       Alert.alert('Error', err.message || 'Failed to save record');
@@ -184,44 +211,54 @@ export default function ExerciseDetailScreen() {
           {/* Personal Record - Prominent at Top */}
           <View style={styles.recordCard}>
             <View style={styles.recordHeader}>
-              <Text style={styles.recordTitle}>💪 Your Personal Record</Text>
-              {!editingWeight && (
-                <TouchableOpacity onPress={() => setEditingWeight(true)}>
+              <Text style={styles.recordTitle}>
+                {isCardio ? '⏱️ Your Best Time' : '💪 Your Personal Record'}
+              </Text>
+              {!editingRecord && (
+                <TouchableOpacity onPress={() => setEditingRecord(true)}>
                   <Text style={styles.editButton}>Edit</Text>
                 </TouchableOpacity>
               )}
             </View>
             
-            {editingWeight ? (
+            {editingRecord ? (
               <View style={styles.editContainer}>
                 <Text style={styles.editPrompt}>
-                  Enter the weight you can lift for this exercise:
+                  {isCardio 
+                    ? 'Enter your best duration for this exercise:'
+                    : 'Enter the weight you can lift for this exercise:'}
                 </Text>
                 <View style={styles.inputRow}>
                   <TextInput
                     style={styles.weightInput}
-                    value={weightInput}
-                    onChangeText={setWeightInput}
+                    value={inputValue}
+                    onChangeText={setInputValue}
                     keyboardType="numeric"
-                    placeholder="Enter weight"
+                    placeholder={isCardio ? "Enter minutes" : "Enter weight"}
                     placeholderTextColor="rgba(0, 151, 167, 0.4)"
                     autoFocus
                   />
-                  <Text style={styles.inputUnit}>kg</Text>
+                  <Text style={styles.inputUnit}>{isCardio ? 'min' : 'kg'}</Text>
                 </View>
                 <View style={styles.editButtons}>
                   <TouchableOpacity 
                     style={styles.cancelButton}
                     onPress={() => {
-                      setEditingWeight(false);
-                      setWeightInput(record?.lastWeight?.toString() || '');
+                      setEditingRecord(false);
+                      if (record) {
+                        if (isCardio) {
+                          setInputValue(Math.floor((record.lastDurationSeconds || 0) / 60).toString());
+                        } else {
+                          setInputValue(record.lastWeight?.toString() || '');
+                        }
+                      }
                     }}
                   >
                     <Text style={styles.cancelButtonText}>Cancel</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     style={styles.saveButton}
-                    onPress={handleSaveWeight}
+                    onPress={handleSaveRecord}
                   >
                     <Text style={styles.saveButtonText}>✓ Save Record</Text>
                   </TouchableOpacity>
@@ -229,29 +266,55 @@ export default function ExerciseDetailScreen() {
               </View>
             ) : record ? (
               <View style={styles.recordStats}>
-                <View style={styles.recordStat}>
-                  <Text style={styles.recordStatLabel}>Last Weight</Text>
-                  <Text style={styles.recordStatValue}>
-                    {record.lastWeight ? `${record.lastWeight} kg` : 'Not set'}
-                  </Text>
-                </View>
-                <View style={styles.recordDivider} />
-                <View style={styles.recordStat}>
-                  <Text style={styles.recordStatLabel}>Max Weight</Text>
-                  <Text style={styles.recordStatValue}>
-                    {record.maxWeight ? `${record.maxWeight} kg` : 'Not set'}
-                  </Text>
-                </View>
+                {isCardio ? (
+                  <>
+                    <View style={styles.recordStat}>
+                      <Text style={styles.recordStatLabel}>Last Duration</Text>
+                      <Text style={styles.recordStatValue}>
+                        {record.lastDurationSeconds 
+                          ? `${Math.floor(record.lastDurationSeconds / 60)} min` 
+                          : 'Not set'}
+                      </Text>
+                    </View>
+                    <View style={styles.recordDivider} />
+                    <View style={styles.recordStat}>
+                      <Text style={styles.recordStatLabel}>Best Duration</Text>
+                      <Text style={styles.recordStatValue}>
+                        {record.maxDurationSeconds 
+                          ? `${Math.floor(record.maxDurationSeconds / 60)} min` 
+                          : 'Not set'}
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <View style={styles.recordStat}>
+                      <Text style={styles.recordStatLabel}>Last Weight</Text>
+                      <Text style={styles.recordStatValue}>
+                        {record.lastWeight ? `${record.lastWeight} kg` : 'Not set'}
+                      </Text>
+                    </View>
+                    <View style={styles.recordDivider} />
+                    <View style={styles.recordStat}>
+                      <Text style={styles.recordStatLabel}>Max Weight</Text>
+                      <Text style={styles.recordStatValue}>
+                        {record.maxWeight ? `${record.maxWeight} kg` : 'Not set'}
+                      </Text>
+                    </View>
+                  </>
+                )}
               </View>
             ) : (
               <TouchableOpacity 
                 style={styles.addWeightPrompt}
-                onPress={() => setEditingWeight(true)}
+                onPress={() => setEditingRecord(true)}
               >
-                <Text style={styles.addWeightIcon}>⚡</Text>
-                <Text style={styles.addWeightText}>Tap to Record Your Weight</Text>
+                <Text style={styles.addWeightIcon}>{isCardio ? '⏱️' : '⚡'}</Text>
+                <Text style={styles.addWeightText}>
+                  {isCardio ? 'Tap to Record Your Time' : 'Tap to Record Your Weight'}
+                </Text>
                 <Text style={styles.addWeightSubtext}>
-                  Track your strength and progress!
+                  Track your {isCardio ? 'endurance' : 'strength'} and progress!
                 </Text>
               </TouchableOpacity>
             )}
