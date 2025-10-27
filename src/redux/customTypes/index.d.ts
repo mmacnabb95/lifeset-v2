@@ -91,8 +91,8 @@ declare module "uiTypes" {
     status: Status;
     error?: string;
     roles?: Role[];
-    user?: User;
-    userId?: number;
+    user?: User | string;
+    userId?: number | string;
     username?: string;
     two_factor_auth: 0 | 1;
     otp_required: 0 | 1;
@@ -101,6 +101,12 @@ declare module "uiTypes" {
     companyId?: number;
     pinAuthed?: boolean;
     hasPin?: boolean;
+    firebaseUser?: {
+      uid: string;
+      email: string | null;
+      displayName: string | null;
+    };
+    authInitialized?: boolean;
   };
 
   export interface FormAfterCreateUpdate<PayloadInterface> {
