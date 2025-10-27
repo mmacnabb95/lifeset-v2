@@ -260,7 +260,7 @@ const RootNavigator = () => {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 13 - Redux Auth Flag
+          Build 15 - AsyncStorage + Persistence Test
         </Text>
       </View>
     );
