@@ -163,7 +163,7 @@ export const TermsOfServiceScreen = () => {
         <Text style={styles.paragraph}>
           If you have questions about these Terms, please contact us:
         </Text>
-        <Text style={styles.contactInfo}>Email: support@lifesetwellbeing.com</Text>
+        <Text style={styles.contactInfo}>Email: matthew@lifesetwellbeing.com</Text>
         <Text style={styles.contactInfo}>Website: www.lifesetwellbeing.com</Text>
 
         <Text style={styles.sectionTitle}>15. Entire Agreement</Text>

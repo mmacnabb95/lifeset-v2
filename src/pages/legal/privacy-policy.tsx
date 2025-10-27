@@ -117,7 +117,7 @@ export const PrivacyPolicyScreen = () => {
           • Withdraw consent for data processing
         </Text>
         <Text style={styles.paragraph}>
-          To exercise these rights, please contact us at privacy@lifesetwellbeing.com
+          To exercise these rights, please contact us at matthew@lifesetwellbeing.com
         </Text>
 
         <Text style={styles.sectionTitle}>8. Data Retention</Text>
@@ -150,7 +150,7 @@ export const PrivacyPolicyScreen = () => {
         <Text style={styles.paragraph}>
           If you have questions about this Privacy Policy, please contact us:
         </Text>
-        <Text style={styles.contactInfo}>Email: privacy@lifesetwellbeing.com</Text>
+        <Text style={styles.contactInfo}>Email: matthew@lifesetwellbeing.com</Text>
         <Text style={styles.contactInfo}>Website: www.lifesetwellbeing.com</Text>
       </View>
     </ScrollView>

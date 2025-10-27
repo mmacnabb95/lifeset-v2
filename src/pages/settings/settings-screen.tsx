@@ -139,17 +139,10 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
 
-        {/* Data & Privacy */}
+        {/* Legal */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Data & Privacy</Text>
+          <Text style={styles.sectionTitle}>Legal</Text>
           <View style={styles.card}>
-            <TouchableOpacity style={styles.settingItem}>
-              <Text style={styles.settingLabel}>💾 Export Data</Text>
-              <Text style={styles.settingValue}>→</Text>
-            </TouchableOpacity>
-            
-            <View style={styles.divider} />
-            
             <TouchableOpacity 
               style={styles.settingItem}
               onPress={() => navigation.navigate('PrivacyPolicy')}
@@ -167,17 +160,6 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
               <Text style={styles.settingLabel}>📜 Terms of Service</Text>
               <Text style={styles.settingValue}>→</Text>
             </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* About */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About</Text>
-          <View style={styles.card}>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>App Version</Text>
-              <Text style={styles.settingValue}>1.0.0</Text>
-            </View>
           </View>
         </View>
 
