@@ -272,7 +272,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 18 - Mark Init on First Callback
+          Build 18 - FINAL FIX (navigationRef + ignore NULL)
         </Text>
       </View>
     );
