@@ -270,20 +270,27 @@ const RootNavigator = () => {
     );
   }
 
-  // Determine initial route
-  let initialRouteName = 'Welcome';
-  
-  if (userId && hasCompletedOnboarding === false) {
-    initialRouteName = 'Onboarding';
-  } else if (userId && hasCompletedOnboarding && !isSubscribed) {
-    initialRouteName = 'Paywall';
-  } else if (userId && hasCompletedOnboarding && isSubscribed) {
-    initialRouteName = 'Home';
-  }
+  // Determine which screen to show based on auth and subscription state
+  // Since initialRouteName doesn't update reactively, we manually route in the effect
+  // But we still need to set a reasonable default for the first render
+  const getInitialRoute = () => {
+    if (userId && hasCompletedOnboarding === false) {
+      return 'Onboarding';
+    } else if (userId && hasCompletedOnboarding && !isSubscribed) {
+      return 'Paywall';
+    } else if (userId && hasCompletedOnboarding && isSubscribed) {
+      return 'Home';
+    }
+    return 'Welcome';
+  };
 
+  const initialRoute = getInitialRoute();
+  console.log('🏗️ Rendering Stack.Navigator with initialRouteName:', initialRoute);
+  
   return (
     <Stack.Navigator 
-      initialRouteName={initialRouteName}
+      key={`nav-${userId}-${hasCompletedOnboarding}-${isSubscribed}`}
+      initialRouteName={initialRoute}
       screenOptions={{ headerShown: false }}
     >
       {/* Auth screens */}
