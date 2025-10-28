@@ -232,19 +232,23 @@ const RootNavigator = () => {
   // Navigate when auth state changes - BUT ONLY after auth is initialized
   useEffect(() => {
     if (!checkingOnboarding && !subLoading && authInitialized && navigationRef.current) {
-      console.log('🧭 Navigation effect running - userId:', userId ? 'EXISTS' : 'NONE', 'onboarding:', hasCompletedOnboarding, 'subscribed:', isSubscribed);
+      console.log('\n========== NAVIGATION DECISION ==========');
+      console.log('userId:', userId ? 'EXISTS' : 'NONE');
+      console.log('hasCompletedOnboarding:', hasCompletedOnboarding);
+      console.log('isSubscribed:', isSubscribed);
+      console.log('=========================================\n');
       
       if (userId && hasCompletedOnboarding === false) {
-        console.log('🧭 Navigating to Onboarding');
+        console.log('🧭 DECISION: Navigating to Onboarding');
         navigationRef.current?.navigate('Onboarding');
       } else if (userId && hasCompletedOnboarding && !isSubscribed) {
-        console.log('🧭 Navigating to Paywall');
+        console.log('🧭 DECISION: Navigating to Paywall (user exists but not subscribed)');
         navigationRef.current?.navigate('Paywall');
       } else if (userId && hasCompletedOnboarding && isSubscribed) {
-        console.log('🧭 Navigating to Home');
+        console.log('🧭 DECISION: Navigating to Home (user subscribed)');
         navigationRef.current?.navigate('Home');
       } else if (!userId) {
-        console.log('🧭 Navigating to Welcome (no user)');
+        console.log('🧭 DECISION: Navigating to Welcome (NO USER - THIS IS THE LOGOUT)');
         navigationRef.current?.navigate('Welcome');
       }
     }
