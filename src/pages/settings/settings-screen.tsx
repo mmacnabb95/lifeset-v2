@@ -23,8 +23,13 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
           onPress: async () => {
             try {
               await logOut();
-              console.log('User logged out');
-              // Navigation will automatically redirect to login via auth listener
+              console.log('User logged out successfully');
+              // Navigate to Welcome screen immediately
+              // The auth listener will also clear Redux state
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Welcome' }],
+              });
             } catch (err: any) {
               console.error('Logout error:', err);
               Alert.alert('Error', 'Failed to logout');
