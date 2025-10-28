@@ -13,7 +13,7 @@ import {
 } from "src/redux/domain/features/company/collection-slice";
 
 import { listEditDefaultOrderNameMediaResourcessLoading } from "src/redux/domain/features/listEditDefaultOrderNameMediaResources/collection-slice";
-import { useListEdit;DefaultOrder:Name;mediaResources;Collection } from "src/redux/domain/features/listEditDefaultOrderNameMediaResources/useListEdit;DefaultOrder:Name;mediaResources;Collection";
+import { useListEditDefaultOrderNameMediaResourcesCollection } from "src/redux/domain/features/listEditDefaultOrderNameMediaResources/useListEditDefaultOrderNameMediaResourcesCollection";
 
 import { Company } from "../../../../../../types/domain/flat-types";
 import { useTranslation } from "src/translations/useTranslation";

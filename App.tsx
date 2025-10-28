@@ -14,6 +14,7 @@ import { Navigation } from './src/navigation/navigation';
 
 // Import Firebase auth listener
 import { onAuthStateChange } from './src/services/firebase/auth';
+import { auth } from './src/services/firebase/config';
 // CHANGE: Import the correct actions from your auth slice
 import { setFirebaseUser, clearFirebaseUser } from './src/redux/features/auth/slice';
 
@@ -41,6 +42,38 @@ function AppContent() {
         console.error('❌ AsyncStorage test FAILED:', error);
       }
       
+      // WORKAROUND: Check if we have a manually saved session
+      // If Firebase Auth fails to restore, we'll restore manually after a delay
+      setTimeout(async () => {
+        try {
+          const savedUserId = await AsyncStorage.getItem('firebase_user_id');
+          const savedEmail = await AsyncStorage.getItem('firebase_user_email');
+          
+          if (savedUserId && savedEmail) {
+            console.log('🔍 Found manual session backup:', savedUserId);
+            
+            // Check if Firebase Auth has restored the user
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+              console.log('⚠️ Firebase Auth failed to restore - using manual backup');
+              // Manually dispatch the user to Redux
+              dispatch(setFirebaseUser({
+                uid: savedUserId,
+                email: savedEmail,
+                displayName: null,
+              }));
+              console.log('✅ Manually restored user session from AsyncStorage');
+            } else {
+              console.log('✅ Firebase Auth already restored user - manual backup not needed');
+            }
+          } else {
+            console.log('ℹ️ No manual session backup found (user not logged in)');
+          }
+        } catch (error) {
+          console.error('❌ Failed to check manual session backup:', error);
+        }
+      }, 1000); // Wait 1 second for Firebase Auth to try restoring first
+      
       // Initialize RevenueCat
       try {
         const apiKey = Platform.OS === 'ios' ? REVENUECAT_IOS_KEY : REVENUECAT_ANDROID_KEY;
@@ -65,7 +98,7 @@ function AppContent() {
     };
 
     initApp();
-  }, []);
+  }, [dispatch]);
 
   // Listen for Firebase auth state changes
   useEffect(() => {
@@ -85,6 +118,16 @@ function AppContent() {
       if (user) {
         console.log(`✅ [${elapsed}ms] User authenticated on app start:`, user.uid);
         console.log('📝 Dispatching setFirebaseUser to Redux...');
+        
+        // WORKAROUND: Manually save user ID to AsyncStorage as backup
+        // This ensures we can restore session even if Firebase persistence fails
+        try {
+          await AsyncStorage.setItem('firebase_user_id', user.uid);
+          await AsyncStorage.setItem('firebase_user_email', user.email || '');
+          console.log('💾 Saved user session to AsyncStorage manually');
+        } catch (error) {
+          console.error('❌ Failed to save user session manually:', error);
+        }
         
         // Set RevenueCat user ID to Firebase UID
         try {
@@ -107,6 +150,15 @@ function AppContent() {
       } else {
         console.log(`⚠️ [${elapsed}ms] No user authenticated (logged out or fresh start)`);
         console.log('📝 Dispatching clearFirebaseUser to Redux...');
+        
+        // Clear manual session storage
+        try {
+          await AsyncStorage.removeItem('firebase_user_id');
+          await AsyncStorage.removeItem('firebase_user_email');
+          console.log('💾 Cleared manual user session from AsyncStorage');
+        } catch (error) {
+          console.error('❌ Failed to clear manual session:', error);
+        }
         
         // Log out RevenueCat user
         try {
