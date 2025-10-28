@@ -248,8 +248,14 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
         console.log('🧭 DECISION: Navigating to Onboarding');
         navigationRef.current?.navigate('Onboarding');
       } else if (userId && hasCompletedOnboarding && !isSubscribed) {
-        console.log('🧭 DECISION: Navigating to Paywall (user exists but not subscribed)');
-        navigationRef.current?.navigate('Paywall');
+        // TEMPORARY: Skip paywall in development to test auth
+        if (__DEV__) {
+          console.log('🧭 DECISION: Navigating to Home (DEV MODE - skipping paywall)');
+          navigationRef.current?.navigate('Home');
+        } else {
+          console.log('🧭 DECISION: Navigating to Paywall (user exists but not subscribed)');
+          navigationRef.current?.navigate('Paywall');
+        }
       } else if (userId && hasCompletedOnboarding && isSubscribed) {
         console.log('🧭 DECISION: Navigating to Home (user subscribed)');
         navigationRef.current?.navigate('Home');
@@ -285,6 +291,12 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     if (userId && hasCompletedOnboarding === false) {
       return 'Onboarding';
     } else if (userId && hasCompletedOnboarding && !isSubscribed) {
+      // TEMPORARY: Skip paywall in development to test auth
+      // TODO: Remove this before production release
+      if (__DEV__) {
+        console.log('⚠️ DEV MODE: Skipping paywall for testing');
+        return 'Home';
+      }
       return 'Paywall';
     } else if (userId && hasCompletedOnboarding && isSubscribed) {
       return 'Home';
