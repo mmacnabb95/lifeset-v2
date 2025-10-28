@@ -231,11 +231,18 @@ const RootNavigator = () => {
 
   // Navigate when auth state changes - BUT ONLY after auth is initialized
   useEffect(() => {
+    console.log('🔍 Navigation effect triggered - checking conditions...');
+    console.log('  checkingOnboarding:', checkingOnboarding);
+    console.log('  subLoading:', subLoading);
+    console.log('  authInitialized:', authInitialized);
+    console.log('  navigationRef.current exists:', !!navigationRef.current);
+    
     if (!checkingOnboarding && !subLoading && authInitialized && navigationRef.current) {
       console.log('\n========== NAVIGATION DECISION ==========');
       console.log('userId:', userId ? 'EXISTS' : 'NONE');
       console.log('hasCompletedOnboarding:', hasCompletedOnboarding);
       console.log('isSubscribed:', isSubscribed);
+      console.log('navigationRef available:', !!navigationRef.current);
       console.log('=========================================\n');
       
       if (userId && hasCompletedOnboarding === false) {
@@ -251,6 +258,8 @@ const RootNavigator = () => {
         console.log('🧭 DECISION: Navigating to Welcome (NO USER - THIS IS THE LOGOUT)');
         navigationRef.current?.navigate('Welcome');
       }
+    } else {
+      console.log('⏭️ Navigation effect conditions not met, skipping navigation');
     }
   }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized]);
 
