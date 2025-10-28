@@ -264,7 +264,7 @@ const RootNavigator = () => {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 17 - Ignore First NULL Callback
+          Build 18 - Mark Init on First Callback
         </Text>
       </View>
     );

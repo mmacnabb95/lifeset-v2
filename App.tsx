@@ -16,7 +16,7 @@ import { Navigation } from './src/navigation/navigation';
 import { onAuthStateChange } from './src/services/firebase/auth';
 import { auth } from './src/services/firebase/config';
 // CHANGE: Import the correct actions from your auth slice
-import { setFirebaseUser, clearFirebaseUser } from './src/redux/features/auth/slice';
+import { setFirebaseUser, clearFirebaseUser, markAuthInitialized } from './src/redux/features/auth/slice';
 
 // Import notification helper to clear old notifications
 import { clearAllNotifications } from './src/services/notifications/habitReminder';
@@ -123,7 +123,11 @@ function AppContent() {
       if (isFirstCallback && !user && elapsed < 1000) {
         console.log('⏭️ IGNORING first NULL callback - waiting for persistence to load');
         isFirstCallback = false;
-        return; // Don't clear user state yet!
+        // Mark auth as initialized so app doesn't get stuck
+        // But DON'T clear user state (wait for second callback with real user)
+        dispatch(markAuthInitialized());
+        console.log('✅ markAuthInitialized dispatched - waiting for real auth state...');
+        return;
       }
       
       isFirstCallback = false;

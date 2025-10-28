@@ -99,6 +99,9 @@ const authSlice = createSlice({
       state.status = "idle";
       state.authInitialized = true;
     },
+    markAuthInitialized(state) {
+      state.authInitialized = true;
+    },
   },
   extraReducers: (builder) => {
     // Only keep Firebase auth handlers
@@ -137,7 +140,7 @@ export const selectAuthInitialized = (state: AppState) => state.auth.authInitial
 
 export { authUser, invalidateAuth };
 
-export const { clearAuth, logOutAction, setFirebaseUser, clearFirebaseUser, setUser: setUserAction } = authSlice.actions;
+export const { clearAuth, logOutAction, setFirebaseUser, clearFirebaseUser, markAuthInitialized, setUser: setUserAction } = authSlice.actions;
 
 // Alias setUser for backwards compatibility
 export const setUser = setFirebaseUser;
