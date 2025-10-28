@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
+import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator } from "react-native";
 import { signIn, signUp } from "src/services/firebase/auth";
@@ -179,13 +179,12 @@ const TestLoginScreen = ({ navigation }: any) => {
 };
 
 // Root navigation with routing logic
-const RootNavigator = () => {
+function RootNavigator({ navigationRef }: { navigationRef: any }) {
   const { userId } = useFirebaseUser();
   const { isSubscribed, loading: subLoading } = useSubscription();
   const authInitialized = useSelector(selectAuthInitialized);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
-  const navigationRef = useRef<any>(null);
 
   // Log when auth initialization state changes
   useEffect(() => {
@@ -348,13 +347,15 @@ const RootNavigator = () => {
   );
 };
 
-export const Navigation = () => {
+export function Navigation() {
+  const navigationRef = useNavigationContainerRef();
+  
   return (
-    <NavigationContainer>
-      <RootNavigator />
+    <NavigationContainer ref={navigationRef}>
+      <RootNavigator navigationRef={navigationRef} />
     </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
