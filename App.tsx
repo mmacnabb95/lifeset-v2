@@ -107,26 +107,31 @@ function AppContent() {
     console.log('🔧 [0ms] Setting up Firebase auth listener...');
     console.log('🔧 Auth listener mounted at:', new Date().toISOString());
     
+    let callbackCount = 0;
+    
     const unsubscribe = onAuthStateChange(async (user) => {
+      callbackCount++;
       const elapsed = Date.now() - startTime;
       const timestamp = new Date().toISOString();
       
-      console.log(`\n========== AUTH STATE CHANGE [${elapsed}ms] ==========`);
+      console.log(`\n========== AUTH CALLBACK #${callbackCount} [${elapsed}ms] ==========`);
       console.log('Timestamp:', timestamp);
       console.log('User:', user ? user.uid : 'NULL');
       console.log('Email:', user ? user.email : 'N/A');
       console.log('Is First Callback:', isFirstCallback);
+      console.log('Callback Count:', callbackCount);
       
       // CRITICAL FIX: Ignore the first NULL callback
       // Firebase Auth fires with NULL immediately while loading from AsyncStorage
       // Then fires again with the actual user once persistence loads
-      if (isFirstCallback && !user && elapsed < 1000) {
-        console.log('⏭️ IGNORING first NULL callback - waiting for persistence to load');
+      if (isFirstCallback && !user && elapsed < 2000) {
+        console.log('⏭️ IGNORING first NULL callback (callback #' + callbackCount + ') - waiting for persistence to load');
         isFirstCallback = false;
         // Mark auth as initialized so app doesn't get stuck
         // But DON'T clear user state (wait for second callback with real user)
         dispatch(markAuthInitialized());
         console.log('✅ markAuthInitialized dispatched - waiting for real auth state...');
+        console.log('========== END AUTH CALLBACK (IGNORED) ==========\n');
         return;
       }
       
