@@ -264,7 +264,7 @@ const RootNavigator = () => {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 16 - Manual Session Backup Workaround
+          Build 17 - Ignore First NULL Callback
         </Text>
       </View>
     );

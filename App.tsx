@@ -103,6 +103,7 @@ function AppContent() {
   // Listen for Firebase auth state changes
   useEffect(() => {
     const startTime = Date.now();
+    let isFirstCallback = true;
     console.log('🔧 [0ms] Setting up Firebase auth listener...');
     console.log('🔧 Auth listener mounted at:', new Date().toISOString());
     
@@ -114,6 +115,18 @@ function AppContent() {
       console.log('Timestamp:', timestamp);
       console.log('User:', user ? user.uid : 'NULL');
       console.log('Email:', user ? user.email : 'N/A');
+      console.log('Is First Callback:', isFirstCallback);
+      
+      // CRITICAL FIX: Ignore the first NULL callback
+      // Firebase Auth fires with NULL immediately while loading from AsyncStorage
+      // Then fires again with the actual user once persistence loads
+      if (isFirstCallback && !user && elapsed < 1000) {
+        console.log('⏭️ IGNORING first NULL callback - waiting for persistence to load');
+        isFirstCallback = false;
+        return; // Don't clear user state yet!
+      }
+      
+      isFirstCallback = false;
       
       if (user) {
         console.log(`✅ [${elapsed}ms] User authenticated on app start:`, user.uid);
