@@ -50,11 +50,18 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       
       // Check if user now has premium entitlement
       if (customerInfo.entitlements.active['premium']) {
-        Alert.alert(
-          'Success!',
-          'Welcome to LifeSet Premium! Enjoy your 7-day free trial.',
-          [{ text: 'Continue', onPress: onComplete }]
-        );
+        // Call onComplete immediately after successful purchase
+        // Don't wait for alert button - navigate automatically
+        onComplete();
+        
+        // Show success message after navigation
+        setTimeout(() => {
+          Alert.alert(
+            'Success!',
+            'Welcome to LifeSet Premium! Enjoy your 7-day free trial.',
+            [{ text: 'OK' }]
+          );
+        }, 500);
       }
     } catch (error: any) {
       if (!error.userCancelled) {
@@ -71,11 +78,17 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       const customerInfo = await Purchases.restorePurchases();
       
       if (customerInfo.entitlements.active['premium']) {
-        Alert.alert(
-          'Restored!',
-          'Your subscription has been restored.',
-          [{ text: 'Continue', onPress: onRestore }]
-        );
+        // Navigate immediately after successful restore
+        onRestore();
+        
+        // Show success message after navigation
+        setTimeout(() => {
+          Alert.alert(
+            'Restored!',
+            'Your subscription has been restored.',
+            [{ text: 'OK' }]
+          );
+        }, 500);
       } else {
         Alert.alert('No Subscription', 'No active subscription found to restore.');
       }
