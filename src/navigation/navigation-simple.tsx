@@ -278,7 +278,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 21 - iPhone Only (No iPad)
+          Build 20 - Paywall Fix + iPhone Only
         </Text>
       </View>
     );
