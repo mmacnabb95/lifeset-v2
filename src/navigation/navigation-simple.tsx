@@ -278,7 +278,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 19 - Complete Auth + Navigation Fix
+          Build 20 - Paywall Auto-Navigate Fix
         </Text>
       </View>
     );
