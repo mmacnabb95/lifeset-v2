@@ -47,13 +47,21 @@ export const useSubscription = (): SubscriptionStatus => {
 
   const checkSubscriptionStatus = async () => {
     try {
+      console.log('💳 Calling Purchases.getCustomerInfo()...');
       const customerInfo: CustomerInfo = await Purchases.getCustomerInfo();
+      console.log('💳 CustomerInfo received:', {
+        originalAppUserId: customerInfo.originalAppUserId,
+        activeSubscriptions: customerInfo.activeSubscriptions,
+        allPurchasedProductIdentifiers: customerInfo.allPurchasedProductIdentifiers,
+      });
       
       // Check if user has any active entitlements
       const entitlements = customerInfo.entitlements.active;
+      console.log('💳 Active entitlements:', Object.keys(entitlements));
       const premiumEntitlement: PurchasesEntitlementInfo | undefined = entitlements['premium'];
       
       if (premiumEntitlement) {
+        console.log('✅ Premium entitlement FOUND!');
         const expirationDate = premiumEntitlement.expirationDate 
           ? new Date(premiumEntitlement.expirationDate) 
           : null;
@@ -61,6 +69,7 @@ export const useSubscription = (): SubscriptionStatus => {
         const isInTrial = premiumEntitlement.periodType === 'TRIAL' || 
                           premiumEntitlement.periodType === 'INTRO';
         
+        console.log('💳 Setting isSubscribed: true, isInTrial:', isInTrial);
         setStatus({
           isSubscribed: true,
           isInTrial,
@@ -69,6 +78,7 @@ export const useSubscription = (): SubscriptionStatus => {
           error: null,
         });
       } else {
+        console.log('❌ NO premium entitlement found - setting isSubscribed: false');
         setStatus({
           isSubscribed: false,
           isInTrial: false,
@@ -78,7 +88,7 @@ export const useSubscription = (): SubscriptionStatus => {
         });
       }
     } catch (error: any) {
-      console.error('Error checking subscription status:', error);
+      console.error('❌ Error checking subscription status:', error);
       
       // In development (Expo Go), treat as subscribed to allow testing
       // In production builds, RevenueCat will work correctly
