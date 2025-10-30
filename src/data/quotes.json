@@ -20,162 +20,156 @@
     },
     {
       "id": 4,
-      "text": "It is the courage to continue that counts.",
-      "author": "Winston Churchill",
-      "category": "motivation"
-    },
-    {
-      "id": 5,
       "text": "It doesn't matter how slowly you go as long as you don't stop.",
       "author": "Confucius",
       "category": "perseverance"
     },
     {
-      "id": 6,
+      "id": 5,
       "text": "Everything you want is on the other side of fear.",
       "author": "George Addair",
       "category": "courage"
     },
     {
-      "id": 7,
+      "id": 6,
       "text": "Believe in yourself. You're braver than you think.",
       "author": "Roy T. Bennett",
       "category": "self-belief"
     },
     {
-      "id": 8,
+      "id": 7,
       "text": "Courage is not the absence of fear, but the triumph over it.",
       "author": "Nelson Mandela",
       "category": "courage"
     },
     {
-      "id": 9,
+      "id": 8,
       "text": "The only impossible journey is the one you never begin.",
       "author": "Tony Robbins",
       "category": "motivation"
     },
     {
-      "id": 10,
+      "id": 9,
       "text": "Your limitation is only your imagination.",
       "author": "Unknown",
       "category": "mindset"
     },
     {
-      "id": 11,
+      "id": 10,
       "text": "Great things never come from comfort zones.",
       "author": "Unknown",
       "category": "growth"
     },
     {
-      "id": 12,
+      "id": 11,
       "text": "Don't watch the clock. Do what it does. Keep going.",
       "author": "Sam Levenson",
       "category": "perseverance"
     },
     {
-      "id": 13,
+      "id": 12,
       "text": "The harder you work, the greater the achievement.",
       "author": "Unknown",
       "category": "achievement"
     },
     {
-      "id": 14,
+      "id": 13,
       "text": "Dream bigger. Do bigger.",
       "author": "Unknown",
       "category": "ambition"
     },
     {
-      "id": 15,
+      "id": 14,
       "text": "Success doesn't find you. You have to go get it.",
       "author": "Unknown",
       "category": "action"
     },
     {
-      "id": 16,
+      "id": 15,
       "text": "Little things make big days.",
       "author": "Unknown",
       "category": "gratitude"
     },
     {
-      "id": 17,
+      "id": 16,
       "text": "Hard does not mean impossible.",
       "author": "Unknown",
       "category": "resilience"
     },
     {
-      "id": 18,
+      "id": 17,
       "text": "Don't stop when you're tired. Stop when you're done.",
       "author": "Unknown",
       "category": "perseverance"
     },
     {
-      "id": 19,
+      "id": 18,
       "text": "Wake up with determination. Go to bed with satisfaction.",
       "author": "Unknown",
       "category": "daily-practice"
     },
     {
-      "id": 20,
+      "id": 19,
       "text": "Do something today that your future self will thank you for.",
       "author": "Sean Patrick Flanery",
       "category": "future-self"
     },
     {
-      "id": 21,
+      "id": 20,
       "text": "You're never too old to dream a new dream.",
       "author": "C.S. Lewis",
       "category": "growth"
     },
     {
-      "id": 22,
+      "id": 21,
       "text": "The secret of getting ahead is getting started.",
       "author": "Mark Twain",
       "category": "action"
     },
     {
-      "id": 23,
+      "id": 22,
       "text": "I am a product of my decisions, not my circumstances.",
       "author": "Stephen Covey",
       "category": "responsibility"
     },
     {
-      "id": 24,
+      "id": 23,
       "text": "You have to start to be great.",
       "author": "Zig Ziglar",
       "category": "beginning"
     },
     {
-      "id": 25,
+      "id": 24,
       "text": "A journey of a thousand miles begins with a single step.",
       "author": "Lao Tzu",
       "category": "beginning"
     },
     {
-      "id": 26,
+      "id": 25,
       "text": "You become the person you decide to be.",
       "author": "Ralph Waldo Emerson",
       "category": "self-determination"
     },
     {
-      "id": 27,
+      "id": 26,
       "text": "Go confidently in the direction of your dreams.",
       "author": "Henry David Thoreau",
       "category": "dreams"
     },
     {
-      "id": 28,
+      "id": 27,
       "text": "Fall seven times and stand up eight.",
       "author": "Japanese Proverb",
       "category": "resilience"
     },
     {
-      "id": 29,
+      "id": 28,
       "text": "What you become is more important than what you achieve.",
       "author": "Zig Ziglar",
       "category": "growth"
     },
     {
-      "id": 30,
+      "id": 29,
       "text": "Strive to be of value, not just successful.",
       "author": "Albert Einstein",
       "category": "purpose"
