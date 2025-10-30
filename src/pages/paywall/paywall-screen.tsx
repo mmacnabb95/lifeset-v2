@@ -44,42 +44,78 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
   };
 
   const handlePurchase = async (pkg: PurchasesPackage) => {
+    let navigationCompleted = false;
+    
+    // FAILSAFE: Force navigate after 3 seconds if something hangs
+    const failsafeTimer = setTimeout(() => {
+      if (!navigationCompleted) {
+        console.log('⚠️ FAILSAFE: Forcing navigation after 3s timeout');
+        setPurchasing(false);
+        navigationCompleted = true;
+        onComplete();
+      }
+    }, 3000);
+    
     try {
       setPurchasing(true);
-      const { customerInfo } = await Purchases.purchasePackage(pkg);
+      console.log('🛒 Starting purchase for package:', pkg.identifier);
       
-      // Check if user now has premium entitlement
-      if (customerInfo.entitlements.active['premium']) {
-        // Call onComplete immediately after successful purchase
-        // Don't wait for alert button - navigate automatically
-        onComplete();
-        
-        // Show success message after navigation
-        setTimeout(() => {
+      const { customerInfo } = await Purchases.purchasePackage(pkg);
+      console.log('✅ Purchase completed, checking entitlement...');
+      
+      // Clear failsafe timer since purchase succeeded
+      clearTimeout(failsafeTimer);
+      
+      // ALWAYS navigate after purchase completes, regardless of entitlement check
+      // This ensures we don't get stuck on paywall screen
+      console.log('🚀 Navigating to Home immediately after purchase');
+      setPurchasing(false); // Reset purchasing state before navigation
+      navigationCompleted = true;
+      onComplete(); // Navigate immediately
+      
+      // Show success message after navigation (non-blocking)
+      setTimeout(() => {
+        if (customerInfo.entitlements.active['premium']) {
+          console.log('✅ Premium entitlement confirmed');
           Alert.alert(
             'Success!',
             'Welcome to LifeSet Premium! Enjoy your 7-day free trial.',
             [{ text: 'OK' }]
           );
-        }, 500);
-      }
+        } else {
+          console.log('⚠️ Purchase completed but entitlement not active yet - may take a moment');
+          Alert.alert(
+            'Purchase Complete',
+            'Your subscription is being processed. Enjoy LifeSet!',
+            [{ text: 'OK' }]
+          );
+        }
+      }, 800);
+      
     } catch (error: any) {
-      if (!error.userCancelled) {
-        Alert.alert('Purchase Failed', error.message);
-      }
-    } finally {
+      console.error('❌ Purchase error:', error);
+      clearTimeout(failsafeTimer);
       setPurchasing(false);
+      navigationCompleted = true;
+      
+      if (!error.userCancelled) {
+        Alert.alert('Purchase Failed', error.message || 'Unable to complete purchase');
+      }
     }
   };
 
   const handleRestore = async () => {
     try {
       setPurchasing(true);
+      console.log('♻️ Starting restore purchases...');
+      
       const customerInfo = await Purchases.restorePurchases();
+      console.log('✅ Restore completed, checking entitlement...');
       
       if (customerInfo.entitlements.active['premium']) {
-        // Navigate immediately after successful restore
-        onRestore();
+        console.log('✅ Premium entitlement found - navigating to Home');
+        setPurchasing(false); // Reset state before navigation
+        onRestore(); // Navigate immediately
         
         // Show success message after navigation
         setTimeout(() => {
@@ -88,14 +124,16 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
             'Your subscription has been restored.',
             [{ text: 'OK' }]
           );
-        }, 500);
+        }, 800);
       } else {
+        console.log('⚠️ No active subscription found');
+        setPurchasing(false);
         Alert.alert('No Subscription', 'No active subscription found to restore.');
       }
     } catch (error: any) {
-      Alert.alert('Restore Failed', error.message);
-    } finally {
+      console.error('❌ Restore error:', error);
       setPurchasing(false);
+      Alert.alert('Restore Failed', error.message || 'Unable to restore purchases');
     }
   };
 
