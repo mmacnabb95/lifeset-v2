@@ -278,7 +278,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 22 - Fix Subscription Check on Restart
+          Build 24 - Auth Diagnostic + 5s Check
         </Text>
       </View>
     );

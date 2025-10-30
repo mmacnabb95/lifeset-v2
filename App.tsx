@@ -126,12 +126,24 @@ function AppContent() {
       // Then fires again with the actual user once persistence loads
       if (isFirstCallback && !user && elapsed < 2000) {
         console.log('⏭️ IGNORING first NULL callback (callback #' + callbackCount + ') - waiting for persistence to load');
+        console.log('⏳ Expecting second callback with user data within a few seconds...');
         isFirstCallback = false;
         // Mark auth as initialized so app doesn't get stuck
         // But DON'T clear user state (wait for second callback with real user)
         dispatch(markAuthInitialized());
         console.log('✅ markAuthInitialized dispatched - waiting for real auth state...');
         console.log('========== END AUTH CALLBACK (IGNORED) ==========\n');
+        
+        // DIAGNOSTIC: Set a timer to check if we ever get the second callback
+        setTimeout(() => {
+          if (!auth.currentUser) {
+            console.log('🚨 WARNING: 5 seconds passed and still no user! Firebase Auth persistence may have failed.');
+            console.log('🚨 Current auth state:', auth.currentUser ? 'USER EXISTS' : 'NULL');
+          } else {
+            console.log('✅ User was restored within 5 seconds:', auth.currentUser.uid);
+          }
+        }, 5000);
+        
         return;
       }
       
