@@ -42,8 +42,8 @@ function AppContent() {
         console.error('❌ AsyncStorage test FAILED:', error);
       }
       
-      // WORKAROUND: Check if we have a manually saved session
-      // If Firebase Auth fails to restore, we'll restore manually after a delay
+      // WORKAROUND: Check manual session backup EARLY
+      // Firebase Auth persistence is failing in TestFlight, so prioritize manual backup
       setTimeout(async () => {
         try {
           const savedUserId = await AsyncStorage.getItem('firebase_user_id');
@@ -55,13 +55,24 @@ function AppContent() {
             // Check if Firebase Auth has restored the user
             const currentUser = auth.currentUser;
             if (!currentUser) {
-              console.log('⚠️ Firebase Auth failed to restore - using manual backup');
+              console.log('🔧 Firebase Auth failed to restore - ACTIVATING manual backup');
               // Manually dispatch the user to Redux
               dispatch(setFirebaseUser({
                 uid: savedUserId,
                 email: savedEmail,
                 displayName: null,
               }));
+              
+              // Also log in to RevenueCat with the manual backup user
+              try {
+                await Purchases.logIn(savedUserId);
+                console.log('✅ RevenueCat logged in with manual backup user');
+              } catch (error: any) {
+                if (!(__DEV__ && error.message?.includes('no singleton instance'))) {
+                  console.error('❌ Failed to log in RevenueCat with manual backup:', error);
+                }
+              }
+              
               console.log('✅ Manually restored user session from AsyncStorage');
             } else {
               console.log('✅ Firebase Auth already restored user - manual backup not needed');
@@ -72,7 +83,7 @@ function AppContent() {
         } catch (error) {
           console.error('❌ Failed to check manual session backup:', error);
         }
-      }, 1000); // Wait 1 second for Firebase Auth to try restoring first
+      }, 800); // Check after 800ms - before navigation initializes
       
       // Initialize RevenueCat
       try {
