@@ -278,7 +278,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
         <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 21 - Bulletproof Paywall + iPhone Only
+          Build 22 - Fix Subscription Check on Restart
         </Text>
       </View>
     );

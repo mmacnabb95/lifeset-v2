@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Purchases, { CustomerInfo, PurchasesEntitlementInfo } from 'react-native-purchases';
+import { useFirebaseUser } from './useFirebaseUser';
 
 export interface SubscriptionStatus {
   isSubscribed: boolean;
@@ -13,6 +14,7 @@ export interface SubscriptionStatus {
  * Hook to check subscription status using RevenueCat
  */
 export const useSubscription = (): SubscriptionStatus => {
+  const { userId } = useFirebaseUser();
   const [status, setStatus] = useState<SubscriptionStatus>({
     isSubscribed: false,
     isInTrial: false,
@@ -22,8 +24,26 @@ export const useSubscription = (): SubscriptionStatus => {
   });
 
   useEffect(() => {
-    checkSubscriptionStatus();
-  }, []);
+    // Wait for user to be authenticated before checking subscription
+    // This ensures RevenueCat is logged in with the correct user ID
+    if (userId) {
+      console.log('💳 User authenticated, checking subscription for:', userId);
+      // Small delay to ensure RevenueCat.logIn() has completed in App.tsx
+      setTimeout(() => {
+        checkSubscriptionStatus();
+      }, 500);
+    } else {
+      console.log('⏳ Waiting for user authentication before checking subscription');
+      // User not logged in, set loading false but not subscribed
+      setStatus({
+        isSubscribed: false,
+        isInTrial: false,
+        expirationDate: null,
+        loading: false,
+        error: null,
+      });
+    }
+  }, [userId]); // Re-check when userId changes
 
   const checkSubscriptionStatus = async () => {
     try {
