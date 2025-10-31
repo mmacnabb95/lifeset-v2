@@ -34,6 +34,23 @@ function AppContent() {
   // Initialize RevenueCat and clear old notifications
   useEffect(() => {
     const initApp = async () => {
+      // Clear old SecureStore sessions from previous app versions
+      // This prevents "ghost accounts" from persisting across major updates
+      const APP_VERSION = '1.10'; // Match version in app.json
+      const LAST_VERSION_KEY = 'lastAppVersion';
+      
+      try {
+        const lastVersion = await AsyncStorage.getItem(LAST_VERSION_KEY);
+        if (lastVersion !== APP_VERSION) {
+          console.log(`🧹 App version changed (${lastVersion} → ${APP_VERSION}), clearing old sessions`);
+          await clearUserSession();
+          await AsyncStorage.setItem(LAST_VERSION_KEY, APP_VERSION);
+          console.log('✅ Old sessions cleared for fresh start');
+        }
+      } catch (error) {
+        console.error('❌ Failed to check app version:', error);
+      }
+      
       // Check SecureStore for saved session EARLY (before Firebase Auth fires)
       // This gives us a reliable restore mechanism independent of Firebase
       setTimeout(async () => {

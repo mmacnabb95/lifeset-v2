@@ -242,12 +242,15 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     const allChecksComplete = !checkingOnboarding && !subLoading && authInitialized;
     
     if (allChecksComplete && navigationRef.current) {
-      // Mark initial load as complete to prevent re-navigation
+      // Mark initial load as complete, but don't navigate on the same render
+      // This ensures we have the final subscription status before routing
       if (!initialLoadComplete) {
-        console.log('✅ Initial load complete - navigation ready');
+        console.log('✅ Initial load complete - navigation ready (waiting one render cycle)');
         setInitialLoadComplete(true);
+        return; // Exit early - navigation will happen on next render
       }
       
+      // Only navigate after initialLoadComplete is set (ensures we have final isSubscribed value)
       console.log('\n========== NAVIGATION DECISION ==========');
       console.log('userId:', userId ? 'EXISTS' : 'NONE');
       console.log('hasCompletedOnboarding:', hasCompletedOnboarding);
