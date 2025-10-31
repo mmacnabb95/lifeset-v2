@@ -291,12 +291,6 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     if (userId && hasCompletedOnboarding === false) {
       return 'Onboarding';
     } else if (userId && hasCompletedOnboarding && !isSubscribed) {
-      // TEMPORARY: Skip paywall in development to test auth
-      // TODO: Remove this before production release
-      if (__DEV__) {
-        console.log('⚠️ DEV MODE: Skipping paywall for testing');
-        return 'Home';
-      }
       return 'Paywall';
     } else if (userId && hasCompletedOnboarding && isSubscribed) {
       return 'Home';
