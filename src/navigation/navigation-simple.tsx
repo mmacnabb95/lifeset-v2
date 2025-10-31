@@ -278,7 +278,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
                 <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-                  Build 26 - Visible Debug Overlay
+                  Build 27 - Any Entitlement Fix
                 </Text>
       </View>
     );

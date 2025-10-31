@@ -59,19 +59,32 @@ export const useSubscription = (): SubscriptionStatus => {
       
       // Check if user has any active entitlements
       const entitlements = customerInfo.entitlements.active;
-      console.log('💳 Active entitlements:', Object.keys(entitlements));
-      const premiumEntitlement: PurchasesEntitlementInfo | undefined = entitlements['premium'];
+      const activeEntitlementKeys = Object.keys(entitlements);
+      console.log('💳 Active entitlements found:', activeEntitlementKeys);
+      console.log('💳 Full entitlements object:', JSON.stringify(entitlements, null, 2));
       
-      if (premiumEntitlement) {
-        console.log('✅ Premium entitlement FOUND!');
-        const expirationDate = premiumEntitlement.expirationDate 
-          ? new Date(premiumEntitlement.expirationDate) 
+      // Accept ANY active entitlement (not just 'premium')
+      // This makes the code resilient to entitlement name changes
+      const hasActiveEntitlement = activeEntitlementKeys.length > 0;
+      
+      if (hasActiveEntitlement) {
+        // Get the first active entitlement (usually 'premium')
+        const entitlementKey = activeEntitlementKeys[0];
+        const activeEntitlement = entitlements[entitlementKey];
+        
+        console.log(`✅ Active entitlement found: "${entitlementKey}"!`);
+        console.log('💳 Entitlement details:', JSON.stringify(activeEntitlement, null, 2));
+        
+        const expirationDate = activeEntitlement.expirationDate 
+          ? new Date(activeEntitlement.expirationDate) 
           : null;
         
-        const isInTrial = premiumEntitlement.periodType === 'TRIAL' || 
-                          premiumEntitlement.periodType === 'INTRO';
+        const isInTrial = activeEntitlement.periodType === 'TRIAL' || 
+                          activeEntitlement.periodType === 'INTRO';
         
         console.log('💳 Setting isSubscribed: true, isInTrial:', isInTrial);
+        console.log('💳 Expiration:', expirationDate);
+        
         setStatus({
           isSubscribed: true,
           isInTrial,
@@ -80,7 +93,11 @@ export const useSubscription = (): SubscriptionStatus => {
           error: null,
         });
       } else {
-        console.log('❌ NO premium entitlement found - setting isSubscribed: false');
+        console.log('❌ NO active entitlements found - user is not subscribed');
+        console.log('💳 This could mean:');
+        console.log('   - User subscription expired');
+        console.log('   - RevenueCat hasn\'t synced yet');
+        console.log('   - Entitlement not configured in RevenueCat dashboard');
         setStatus({
           isSubscribed: false,
           isInTrial: false,

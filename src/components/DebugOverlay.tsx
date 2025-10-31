@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 25 - SecureStore
+            Build 27 - Any Entitlement
           </Text>
         </View>
       )}

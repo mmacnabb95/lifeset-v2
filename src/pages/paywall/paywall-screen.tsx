@@ -76,8 +76,8 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       
       // Show success message after navigation (non-blocking)
       setTimeout(() => {
-        if (customerInfo.entitlements.active['premium']) {
-          console.log('✅ Premium entitlement confirmed');
+        if (Object.keys(customerInfo.entitlements.active).length > 0) {
+          console.log('✅ Entitlement confirmed');
           Alert.alert(
             'Success!',
             'Welcome to LifeSet Premium! Enjoy your 7-day free trial.',
@@ -113,8 +113,8 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       const customerInfo = await Purchases.restorePurchases();
       console.log('✅ Restore completed, checking entitlement...');
       
-      if (customerInfo.entitlements.active['premium']) {
-        console.log('✅ Premium entitlement found - navigating to Home');
+      if (Object.keys(customerInfo.entitlements.active).length > 0) {
+        console.log('✅ Active entitlement found - navigating to Home');
         setPurchasing(false); // Reset state before navigation
         onRestore(); // Navigate immediately
         
