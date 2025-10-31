@@ -18,6 +18,7 @@ import quotesData from "src/data/quotes.json";
 import { getPercentile, getTierName } from "src/utils/xpPercentileMapper";
 
 // Debug overlay
+import { DebugOverlay } from "src/components/DebugOverlay";
 
 export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   const { user, userId } = useFirebaseUser();
@@ -157,6 +158,9 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
 
   return (
     <View style={styles.container}>
+      {/* Debug Overlay - Temporary for testing */}
+      <DebugOverlay visible={true} />
+      
       {/* Fixed Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('PersonalDetails')}>

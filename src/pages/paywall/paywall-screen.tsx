@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Purchases, { PurchasesPackage } from 'react-native-purchases';
 import { LinearGradient } from 'expo-linear-gradient';
+import { DebugOverlay } from 'src/components/DebugOverlay';
 
 interface PaywallScreenProps {
   onComplete: () => void;
@@ -156,6 +157,9 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Debug Overlay - Temporary for testing */}
+      <DebugOverlay visible={true} />
+      
       <LinearGradient
         colors={['#667eea', '#764ba2']}
         style={styles.headerGradient}
