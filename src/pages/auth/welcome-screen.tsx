@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { DebugOverlay } from 'src/components/DebugOverlay';
 
 export const WelcomeScreen = ({ navigation }: { navigation: any }) => {
   return (
@@ -9,9 +8,6 @@ export const WelcomeScreen = ({ navigation }: { navigation: any }) => {
       colors={['#667eea', '#764ba2']}
       style={styles.container}
     >
-      {/* Debug Overlay */}
-      <DebugOverlay visible={true} />
-      
       <View style={styles.content}>
         <Image 
           source={require('../../../assets/lifeset-icon.png')} 

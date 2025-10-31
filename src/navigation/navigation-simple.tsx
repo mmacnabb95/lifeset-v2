@@ -286,12 +286,6 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />
         <Text style={styles.loadingText}>Loading your account...</Text>
-        <Text style={styles.debugText}>
-          Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
-        </Text>
-                <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-                  Build 30 - Habit Refresh
-                </Text>
       </View>
     );
   }
