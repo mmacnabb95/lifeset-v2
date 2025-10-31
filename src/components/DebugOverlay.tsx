@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 29 - Streak Fix
+            Build 30 - Habit Refresh
           </Text>
         </View>
       )}
