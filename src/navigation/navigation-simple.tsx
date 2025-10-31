@@ -186,6 +186,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [hasCheckedSubscription, setHasCheckedSubscription] = useState(false);
 
   // Log when auth initialization state changes
   useEffect(() => {
@@ -237,9 +238,24 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     console.log('  authInitialized:', authInitialized);
     console.log('  navigationRef.current exists:', !!navigationRef.current);
     console.log('  initialLoadComplete:', initialLoadComplete);
+    console.log('  hasCheckedSubscription:', hasCheckedSubscription);
+    
+    // Mark that we've checked subscription status at least once
+    if (userId && !subLoading && !hasCheckedSubscription) {
+      console.log('✅ Subscription check completed - marking as checked');
+      setHasCheckedSubscription(true);
+    }
+    
+    // Reset subscription check flag if user changes (logout/login)
+    if (!userId && hasCheckedSubscription) {
+      console.log('🔄 User logged out - resetting subscription check flag');
+      setHasCheckedSubscription(false);
+    }
     
     // Wait for all checks to complete before navigating
-    const allChecksComplete = !checkingOnboarding && !subLoading && authInitialized;
+    // For logged-in users, also wait for subscription check to complete
+    const needsSubscriptionCheck = userId && !hasCheckedSubscription;
+    const allChecksComplete = !checkingOnboarding && !subLoading && authInitialized && !needsSubscriptionCheck;
     
     if (allChecksComplete && navigationRef.current) {
       // Mark initial load as complete, but don't navigate on the same render
@@ -274,11 +290,13 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     } else {
       console.log('⏭️ Navigation effect conditions not met, skipping navigation');
     }
-  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized, initialLoadComplete]);
+  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized, initialLoadComplete, hasCheckedSubscription]);
 
   // Show loading while checking status or waiting for auth to initialize
   // OR during initial load to prevent flickering between screens
-  if (checkingOnboarding || subLoading || !authInitialized || !initialLoadComplete) {
+  // Also wait for subscription check if user is logged in
+  const needsSubscriptionCheck = userId && !hasCheckedSubscription;
+  if (checkingOnboarding || subLoading || !authInitialized || !initialLoadComplete || needsSubscriptionCheck) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />

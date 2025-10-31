@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 35 - Production Ready
+            Build 36 - No Paywall Flash
           </Text>
         </View>
       )}
