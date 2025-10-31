@@ -277,9 +277,9 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
         <Text style={styles.debugText}>
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
-        <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-          Build 24 - Manual Backup Primary Method
-        </Text>
+                <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
+                  Build 25 - SecureStore Auth Persistence
+                </Text>
       </View>
     );
   }
