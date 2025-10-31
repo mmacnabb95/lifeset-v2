@@ -185,6 +185,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
   const authInitialized = useSelector(selectAuthInitialized);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
   const [checkingOnboarding, setCheckingOnboarding] = useState(true);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
   // Log when auth initialization state changes
   useEffect(() => {
@@ -235,8 +236,18 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     console.log('  subLoading:', subLoading);
     console.log('  authInitialized:', authInitialized);
     console.log('  navigationRef.current exists:', !!navigationRef.current);
+    console.log('  initialLoadComplete:', initialLoadComplete);
     
-    if (!checkingOnboarding && !subLoading && authInitialized && navigationRef.current) {
+    // Wait for all checks to complete before navigating
+    const allChecksComplete = !checkingOnboarding && !subLoading && authInitialized;
+    
+    if (allChecksComplete && navigationRef.current) {
+      // Mark initial load as complete to prevent re-navigation
+      if (!initialLoadComplete) {
+        console.log('✅ Initial load complete - navigation ready');
+        setInitialLoadComplete(true);
+      }
+      
       console.log('\n========== NAVIGATION DECISION ==========');
       console.log('userId:', userId ? 'EXISTS' : 'NONE');
       console.log('hasCompletedOnboarding:', hasCompletedOnboarding);
@@ -266,19 +277,20 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
     } else {
       console.log('⏭️ Navigation effect conditions not met, skipping navigation');
     }
-  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized]);
+  }, [userId, hasCompletedOnboarding, isSubscribed, checkingOnboarding, subLoading, authInitialized, initialLoadComplete]);
 
   // Show loading while checking status or waiting for auth to initialize
-  if (checkingOnboarding || subLoading || !authInitialized) {
+  // OR during initial load to prevent flickering between screens
+  if (checkingOnboarding || subLoading || !authInitialized || !initialLoadComplete) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#667eea" />
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={styles.loadingText}>Loading your account...</Text>
         <Text style={styles.debugText}>
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
                 <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-                  Build 27 - Any Entitlement Fix
+                  Build 28 - No Flicker Fix
                 </Text>
       </View>
     );
