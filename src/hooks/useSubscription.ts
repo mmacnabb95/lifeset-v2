@@ -28,6 +28,13 @@ export const useSubscription = (): SubscriptionStatus => {
     // This ensures RevenueCat is logged in with the correct user ID
     if (userId) {
       console.log('💳 User authenticated, checking subscription for:', userId);
+      
+      // CRITICAL: Keep loading TRUE during the delay
+      setStatus(prev => ({
+        ...prev,
+        loading: true, // Keep loading while waiting for RevenueCat to sync
+      }));
+      
       // Delay to ensure RevenueCat.logIn() has completed in App.tsx
       // Give RevenueCat time to sync with server after login
       setTimeout(() => {
