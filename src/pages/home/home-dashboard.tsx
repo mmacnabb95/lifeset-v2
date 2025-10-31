@@ -117,6 +117,10 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
         await completeHabit(userId, habitId);
         setCompletedToday(prev => new Set(prev).add(habitId));
       }
+      
+      // Immediately refresh streak after completion/uncompletion
+      const updatedStreak = await getStreak(userId);
+      setStreak(updatedStreak);
     } catch (err: any) {
       console.error('Error toggling habit:', err);
       // Silently refresh if already completed

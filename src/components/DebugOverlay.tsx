@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 28 - No Flicker
+            Build 29 - Streak Fix
           </Text>
         </View>
       )}

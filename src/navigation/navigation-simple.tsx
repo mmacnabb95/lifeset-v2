@@ -290,7 +290,7 @@ function RootNavigator({ navigationRef }: { navigationRef: any }) {
           Auth Init: {authInitialized ? '✅' : '⏳'} | User: {userId ? '✅' : '❌'} | Sub: {subLoading ? '⏳' : '✅'}
         </Text>
                 <Text style={[styles.debugText, { fontSize: 10, marginTop: 8 }]}>
-                  Build 28 - No Flicker Fix
+                  Build 29 - Streak Fix
                 </Text>
       </View>
     );

@@ -109,6 +109,10 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
           return newSet;
         });
         console.log(`Uncompleted: ${habitName} for ${selectedDate}`);
+        
+        // Immediately refresh streak after uncompletion
+        const updatedStreak = await getStreak(userId);
+        setStreak(updatedStreak);
       } else {
         // Complete - update Firebase first, then UI
         await completeHabit(userId, habitId, selectedDate);
@@ -116,6 +120,10 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
         // Only update UI if Firebase operation succeeded
         setCompletedForDate(prev => new Set(prev).add(habitId));
         console.log(`Completed: ${habitName} for ${selectedDate}`);
+        
+        // Immediately refresh streak after completion
+        const updatedStreak = await getStreak(userId);
+        setStreak(updatedStreak);
         
         // Only award bonus XP if completing for today
         if (isToday) {
