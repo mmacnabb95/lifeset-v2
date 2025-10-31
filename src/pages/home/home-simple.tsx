@@ -205,6 +205,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
         <Text style={styles.quoteIcon}>✨</Text>
         <View style={styles.quoteContent}>
           <Text style={styles.quoteText}>"{dailyQuote.text}"</Text>
+          <Text style={styles.quoteAuthor}>— {dailyQuote.author}</Text>
         </View>
       </View>
       
