@@ -394,12 +394,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-  debugText: {
-    marginTop: 12,
-    fontSize: 12,
-    color: '#999',
-    fontFamily: 'monospace',
-  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
