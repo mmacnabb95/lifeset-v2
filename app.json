@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lifesetwellbeing.lifeset",
-      "buildNumber": "25",
+      "buildNumber": "26",
       "icon": "./assets/lifeset-icon.png",
       "config": {
         "usesNonExemptEncryption": false
@@ -35,7 +35,7 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.lifesetwellbeing.lifeset",
-      "versionCode": 25,
+      "versionCode": 26,
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
