@@ -191,7 +191,6 @@ export const WriteJournalSimpleScreen = () => {
             textAlignVertical="top"
             maxLength={5000}
             placeholderTextColor="#999"
-            autoFocus={!isEditing}
           />
           <Text style={styles.charCount}>
             {content.length} / 5000 characters
