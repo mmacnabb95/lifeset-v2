@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, TouchableOpacity, Image, Alert } from "react-native";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
 import { useFocusEffect } from "@react-navigation/native";
 import commonConstants from "src/themes/constants";
+import { useXPRewards } from "src/hooks/useXPRewards";
 
 // Firebase services
 import { getUserProfile, updateStreak, UserProfile } from "src/services/firebase/user";
@@ -21,6 +22,7 @@ import { getPercentile, getTierName } from "src/utils/xpPercentileMapper";
 
 export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   const { user, userId } = useFirebaseUser();
+  const { checkAllHabitsCompleted } = useXPRewards();
   
   // State
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -114,7 +116,16 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
         });
       } else {
         await completeHabit(userId, habitId);
-        setCompletedToday(prev => new Set(prev).add(habitId));
+        const newCompletedSet = new Set(completedToday).add(habitId);
+        setCompletedToday(newCompletedSet);
+        
+        // Check if all habits are now completed
+        if (newCompletedSet.size === habits.length && habits.length > 0) {
+          const allCompleted = await checkAllHabitsCompleted();
+          if (allCompleted) {
+            Alert.alert('🎉 All Habits Complete!', 'You completed all your habits today!\n\n+15 XP bonus! 🌟');
+          }
+        }
       }
       
       // Immediately refresh streak after completion/uncompletion
