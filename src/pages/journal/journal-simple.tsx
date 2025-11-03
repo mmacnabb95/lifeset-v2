@@ -81,6 +81,11 @@ export const JournalSimpleScreen = ({ navigation }: { navigation: any }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <View style={styles.headerTop}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Text style={styles.backButtonText}>← Back</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.headerTitle}>📝 My Journal</Text>
         <Text style={styles.headerSubtitle}>{entries.length} entries</Text>
       </View>
@@ -158,10 +163,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 50,
     paddingHorizontal: 20,
     paddingBottom: 20,
     backgroundColor: '#ffd54f',
+  },
+  headerTop: {
+    marginBottom: 10,
+  },
+  backButton: {
+    padding: 5,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '600',
   },
   headerTitle: {
     fontSize: 28,

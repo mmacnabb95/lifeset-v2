@@ -53,6 +53,9 @@ export default function MeditationBrowserScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>🧘 Guided Meditations</Text>
         <Text style={styles.subtitle}>
           {filteredSessions.length} sessions available
@@ -151,10 +154,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingTop: 60,
+    paddingTop: 50,
     paddingHorizontal: 20,
     paddingBottom: 20,
     backgroundColor: '#673ab7',
+  },
+  backButton: {
+    padding: 5,
+    marginBottom: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#e1bee7',
+    fontWeight: '600',
   },
   title: {
     fontSize: 28,

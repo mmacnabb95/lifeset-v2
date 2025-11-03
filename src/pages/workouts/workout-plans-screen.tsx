@@ -151,6 +151,11 @@ export function WorkoutPlansScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <View style={styles.headerTop}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Text style={styles.backButtonText}>← Back</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.title}>Workout Plans</Text>
         <Text style={styles.subtitle}>
           {filteredPlans.length} programs available
@@ -413,10 +418,21 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 50,
     backgroundColor: '#f8f9fa',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+  },
+  headerTop: {
+    marginBottom: 10,
+  },
+  backButton: {
+    padding: 5,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
   },
   title: {
     fontSize: 28,
