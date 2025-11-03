@@ -36,7 +36,7 @@ function AppContent() {
     const initApp = async () => {
       // Clear old SecureStore sessions from previous app versions
       // This prevents "ghost accounts" from persisting across major updates
-      const APP_VERSION = '1.10'; // Match version in app.json
+      const APP_VERSION = '1.11'; // Match version in app.json
       const LAST_VERSION_KEY = 'lastAppVersion';
       
       try {
