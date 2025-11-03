@@ -195,45 +195,17 @@ export const WriteJournalSimpleScreen = () => {
           />
         </View>
 
-        {/* Journal Prompts */}
-        {!isEditing && (
+        {/* Journal Prompt - Always visible, subtle */}
+        {!isEditing && content.length === 0 && (
           <View style={styles.section}>
             <TouchableOpacity 
-              style={styles.promptButton}
-              onPress={() => setShowPrompts(!showPrompts)}
+              style={styles.promptCard}
+              onPress={() => usePrompt(dailyPrompt)}
             >
-              <Text style={styles.promptButtonText}>
-                💡 {showPrompts ? 'Hide Prompts' : 'Need Inspiration?'}
-              </Text>
+              <Text style={styles.promptLabel}>💡 Today's Journal Prompt</Text>
+              <Text style={styles.promptText}>{dailyPrompt}</Text>
+              <Text style={styles.promptAction}>Tap to use this prompt →</Text>
             </TouchableOpacity>
-            
-            {showPrompts && (
-              <View style={styles.promptsContainer}>
-                <Text style={styles.promptTitle}>Today's Prompt:</Text>
-                <TouchableOpacity 
-                  style={styles.promptCard}
-                  onPress={() => usePrompt(dailyPrompt)}
-                >
-                  <Text style={styles.promptText}>{dailyPrompt}</Text>
-                  <Text style={styles.promptAction}>Tap to use →</Text>
-                </TouchableOpacity>
-                
-                <Text style={styles.promptTitle} style={{ marginTop: 15 }}>Quick Prompts:</Text>
-                <View style={styles.quickPrompts}>
-                  {journalPromptsData.prompts.slice(0, 3).map((prompt, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={styles.quickPromptButton}
-                      onPress={() => usePrompt(prompt)}
-                    >
-                      <Text style={styles.quickPromptText} numberOfLines={2}>
-                        {prompt}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )}
           </View>
         )}
 
@@ -362,62 +334,34 @@ const styles = StyleSheet.create({
   moodLabelActive: {
     color: 'white',
   },
-  promptButton: {
-    backgroundColor: '#fff3cd',
-    borderRadius: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ffd54f',
-    alignItems: 'center',
-  },
-  promptButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#856404',
-  },
-  promptsContainer: {
-    marginTop: 15,
-  },
-  promptTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-    marginBottom: 8,
-  },
   promptCard: {
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#fffbf0',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
     borderColor: '#ffd54f',
     borderLeftWidth: 4,
+    borderLeftColor: '#ffd54f',
+  },
+  promptLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#856404',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   promptText: {
     fontSize: 16,
     color: '#333',
     lineHeight: 24,
-    marginBottom: 8,
+    marginBottom: 10,
+    fontStyle: 'italic',
   },
   promptAction: {
     fontSize: 13,
-    color: '#ffd54f',
+    color: '#856404',
     fontWeight: '600',
-  },
-  quickPrompts: {
-    flexDirection: 'column',
-    gap: 10,
-  },
-  quickPromptButton: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  quickPromptText: {
-    fontSize: 14,
-    color: '#555',
-    lineHeight: 20,
   },
   titleInput: {
     backgroundColor: '#f5f5f5',
