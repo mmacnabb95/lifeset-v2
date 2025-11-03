@@ -261,7 +261,10 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
         {/* Date Selector */}
         <View style={styles.dateSelector}>
           <TouchableOpacity 
-            onPress={goToPreviousDay}
+            onPress={() => {
+              console.log('⬅️ LEFT ARROW PRESSED');
+              goToPreviousDay();
+            }}
             style={styles.dateNavButton}
             disabled={moment(selectedDate).isSameOrBefore(gracePeriodStart)}
           >
@@ -284,7 +287,10 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
           </View>
 
           <TouchableOpacity 
-            onPress={goToNextDay}
+            onPress={() => {
+              console.log('➡️ RIGHT ARROW PRESSED');
+              goToNextDay();
+            }}
             style={styles.dateNavButton}
             disabled={moment(selectedDate).isSameOrAfter(today)}
           >
