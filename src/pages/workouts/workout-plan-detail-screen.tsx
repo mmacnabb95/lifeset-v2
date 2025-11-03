@@ -351,28 +351,30 @@ export default function WorkoutPlanDetailScreen() {
             <Text style={styles.backButtonText}>← Back</Text>
           </TouchableOpacity>
           
-          <View style={styles.headerContent}>
-            <Text style={styles.title}>{plan.name}</Text>
-            {plan.isTemplate ? (
-              <View style={styles.templateBadge}>
-                <Text style={styles.templateBadgeText}>✨ LifeSet Program</Text>
-              </View>
-            ) : (
-              <View style={styles.customBadgeDetail}>
-                <Text style={styles.customBadgeDetailText}>📝 My Plan</Text>
-              </View>
+          <View style={styles.headerRow}>
+            <View style={styles.headerContent}>
+              <Text style={styles.title}>{plan.name}</Text>
+              {plan.isTemplate ? (
+                <View style={styles.templateBadge}>
+                  <Text style={styles.templateBadgeText}>✨ LifeSet Program</Text>
+                </View>
+              ) : (
+                <View style={styles.customBadgeDetail}>
+                  <Text style={styles.customBadgeDetailText}>📝 My Plan</Text>
+                </View>
+              )}
+            </View>
+            
+            {/* Delete button for custom plans */}
+            {!plan.isTemplate && plan.userId === userId && (
+              <TouchableOpacity
+                style={styles.headerDeleteButton}
+                onPress={handleDeletePlan}
+              >
+                <Text style={styles.headerDeleteButtonText}>🗑️</Text>
+              </TouchableOpacity>
             )}
           </View>
-          
-          {/* Delete button for custom plans */}
-          {!plan.isTemplate && plan.userId === userId && (
-            <TouchableOpacity
-              style={styles.headerDeleteButton}
-              onPress={handleDeletePlan}
-            >
-              <Text style={styles.headerDeleteButtonText}>🗑️</Text>
-            </TouchableOpacity>
-          )}
         </View>
 
         {/* Meta Info */}
@@ -611,10 +613,13 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontWeight: '600',
   },
-  headerContent: {
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+  },
+  headerContent: {
+    flex: 1,
   },
   title: {
     fontSize: 24,
