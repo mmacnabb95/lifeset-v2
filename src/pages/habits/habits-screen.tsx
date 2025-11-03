@@ -82,12 +82,13 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
     fetchHabits();
   }, [userId, selectedDate]);
 
-  // Reset to today and refresh habits when screen is focused (e.g., after adding a new habit)
+  // Refresh habits when screen is focused (e.g., after adding a new habit)
+  // Only reset to today on FIRST mount, not every focus
   useFocusEffect(
     React.useCallback(() => {
-      setSelectedDate(moment().format('YYYY-MM-DD'));
       fetchHabits(); // Refresh habits list when screen comes into focus
-    }, [userId, selectedDate])
+      // Don't reset selectedDate here - let users browse different days
+    }, [userId])
   );
 
   const onRefresh = () => {
