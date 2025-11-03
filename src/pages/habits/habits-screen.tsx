@@ -186,6 +186,10 @@ export const HabitsScreen = ({ navigation }: { navigation: any }) => {
 
   const goToPreviousDay = () => {
     const previousDay = moment(selectedDate).subtract(1, 'day');
+    console.log('Attempting to go to previous day:', previousDay.format('YYYY-MM-DD'));
+    console.log('Grace period start:', gracePeriodStart);
+    console.log('Is before grace period?', previousDay.isBefore(gracePeriodStart));
+    
     if (previousDay.isBefore(gracePeriodStart)) {
       Alert.alert('Grace Period', 'You can only edit habits from the last 3 days');
       return;
