@@ -45,8 +45,7 @@ export const WriteJournalSimpleScreen = () => {
   const dailyPrompt = getDailyPrompt();
   
   const usePrompt = (prompt: string) => {
-    setContent(prompt + '\n\n');
-    setShowPrompts(false);
+    setTitle(prompt);
   };
 
   // Load existing entry if editing
@@ -182,6 +181,20 @@ export const WriteJournalSimpleScreen = () => {
           </View>
         </View>
 
+        {/* Journal Prompt - Show before title if empty */}
+        {!isEditing && title.length === 0 && (
+          <View style={styles.section}>
+            <TouchableOpacity 
+              style={styles.promptCard}
+              onPress={() => usePrompt(dailyPrompt)}
+            >
+              <Text style={styles.promptLabel}>💡 Today's Journal Prompt</Text>
+              <Text style={styles.promptText}>{dailyPrompt}</Text>
+              <Text style={styles.promptAction}>Tap to use as title →</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         {/* Optional Title */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Title (Optional)</Text>
@@ -194,20 +207,6 @@ export const WriteJournalSimpleScreen = () => {
             placeholderTextColor="#999"
           />
         </View>
-
-        {/* Journal Prompt - Always visible, subtle */}
-        {!isEditing && content.length === 0 && (
-          <View style={styles.section}>
-            <TouchableOpacity 
-              style={styles.promptCard}
-              onPress={() => usePrompt(dailyPrompt)}
-            >
-              <Text style={styles.promptLabel}>💡 Today's Journal Prompt</Text>
-              <Text style={styles.promptText}>{dailyPrompt}</Text>
-              <Text style={styles.promptAction}>Tap to use this prompt →</Text>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {/* Journal Content */}
         <View style={styles.section}>
