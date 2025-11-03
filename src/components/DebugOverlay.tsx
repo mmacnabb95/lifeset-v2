@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 41 - XP Bonus Fix
+            Build 42 - Journal Prompts
           </Text>
         </View>
       )}

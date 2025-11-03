@@ -9,6 +9,7 @@ import {
   updateJournalEntry, 
   getJournalEntry,
 } from "src/services/firebase/journal";
+import journalPromptsData from "src/data/journal-prompts.json";
 
 const MOODS = [
   { key: 'great', emoji: '😄', label: 'Great', color: '#4CAF50' },
@@ -31,6 +32,22 @@ export const WriteJournalSimpleScreen = () => {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingEntry, setLoadingEntry] = useState(isEditing);
+  const [showPrompts, setShowPrompts] = useState(false);
+  
+  // Get a random daily prompt
+  const getDailyPrompt = () => {
+    const prompts = journalPromptsData.prompts;
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+    const index = dayOfYear % prompts.length;
+    return prompts[index];
+  };
+  
+  const dailyPrompt = getDailyPrompt();
+  
+  const usePrompt = (prompt: string) => {
+    setContent(prompt + '\n\n');
+    setShowPrompts(false);
+  };
 
   // Load existing entry if editing
   useEffect(() => {
@@ -178,6 +195,48 @@ export const WriteJournalSimpleScreen = () => {
           />
         </View>
 
+        {/* Journal Prompts */}
+        {!isEditing && (
+          <View style={styles.section}>
+            <TouchableOpacity 
+              style={styles.promptButton}
+              onPress={() => setShowPrompts(!showPrompts)}
+            >
+              <Text style={styles.promptButtonText}>
+                💡 {showPrompts ? 'Hide Prompts' : 'Need Inspiration?'}
+              </Text>
+            </TouchableOpacity>
+            
+            {showPrompts && (
+              <View style={styles.promptsContainer}>
+                <Text style={styles.promptTitle}>Today's Prompt:</Text>
+                <TouchableOpacity 
+                  style={styles.promptCard}
+                  onPress={() => usePrompt(dailyPrompt)}
+                >
+                  <Text style={styles.promptText}>{dailyPrompt}</Text>
+                  <Text style={styles.promptAction}>Tap to use →</Text>
+                </TouchableOpacity>
+                
+                <Text style={styles.promptTitle} style={{ marginTop: 15 }}>Quick Prompts:</Text>
+                <View style={styles.quickPrompts}>
+                  {journalPromptsData.prompts.slice(0, 3).map((prompt, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.quickPromptButton}
+                      onPress={() => usePrompt(prompt)}
+                    >
+                      <Text style={styles.quickPromptText} numberOfLines={2}>
+                        {prompt}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+
         {/* Journal Content */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>What's on your mind?</Text>
@@ -302,6 +361,63 @@ const styles = StyleSheet.create({
   },
   moodLabelActive: {
     color: 'white',
+  },
+  promptButton: {
+    backgroundColor: '#fff3cd',
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ffd54f',
+    alignItems: 'center',
+  },
+  promptButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#856404',
+  },
+  promptsContainer: {
+    marginTop: 15,
+  },
+  promptTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 8,
+  },
+  promptCard: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ffd54f',
+    borderLeftWidth: 4,
+  },
+  promptText: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 24,
+    marginBottom: 8,
+  },
+  promptAction: {
+    fontSize: 13,
+    color: '#ffd54f',
+    fontWeight: '600',
+  },
+  quickPrompts: {
+    flexDirection: 'column',
+    gap: 10,
+  },
+  quickPromptButton: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  quickPromptText: {
+    fontSize: 14,
+    color: '#555',
+    lineHeight: 20,
   },
   titleInput: {
     backgroundColor: '#f5f5f5',
