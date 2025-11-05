@@ -2,7 +2,7 @@
   "expo": {
     "name": "LifeSet",
     "slug": "lifeset-v2",
-    "version": "1.11",
+    "version": "1.12",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lifesetwellbeing.lifeset",
-      "buildNumber": "44",
+      "buildNumber": "45",
       "icon": "./assets/lifeset-icon.png",
       "config": {
         "usesNonExemptEncryption": false
@@ -35,7 +35,7 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.lifesetwellbeing.lifeset",
-      "versionCode": 44,
+      "versionCode": 45,
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",

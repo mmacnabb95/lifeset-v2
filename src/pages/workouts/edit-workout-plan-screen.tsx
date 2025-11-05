@@ -473,25 +473,23 @@ export default function EditWorkoutPlanScreen() {
           {/* Exercise List */}
           <ScrollView style={styles.exerciseList}>
             {filteredExercises.map((exercise) => {
-              const alreadyAdded = plan.exercises.some(
+              // Count how many times this exercise is already in the plan
+              const addedCount = plan.exercises.filter(
                 (ex) => ex.exerciseId === exercise.id
-              );
+              ).length;
+              
               return (
                 <TouchableOpacity
                   key={exercise.id}
-                  style={[
-                    styles.exercisePickerCard,
-                    alreadyAdded && styles.exercisePickerCardDisabled,
-                  ]}
-                  onPress={() => !alreadyAdded && handleAddExercise(exercise.id)}
-                  disabled={alreadyAdded}
+                  style={styles.exercisePickerCard}
+                  onPress={() => handleAddExercise(exercise.id)}
                 >
                   <Text style={styles.exercisePickerName}>{exercise.name}</Text>
                   <Text style={styles.exercisePickerCategory}>
                     {exercise.category}
                   </Text>
-                  {alreadyAdded && (
-                    <Text style={styles.alreadyAddedText}>✓ Added</Text>
+                  {addedCount > 0 && (
+                    <Text style={styles.alreadyAddedText}>Added {addedCount}x</Text>
                   )}
                 </TouchableOpacity>
               );

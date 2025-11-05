@@ -93,6 +93,19 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
     }, [userId])
   );
 
+  // Check for day change and refresh habits
+  useEffect(() => {
+    const checkDayChange = setInterval(() => {
+      const currentDay = new Date().toISOString().split('T')[0];
+      if (currentDay !== today) {
+        console.log('🔄 Day changed - refreshing habits');
+        fetchUserData();
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(checkDayChange);
+  }, [today]);
+
   const onRefresh = () => {
     setRefreshing(true);
     fetchUserData();
