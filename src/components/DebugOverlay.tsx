@@ -108,7 +108,7 @@ export const DebugOverlay = ({ visible = true }: { visible?: boolean }) => {
           </Text>
           
           <Text style={styles.build}>
-            Build 45 - v1.12
+            Build 46 - v1.12
           </Text>
         </View>
       )}
