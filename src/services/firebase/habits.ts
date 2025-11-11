@@ -270,16 +270,26 @@ export const updateStreak = async (userId: string) => {
   try {
     const today = moment().format('YYYY-MM-DD');
     const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
+    const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD');
+    const threeDaysAgo = moment().subtract(3, 'days').format('YYYY-MM-DD');
     
-    // Get completion percentages
-    const completionToday = await calculateCompletionPercentage(userId, today);
-    const completionYesterday = await calculateCompletionPercentage(userId, yesterday);
+    // Get completion percentages for last several days
+    const [completionToday, completionYesterday, completion2Days, completion3Days] = await Promise.all([
+      calculateCompletionPercentage(userId, today),
+      calculateCompletionPercentage(userId, yesterday),
+      calculateCompletionPercentage(userId, twoDaysAgo),
+      calculateCompletionPercentage(userId, threeDaysAgo),
+    ]);
     
     console.log('Streak calculation:', {
       today,
       yesterday,
+      twoDaysAgo,
+      threeDaysAgo,
       completionToday,
       completionYesterday,
+      completion2Days,
+      completion3Days,
     });
     
     // Get current streak
@@ -310,10 +320,37 @@ export const updateStreak = async (userId: string) => {
     }
     
     // Case 2: User missed yesterday, but completed today → reset to 1
+    // BUT: Check if they completed yesterday retroactively (filling in past days)
     if (completionYesterday < 1 && completionToday === 1 && lastCompletedDate !== today) {
-      const newLongestStreak = Math.max(longestStreak, 1);
+      // Check if there's a consecutive streak going back from today
+      let consecutiveDays = 1; // Today is complete
+      
+      // Check if yesterday is NOW complete (maybe they just filled it in)
+      if (completionYesterday === 1) {
+        consecutiveDays++;
+        // Check 2 days ago
+        if (completion2Days === 1) {
+          consecutiveDays++;
+          // Check 3 days ago
+          if (completion3Days === 1) {
+            consecutiveDays++;
+          }
+        }
+      }
+      
+      const newCurrentStreak = consecutiveDays;
+      const newLongestStreak = Math.max(longestStreak, newCurrentStreak);
+      
+      console.log('📊 Recalculated streak from today backwards:', {
+        consecutiveDays,
+        completionToday,
+        completionYesterday,
+        completion2Days,
+        completion3Days,
+      });
+      
       await updateDoc(streakRef, {
-        currentStreak: 1,
+        currentStreak: newCurrentStreak,
         longestStreak: newLongestStreak,
         lastCompletedDate: today,
         updatedAt: serverTimestamp(),
