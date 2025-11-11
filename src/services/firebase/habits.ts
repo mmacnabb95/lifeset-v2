@@ -319,13 +319,13 @@ export const updateStreak = async (userId: string) => {
       return;
     }
     
-    // Case 2: User missed yesterday, but completed today → reset to 1
-    // BUT: Check if they completed yesterday retroactively (filling in past days)
-    if (completionYesterday < 1 && completionToday === 1 && lastCompletedDate !== today) {
-      // Check if there's a consecutive streak going back from today
+    // Case 2: Today is complete, check for consecutive days backwards
+    // This handles both: fresh completions AND retroactive fill-ins
+    if (completionToday === 1 && lastCompletedDate !== today) {
+      // Count consecutive days going backwards from today
       let consecutiveDays = 1; // Today is complete
       
-      // Check if yesterday is NOW complete (maybe they just filled it in)
+      // Check yesterday
       if (completionYesterday === 1) {
         consecutiveDays++;
         // Check 2 days ago
@@ -347,6 +347,7 @@ export const updateStreak = async (userId: string) => {
         completionYesterday,
         completion2Days,
         completion3Days,
+        newCurrentStreak,
       });
       
       await updateDoc(streakRef, {
