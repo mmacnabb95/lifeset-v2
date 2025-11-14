@@ -162,7 +162,9 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       >
         <Text style={styles.headerEmoji}>✨</Text>
         <Text style={styles.headerTitle}>LifeSet Premium</Text>
-        <Text style={styles.headerSubtitle}>7-Day Free Trial</Text>
+        <Text style={styles.headerSubtitle}>
+          7-Day Free Trial • Auto-renews after trial
+        </Text>
       </LinearGradient>
 
       <View style={styles.benefitsContainer}>
@@ -176,39 +178,79 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
       </View>
 
       <View style={styles.packagesContainer}>
-        {packages.map((pkg) => (
-          <TouchableOpacity
-            key={pkg.identifier}
-            style={styles.packageCard}
-            onPress={() => handlePurchase(pkg)}
-            disabled={purchasing}
-          >
-            <View style={styles.packageHeader}>
-              <Text style={styles.packageTitle}>
-                {pkg.product.title.replace('(LifeSet)', '').trim()}
+        {packages.map((pkg) => {
+          const isAnnual = pkg.packageType === 'ANNUAL';
+          const billingPeriod = isAnnual ? 'year' : 'month';
+          
+          return (
+            <TouchableOpacity
+              key={pkg.identifier}
+              style={styles.packageCard}
+              onPress={() => handlePurchase(pkg)}
+              disabled={purchasing}
+            >
+              <View style={styles.packageHeader}>
+                <Text style={styles.packageTitle}>
+                  {pkg.product.title.replace('(LifeSet)', '').trim()}
+                </Text>
+                {isAnnual && (
+                  <View style={styles.saveBadge}>
+                    <Text style={styles.saveBadgeText}>SAVE 40%</Text>
+                  </View>
+                )}
+              </View>
+              
+              {/* FREE TRIAL - Prominent */}
+              <View style={styles.trialBadge}>
+                <Text style={styles.trialBadgeText}>
+                  🎁 7-Day Free Trial
+                </Text>
+              </View>
+              
+              {/* PRICING - Clear and explicit */}
+              <View style={styles.pricingContainer}>
+                <Text style={styles.pricingLabel}>Then:</Text>
+                <Text style={styles.packagePrice}>
+                  {pkg.product.priceString}
+                  <Text style={styles.pricingPeriod}>/{billingPeriod}</Text>
+                </Text>
+              </View>
+              
+              {/* AUTO-RENEWAL NOTICE */}
+              <Text style={styles.autoRenewNotice}>
+                Auto-renews at {pkg.product.priceString}/{billingPeriod} unless cancelled
               </Text>
-              {pkg.packageType === 'ANNUAL' && (
-                <View style={styles.saveBadge}>
-                  <Text style={styles.saveBadgeText}>SAVE 40%</Text>
-                </View>
-              )}
-            </View>
-            <Text style={styles.packagePrice}>
-              {pkg.product.priceString}
-              {pkg.packageType === 'ANNUAL' ? '/year' : '/month'}
-            </Text>
-            <Text style={styles.packageDescription}>
-              {pkg.packageType === 'ANNUAL' 
-                ? 'Best Value - Billed annually' 
-                : 'Billed monthly'}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              
+              <Text style={styles.packageDescription}>
+                {isAnnual 
+                  ? 'Billed annually after trial' 
+                  : 'Billed monthly after trial'}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
-      <Text style={styles.trialNotice}>
-        Start your 7-day free trial. Cancel anytime before trial ends to avoid charges.
-      </Text>
+      <View style={styles.trialNoticeContainer}>
+        <Text style={styles.trialNoticeTitle}>
+          ⚠️ Important Subscription Information
+        </Text>
+        <Text style={styles.trialNotice}>
+          • Your subscription includes a <Text style={styles.trialNoticeBold}>7-day free trial</Text>
+        </Text>
+        <Text style={styles.trialNotice}>
+          • After the trial, you will be automatically charged the subscription price
+        </Text>
+        <Text style={styles.trialNotice}>
+          • You can cancel anytime before the trial ends to avoid charges
+        </Text>
+        <Text style={styles.trialNotice}>
+          • Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period
+        </Text>
+        <Text style={styles.trialNotice}>
+          • Manage your subscription in your Apple ID account settings
+        </Text>
+      </View>
 
       <TouchableOpacity
         style={styles.restoreButton}
@@ -347,23 +389,77 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
+  trialBadge: {
+    backgroundColor: '#10b981',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+    marginTop: 4,
+  },
+  trialBadgeText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  pricingContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginBottom: 8,
+  },
+  pricingLabel: {
+    fontSize: 16,
+    color: '#666',
+    marginRight: 6,
+    fontWeight: '500',
+  },
   packagePrice: {
     fontSize: 24,
     fontWeight: '800',
     color: '#667eea',
-    marginBottom: 4,
+  },
+  pricingPeriod: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#667eea',
+  },
+  autoRenewNotice: {
+    fontSize: 13,
+    color: '#e74c3c',
+    fontWeight: '600',
+    marginBottom: 8,
+    lineHeight: 18,
   },
   packageDescription: {
     fontSize: 14,
     color: '#666',
+    marginTop: 4,
+  },
+  trialNoticeContainer: {
+    marginHorizontal: 20,
+    marginTop: 24,
+    backgroundColor: '#fff3cd',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#ffc107',
+  },
+  trialNoticeTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#856404',
+    marginBottom: 12,
   },
   trialNotice: {
-    marginHorizontal: 20,
-    marginTop: 20,
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    fontSize: 13,
+    color: '#856404',
     lineHeight: 20,
+    marginBottom: 6,
+  },
+  trialNoticeBold: {
+    fontWeight: '700',
+    color: '#856404',
   },
   restoreButton: {
     marginHorizontal: 20,
