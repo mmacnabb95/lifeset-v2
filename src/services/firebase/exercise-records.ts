@@ -16,6 +16,7 @@ export interface ExerciseRecord {
   exerciseId: number;
   exerciseName: string;
   exerciseCategory?: string; // 'cardio', 'strength', etc.
+  notes?: string;
   // For strength exercises
   maxWeight?: number;
   lastWeight?: number;
@@ -110,11 +111,44 @@ export const updateExerciseRecord = async (
       recordData.lastDurationSeconds = data.durationSeconds;
     }
     
-    await setDoc(recordRef, recordData);
+    await setDoc(recordRef, recordData, { merge: true });
     console.log(`Updated record for ${exerciseName}:`, data);
   } catch (error) {
     console.error('Update exercise record error:', error);
     throw new Error('Failed to update exercise record');
+  }
+};
+
+/**
+ * Save personal notes for an exercise without affecting stats
+ */
+export const saveExerciseNotes = async (
+  userId: string,
+  exerciseId: number,
+  exerciseName: string,
+  exerciseCategory: string,
+  notes: string
+): Promise<void> => {
+  try {
+    const recordRef = doc(db, 'users', userId, 'exercise_records', exerciseId.toString());
+    
+    await setDoc(
+      recordRef,
+      {
+        userId,
+        exerciseId,
+        exerciseName,
+        exerciseCategory,
+        notes,
+        lastUpdated: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    
+    console.log(`Saved notes for ${exerciseName}`);
+  } catch (error) {
+    console.error('Save exercise notes error:', error);
+    throw new Error('Failed to save notes');
   }
 };
 

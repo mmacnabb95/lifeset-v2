@@ -9,10 +9,11 @@ import {
   Alert,
   Linking,
   ActivityIndicator,
+  Vibration,
 } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useFirebaseUser } from 'src/hooks/useFirebaseUser';
-import { getExerciseRecord, updateExerciseRecord, ExerciseRecord } from 'src/services/firebase/exercise-records';
+import { getExerciseRecord, updateExerciseRecord, saveExerciseNotes, ExerciseRecord } from 'src/services/firebase/exercise-records';
 import { Video, ResizeMode } from 'expo-av';
 
 interface Exercise {
@@ -41,6 +42,13 @@ export default function ExerciseDetailScreen() {
   const [inputValue, setInputValue] = useState('');
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
+  const [noteText, setNoteText] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
+  const [noteSavedAt, setNoteSavedAt] = useState<Date | null>(null);
+  const [restDuration, setRestDuration] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerComplete, setTimerComplete] = useState(false);
 
   const isCardio = exercise.category === 'cardio';
 
@@ -58,10 +66,29 @@ export default function ExerciseDetailScreen() {
           // For strength, show weight
           setInputValue(exerciseRecord.lastWeight?.toString() || '');
         }
+        setNoteText(exerciseRecord.notes || '');
+        setNoteSavedAt(exerciseRecord.lastUpdated?.toDate?.() || null);
       }
     };
     loadRecord();
   }, [userId, exercise.id, isCardio]);
+
+  // Rest timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (timerRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (timerRunning && timeLeft === 0) {
+      Vibration.vibrate(600);
+      setTimerRunning(false);
+      setTimerComplete(true);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timerRunning, timeLeft]);
 
   const handleSaveRecord = async () => {
     if (!userId) {
@@ -103,6 +130,81 @@ export default function ExerciseDetailScreen() {
     } catch (err: any) {
       Alert.alert('Error', err.message || 'Failed to save record');
     }
+  };
+
+  const handleSaveNote = async () => {
+    if (!userId) {
+      Alert.alert('Login Required', 'Please login to save notes');
+      return;
+    }
+
+    try {
+      setSavingNote(true);
+      await saveExerciseNotes(
+        userId,
+        exercise.id,
+        exercise.name,
+        exercise.category,
+        noteText.trim()
+      );
+
+      setRecord((prev) =>
+        prev
+          ? { ...prev, notes: noteText.trim(), lastUpdated: new Date() }
+          : {
+              userId,
+              exerciseId: exercise.id,
+              exerciseName: exercise.name,
+              exerciseCategory: exercise.category,
+              notes: noteText.trim(),
+              lastUpdated: new Date(),
+            }
+      );
+      setNoteSavedAt(new Date());
+      Alert.alert('Saved', 'Your personal notes have been updated.');
+    } catch (err: any) {
+      Alert.alert('Error', err.message || 'Failed to save notes');
+    } finally {
+      setSavingNote(false);
+    }
+  };
+
+  const handleStartTimer = () => {
+    setTimerComplete(false);
+    setTimeLeft(restDuration);
+    setTimerRunning(true);
+  };
+
+  const handlePauseTimer = () => {
+    setTimerRunning(false);
+  };
+
+  const handleResetTimer = () => {
+    setTimerRunning(false);
+    setTimerComplete(false);
+    setTimeLeft(restDuration);
+  };
+
+  const handleAdjustDuration = (text: string) => {
+    if (text === '') {
+      setRestDuration(0);
+      setTimeLeft(0);
+      return;
+    }
+
+    const value = parseInt(text, 10);
+    if (!isNaN(value) && value >= 0) {
+      setRestDuration(value);
+      if (!timerRunning) {
+        setTimeLeft(value);
+      }
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handlePlayVideo = async () => {
@@ -318,6 +420,100 @@ export default function ExerciseDetailScreen() {
                 </Text>
               </TouchableOpacity>
             )}
+          </View>
+
+          {/* Rest Timer - Compact */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Rest Timer</Text>
+            <View style={styles.compactTimerCard}>
+              <View style={styles.timerInfoRow}>
+                <View style={styles.timerInfo}>
+                  <Text style={styles.timerLabel}>Next set in</Text>
+                  <Text style={styles.compactTimerDisplay}>{formatTime(timeLeft)}</Text>
+                  {timerComplete && (
+                    <Text style={styles.timerCompleteText}>Rest complete!</Text>
+                  )}
+                </View>
+                <View style={styles.durationInputRow}>
+                  <Text style={styles.durationInputLabel}>Rest (sec)</Text>
+                  <TextInput
+                    style={styles.durationInput}
+                    keyboardType="number-pad"
+                    value={restDuration.toString()}
+                    onChangeText={handleAdjustDuration}
+                    selectTextOnFocus
+                  />
+                </View>
+              </View>
+              <View style={styles.timerButtonsRow}>
+                <TouchableOpacity
+                  style={[styles.timerButtonSmall, styles.timerPrimaryButton]}
+                  onPress={handleStartTimer}
+                >
+                  <Text style={styles.timerButtonSmallText}>
+                    {timerRunning ? 'Restart' : 'Start'}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timerButtonSmall,
+                    styles.timerSecondaryButton,
+                    !timerRunning && styles.timerButtonDisabled,
+                  ]}
+                  onPress={handlePauseTimer}
+                  disabled={!timerRunning}
+                >
+                  <Text
+                    style={[
+                      styles.timerButtonSmallText,
+                      !timerRunning && styles.timerButtonDisabledText,
+                    ]}
+                  >
+                    Pause
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.timerButtonSmall, styles.timerSecondaryButton]}
+                  onPress={handleResetTimer}
+                >
+                  <Text style={styles.timerButtonSmallText}>Reset</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          {/* Personal Notes */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Personal Notes</Text>
+            <Text style={styles.sectionSubtitle}>
+              Jot down cues about your form, difficulty, or reminders for next time.
+            </Text>
+            <TextInput
+              style={styles.noteInput}
+              multiline
+              placeholder="e.g. Focus on keeping core tight on the last rep."
+              placeholderTextColor="#999"
+              value={noteText}
+              onChangeText={setNoteText}
+              textAlignVertical="top"
+              numberOfLines={4}
+            />
+            <View style={styles.noteActions}>
+              <TouchableOpacity
+                style={[styles.saveNoteButton, savingNote && styles.saveNoteButtonDisabled]}
+                onPress={handleSaveNote}
+                disabled={savingNote}
+              >
+                <Text style={styles.saveNoteButtonText}>
+                  {savingNote ? 'Saving...' : 'Save Notes'}
+                </Text>
+              </TouchableOpacity>
+              {noteSavedAt && (
+                <Text style={styles.noteTimestamp}>
+                  Last updated {noteSavedAt.toLocaleDateString()} {noteSavedAt.toLocaleTimeString()}
+                </Text>
+              )}
+            </View>
           </View>
 
           {/* Meta Info */}
@@ -659,6 +855,12 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 12,
   },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#777',
+    marginBottom: 12,
+    lineHeight: 20,
+  },
   description: {
     fontSize: 16,
     color: '#666',
@@ -697,6 +899,126 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#666',
     lineHeight: 24,
+  },
+  noteInput: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    padding: 16,
+    fontSize: 15,
+    minHeight: 110,
+  },
+  noteActions: {
+    marginTop: 12,
+    gap: 6,
+  },
+  saveNoteButton: {
+    backgroundColor: '#26c6da',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  saveNoteButtonDisabled: {
+    opacity: 0.6,
+  },
+  saveNoteButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  noteTimestamp: {
+    fontSize: 12,
+    color: '#888',
+    textAlign: 'center',
+  },
+  compactTimerCard: {
+    backgroundColor: '#f0fbff',
+    borderRadius: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#b3e5fc',
+    shadowColor: '#26c6da',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  timerInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  timerInfo: {
+    flex: 1,
+  },
+  timerLabel: {
+    fontSize: 12,
+    color: '#4fb0c6',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 4,
+    fontWeight: '700',
+  },
+  compactTimerDisplay: {
+    fontSize: 32,
+    fontWeight: '900',
+    color: '#0e4a61',
+  },
+  timerCompleteText: {
+    color: '#4caf50',
+    fontWeight: '700',
+    marginTop: 6,
+  },
+  durationInputRow: {
+    alignItems: 'center',
+  },
+  durationInputLabel: {
+    fontSize: 12,
+    color: '#4fb0c6',
+    marginBottom: 4,
+    fontWeight: '600',
+  },
+  durationInput: {
+    width: 90,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#b3e5fc',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    color: '#0e4a61',
+    fontSize: 18,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  timerButtonsRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  timerButtonSmall: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  timerPrimaryButton: {
+    backgroundColor: '#26c6da',
+  },
+  timerSecondaryButton: {
+    backgroundColor: '#b2ebf2',
+  },
+  timerButtonSmallText: {
+    color: '#0e4a61',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  timerButtonDisabled: {
+    opacity: 0.4,
+  },
+  timerButtonDisabledText: {
+    color: 'rgba(14,74,97,0.4)',
   },
 });
 

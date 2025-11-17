@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.lifesetwellbeing.lifeset",
-      "buildNumber": "47",
+      "buildNumber": "48",
       "icon": "./assets/lifeset-icon.png",
       "config": {
         "usesNonExemptEncryption": false
@@ -25,7 +25,8 @@
         "NSPhotoLibraryUsageDescription": "LifeSet needs access to your photo library to upload profile pictures.",
         "NSCameraUsageDescription": "LifeSet needs access to your camera to take profile pictures.",
         "NSUserNotificationsUsageDescription": "LifeSet sends daily reminders to help you stay on track with your habits."
-      }
+      },
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +36,7 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.lifesetwellbeing.lifeset",
-      "versionCode": 47,
+      "versionCode": 48,
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",

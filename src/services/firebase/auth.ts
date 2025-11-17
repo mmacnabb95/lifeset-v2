@@ -8,9 +8,12 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   User,
+  OAuthProvider,
+  signInWithCredential,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './config';
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 /**
  * Sign up a new user
@@ -82,6 +85,78 @@ export const resetPassword = async (email: string) => {
  */
 export const getCurrentUser = (): User | null => {
   return auth.currentUser;
+};
+
+/**
+ * Sign in with Apple
+ */
+export const signInWithApple = async () => {
+  try {
+    // Check if Apple Authentication is available
+    const isAvailable = await AppleAuthentication.isAvailableAsync();
+    if (!isAvailable) {
+      throw new Error('Apple Sign In is not available on this device');
+    }
+
+    // Request Apple authentication
+    const appleCredential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+
+    // Create Firebase credential from Apple credential
+    const { identityToken, authorizationCode } = appleCredential;
+    if (!identityToken) {
+      throw new Error('Apple Sign In failed - no identity token');
+    }
+
+    const provider = new OAuthProvider('apple.com');
+    const credential = provider.credential({
+      idToken: identityToken,
+      rawNonce: authorizationCode || undefined,
+    });
+
+    // Sign in to Firebase with Apple credential
+    const userCredential = await signInWithCredential(auth, credential);
+    const user = userCredential.user;
+
+    // Check if user document exists, create if not
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      // New user - create profile
+      const displayName = appleCredential.fullName
+        ? `${appleCredential.fullName.givenName || ''} ${appleCredential.fullName.familyName || ''}`.trim()
+        : user.email?.split('@')[0] || 'User';
+
+      await setDoc(userDocRef, {
+        email: user.email || appleCredential.email || '',
+        username: displayName,
+        createdAt: serverTimestamp(),
+        xp: 0,
+        level: 1,
+      });
+
+      // Update Firebase profile with display name
+      if (displayName) {
+        await updateProfile(user, { displayName });
+      }
+    }
+
+    return user;
+  } catch (error: any) {
+    console.error('Apple Sign In error:', error);
+    
+    // Handle user cancellation gracefully
+    if (error.code === 'ERR_CANCELED' || error.code === 'ERR_REQUEST_CANCELED') {
+      throw new Error('Sign in was cancelled');
+    }
+    
+    throw new Error(error.message || 'Failed to sign in with Apple');
+  }
 };
 
 /**

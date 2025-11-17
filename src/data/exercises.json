@@ -1888,5 +1888,52 @@
     "thumbnailUrl": null,
     "duration": null,
     "originalFilename": "Lever Preacher Curl.mp4"
+  },
+  {
+    "id": 127,
+    "name": "Plank",
+    "category": "abs",
+    "description": "Hold a straight-line plank position on your elbows or hands, keeping core tight and hips level.",
+    "difficulty": "beginner",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FPlank.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Plank.mp4"
+  },
+  {
+    "id": 128,
+    "name": "Plank with Leg Lift",
+    "category": "abs",
+    "description": "From a front plank position, alternate lifting each leg while keeping hips steady to increase core and glute activation.",
+    "difficulty": "intermediate",
+    "equipment": [],
+    "muscleGroups": [
+      "abs"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fabs%2FFront%20Plank%20with%20Leg%20Lift.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Front Plank with Leg Lift.mp4"
+  },
+  {
+    "id": 129,
+    "name": "Rowing Machine",
+    "category": "cardio",
+    "description": "Use the rowing machine with a strong leg drive, upright posture, and smooth pull to build full-body endurance.",
+    "difficulty": "beginner",
+    "equipment": [
+      "rowing machine"
+    ],
+    "muscleGroups": [
+      "cardio"
+    ],
+    "videoUrl": "https://firebasestorage.googleapis.com/v0/b/lifeset-v2.firebasestorage.app/o/exercises%2Fcardio%2FRowing%20Machine.mp4?alt=media",
+    "thumbnailUrl": null,
+    "duration": null,
+    "originalFilename": "Rowing Machine.mp4"
   }
 ]

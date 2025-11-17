@@ -22,7 +22,12 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
 
     // Filter by category
     if (selectedCategory !== 'All') {
-      recipes = recipes.filter(r => r.category === selectedCategory);
+      // Normalise snack/dessert to match data, which uses "Snacks"
+      if (selectedCategory === 'Snack' || selectedCategory === 'Dessert') {
+        recipes = recipes.filter(r => r.category === 'Snacks' || r.category === 'Dessert');
+      } else {
+        recipes = recipes.filter(r => r.category === selectedCategory);
+      }
     }
 
     // Search by title or description

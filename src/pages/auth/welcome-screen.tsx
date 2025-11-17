@@ -1,8 +1,43 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { signInWithApple } from 'src/services/firebase/auth';
+import { useDispatch } from 'react-redux';
+import { setFirebaseUser } from 'src/redux/features/auth/slice';
 
 export const WelcomeScreen = ({ navigation }: { navigation: any }) => {
+  const dispatch = useDispatch();
+  const [appleLoading, setAppleLoading] = useState(false);
+
+  const handleAppleSignIn = async () => {
+    try {
+      setAppleLoading(true);
+      const user = await signInWithApple();
+      
+      // Dispatch to Redux
+      dispatch(setFirebaseUser({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+      }));
+
+      // Navigation will be handled by auth listener
+      console.log('Apple Sign In successful:', user.uid);
+    } catch (error: any) {
+      console.error('Apple Sign In error:', error);
+      
+      // Don't show error for user cancellation
+      if (error.message?.includes('cancelled') || error.message?.includes('canceled')) {
+        return;
+      }
+      
+      Alert.alert('Sign In Failed', error.message || 'Failed to sign in with Apple');
+    } finally {
+      setAppleLoading(false);
+    }
+  };
+
   return (
     <LinearGradient
       colors={['#667eea', '#764ba2']}
@@ -20,6 +55,17 @@ export const WelcomeScreen = ({ navigation }: { navigation: any }) => {
         </Text>
 
         <View style={styles.buttonContainer}>
+          {Platform.OS === 'ios' && (
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+              buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.WHITE}
+              cornerRadius={12}
+              style={styles.appleButton}
+              onPress={handleAppleSignIn}
+              disabled={appleLoading}
+            />
+          )}
+
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => navigation.navigate('SignUp')}
@@ -72,6 +118,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     gap: 16,
+  },
+  appleButton: {
+    width: '100%',
+    height: 50,
+    marginBottom: 8,
   },
   primaryButton: {
     backgroundColor: '#fff',
