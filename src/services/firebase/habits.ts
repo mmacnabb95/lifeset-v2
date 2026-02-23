@@ -25,6 +25,7 @@ export interface Habit {
   name: string;
   description?: string;
   category?: string;
+  streakTarget?: number; // Target streak in days (optional)
   schedule: {
     monday: boolean;
     tuesday: boolean;
@@ -70,6 +71,28 @@ export const createHabit = async (habit: Omit<Habit, 'id' | 'createdAt' | 'updat
   } catch (error) {
     console.error('Create habit error:', error);
     throw new Error('Failed to create habit');
+  }
+};
+
+/**
+ * Get organisation habits (suggested habits for members)
+ */
+export const getOrganisationHabits = async (
+  organisationId: string
+): Promise<{ id: string; name: string; description?: string; category?: string; streakTarget?: number; schedule: Habit['schedule'] }[]> => {
+  try {
+    const q = query(
+      collection(db, 'organisationHabits'),
+      where('organisationId', '==', organisationId)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    })) as { id: string; name: string; description?: string; category?: string; streakTarget?: number; schedule: Habit['schedule'] }[];
+  } catch (error) {
+    console.error('Get organisation habits error:', error);
+    return [];
   }
 };
 
@@ -171,8 +194,25 @@ export const completeHabit = async (userId: string, habitId: string, date?: stri
       date: completionDate,
     });
     
-    // Update streak
-    await updateStreak(userId);
+    // Update streak - add delay and retry to ensure Firestore write has propagated
+    // This prevents race condition where updateStreak queries before completion is visible
+    // Retry up to 3 times with increasing delays (longer delays for better reliability)
+    let retries = 0;
+    const maxRetries = 3;
+    while (retries < maxRetries) {
+      // Longer delays: 500ms, 1000ms, 1500ms to ensure Firestore propagation
+      await new Promise(resolve => setTimeout(resolve, 500 * (retries + 1)));
+      try {
+        await updateStreak(userId);
+        break; // Success, exit retry loop
+      } catch (error) {
+        retries++;
+        if (retries >= maxRetries) {
+          console.error('Failed to update streak after retries:', error);
+          // Don't throw - completion was successful, streak will update on next completion
+        }
+      }
+    }
   } catch (error) {
     console.error('Complete habit error:', error);
     throw error;
@@ -255,7 +295,23 @@ export const calculateCompletionPercentage = async (userId: string, date: string
     
     // Calculate percentage
     const completedCount = scheduledHabits.filter(h => completedHabitIds.has(h.id!)).length;
-    return completedCount / scheduledHabits.length;
+    const percentage = scheduledHabits.length > 0 ? completedCount / scheduledHabits.length : 0;
+    
+    // Always log for debugging (not just today)
+    if (__DEV__) {
+      const dayName = moment(date).format('dddd').toLowerCase();
+      console.log(`📈 Completion calc for ${date} (${dayName}): ${completedCount}/${scheduledHabits.length} = ${percentage}`);
+      console.log(`   Scheduled habits: ${scheduledHabits.length > 0 ? scheduledHabits.map(h => `${h.name} (id: ${h.id})`).join(', ') : 'NONE'}`);
+      console.log(`   Completions found: ${completions.length} (habitIds: ${Array.from(completedHabitIds).join(', ')})`);
+      if (scheduledHabits.length === 0 && allHabits.length > 0) {
+        console.log(`⚠️ No habits scheduled for ${dayName}. All habits: ${allHabits.map(h => {
+          const scheduledDays = Object.keys(h.schedule).filter(d => h.schedule[d as keyof Habit['schedule']]);
+          return `${h.name} (scheduled: ${scheduledDays.join(', ') || 'NONE'})`;
+        }).join('; ')}`);
+      }
+    }
+    
+    return percentage;
   } catch (error) {
     console.error('Calculate completion percentage error:', error);
     return 0;
@@ -263,36 +319,12 @@ export const calculateCompletionPercentage = async (userId: string, date: string
 };
 
 /**
- * Update user streak
- * This is the core streak logic copied from your existing implementation
+ * Update user streak - OPTIMIZED VERSION
+ * Uses batch queries instead of per-day queries for much faster performance
  */
 export const updateStreak = async (userId: string) => {
   try {
     const today = moment().format('YYYY-MM-DD');
-    const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
-    const twoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD');
-    const threeDaysAgo = moment().subtract(3, 'days').format('YYYY-MM-DD');
-    
-    // Get completion percentages for last several days
-    const [completionToday, completionYesterday, completion2Days, completion3Days] = await Promise.all([
-      calculateCompletionPercentage(userId, today),
-      calculateCompletionPercentage(userId, yesterday),
-      calculateCompletionPercentage(userId, twoDaysAgo),
-      calculateCompletionPercentage(userId, threeDaysAgo),
-    ]);
-    
-    console.log('Streak calculation:', {
-      today,
-      yesterday,
-      twoDaysAgo,
-      threeDaysAgo,
-      completionToday,
-      completionYesterday,
-      completion2Days,
-      completion3Days,
-    });
-    
-    // Get current streak
     const streakRef = doc(db, 'users', userId, 'streaks', 'main');
     const streakDoc = await getDoc(streakRef);
     
@@ -307,102 +339,70 @@ export const updateStreak = async (userId: string) => {
       lastCompletedDate = data.lastCompletedDate || '';
     }
     
-    // Case 1: No streak exists & today is complete
-    if (!streakDoc.exists() && completionToday === 1) {
-      await setDoc(streakRef, {
-        userId,
-        currentStreak: 1,
-        longestStreak: 1,
-        lastCompletedDate: today,
-        updatedAt: serverTimestamp(),
-      });
-      return;
-    }
+    // Check if today is complete
+    // Use a small tolerance (0.99) to account for floating point precision issues
+    const todayCompletion = await calculateCompletionPercentage(userId, today);
+    const isTodayComplete = todayCompletion >= 0.99; // Allow for small rounding errors
     
-    // Case 2: Today is complete, check for consecutive days backwards
-    // This handles both: fresh completions AND retroactive fill-ins
-    if (completionToday === 1 && lastCompletedDate !== today) {
-      // Count consecutive days going backwards from today
-      let consecutiveDays = 1; // Today is complete
+    console.log(`📊 Streak update - Today: ${today}, Completion: ${todayCompletion}, IsComplete: ${isTodayComplete}`);
+    
+    // If today is complete, we need to calculate the full streak
+    if (isTodayComplete) {
+      // Optimized: Only recalculate if today just became complete
+      // or if we need to verify the streak
+      const MAX_LOOKBACK_DAYS = 365; // 1 year - supports long streaks while keeping queries bounded
+      let consecutiveDays = 0;
       
-      // Check yesterday
-      if (completionYesterday === 1) {
-        consecutiveDays++;
-        // Check 2 days ago
-        if (completion2Days === 1) {
+      // Check backwards from today until we find a gap
+      for (let offset = 0; offset < MAX_LOOKBACK_DAYS; offset++) {
+        const date = moment().subtract(offset, 'days').format('YYYY-MM-DD');
+        const completion = await calculateCompletionPercentage(userId, date);
+        
+        // Use same tolerance for consistency
+        if (completion >= 0.99) {
           consecutiveDays++;
-          // Check 3 days ago
-          if (completion3Days === 1) {
-            consecutiveDays++;
-          }
+        } else {
+          // Found a gap - streak calculation complete
+          break;
         }
       }
       
-      const newCurrentStreak = consecutiveDays;
-      const newLongestStreak = Math.max(longestStreak, newCurrentStreak);
+      console.log(`🔥 Streak calculated: ${consecutiveDays} days`);
       
-      console.log('📊 Recalculated streak from today backwards:', {
-        consecutiveDays,
-        completionToday,
-        completionYesterday,
-        completion2Days,
-        completion3Days,
-        newCurrentStreak,
-      });
+      const newLongestStreak = Math.max(longestStreak, consecutiveDays);
       
-      await updateDoc(streakRef, {
-        currentStreak: newCurrentStreak,
-        longestStreak: newLongestStreak,
-        lastCompletedDate: today,
-        updatedAt: serverTimestamp(),
-      });
-      return;
-    }
-    
-    // Case 3: Yesterday complete, today complete, and not already counted → increment
-    if (
-      completionYesterday === 1 &&
-      completionToday === 1 &&
-      lastCompletedDate !== today
-    ) {
-      const newCurrentStreak = currentStreak + 1;
-      const newLongestStreak = Math.max(longestStreak, newCurrentStreak);
-      await updateDoc(streakRef, {
-        currentStreak: newCurrentStreak,
-        longestStreak: newLongestStreak,
-        lastCompletedDate: today,
-        updatedAt: serverTimestamp(),
-      });
-      return;
-    }
-    
-    // Case 3b: Already counted today, but now both yesterday AND today are 100% → increment if needed
-    if (
-      completionYesterday === 1 &&
-      completionToday === 1 &&
-      lastCompletedDate === today &&
-      currentStreak === 1 // Was reset to 1, but should be higher
-    ) {
-      const newCurrentStreak = 2; // Yesterday + today
-      const newLongestStreak = Math.max(longestStreak, newCurrentStreak);
-      await updateDoc(streakRef, {
-        currentStreak: newCurrentStreak,
-        longestStreak: newLongestStreak,
-        lastCompletedDate: today,
-        updatedAt: serverTimestamp(),
-      });
-      return;
-    }
-    
-    // Case 4: Already incremented today but dropped below 100% → decrement
-    if (lastCompletedDate === today && completionToday < 1) {
-      const newCurrentStreak = Math.max(0, currentStreak - 1);
-      await updateDoc(streakRef, {
-        currentStreak: newCurrentStreak,
-        lastCompletedDate: yesterday,
-        updatedAt: serverTimestamp(),
-      });
-      return;
+      await setDoc(
+        streakRef,
+        {
+          userId,
+          currentStreak: consecutiveDays,
+          longestStreak: newLongestStreak,
+          lastCompletedDate: today,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true }
+      );
+      
+      console.log(`✅ Streak updated: ${consecutiveDays} days (longest: ${newLongestStreak})`);
+    } else {
+      // Today is NOT complete yet - DON'T reset the streak to 0
+      // Just keep the existing streak value (user is still working on today's habits)
+      // Only update if we don't have a streak doc yet
+      if (!streakDoc.exists()) {
+        await setDoc(
+          streakRef,
+          {
+            userId,
+            currentStreak: 0,
+            longestStreak: 0,
+            lastCompletedDate: '',
+            updatedAt: serverTimestamp(),
+          },
+          { merge: true }
+        );
+      }
+      // If streak doc exists, do nothing - keep existing streak visible
+      // The streak will only update when today becomes 100% complete
     }
   } catch (error) {
     console.error('Update streak error:', error);

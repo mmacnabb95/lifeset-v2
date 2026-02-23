@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
 import { Button, ButtonTypes } from "src/components/common/button-simple";
+import { useBranding } from "src/hooks/useBranding";
 import recipesData from "src/data/recipes.json";
 
 const CATEGORIES = [
@@ -12,7 +13,17 @@ const CATEGORIES = [
   { key: 'Dessert', emoji: '🍰', label: 'Dessert' },
 ];
 
+const CATEGORY_MAP: Record<string, string[]> = {
+  All: [],
+  Breakfast: ['Breakfast'],
+  Lunch: ['Lunch'],
+  Dinner: ['Dinner'],
+  Snack: ['Snacks'],
+  Dessert: ['Dessert'],
+};
+
 export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
+  const { primaryColor, isBranded } = useBranding();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -22,12 +33,8 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
 
     // Filter by category
     if (selectedCategory !== 'All') {
-      // Normalise snack/dessert to match data, which uses "Snacks"
-      if (selectedCategory === 'Snack' || selectedCategory === 'Dessert') {
-        recipes = recipes.filter(r => r.category === 'Snacks' || r.category === 'Dessert');
-      } else {
-        recipes = recipes.filter(r => r.category === selectedCategory);
-      }
+      const allowedCategories = CATEGORY_MAP[selectedCategory] || [selectedCategory];
+      recipes = recipes.filter(r => allowedCategories.includes(r.category));
     }
 
     // Search by title or description
@@ -45,11 +52,11 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, isBranded && { borderBottomWidth: 3, borderBottomColor: primaryColor }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Text style={styles.backButtonText} allowFontScaling={false}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Recipes</Text>
+        <Text style={styles.headerTitle} allowFontScaling={false}>Recipes</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -61,15 +68,17 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
             style={[
               styles.categoryButton,
               selectedCategory === category.key && styles.categoryButtonSelected,
+              selectedCategory === category.key && isBranded && { backgroundColor: primaryColor },
             ]}
             onPress={() => setSelectedCategory(category.key)}
           >
-            <Text style={styles.categoryEmoji}>{category.emoji}</Text>
+            <Text style={styles.categoryEmoji} allowFontScaling={false}>{category.emoji}</Text>
             <Text
               style={[
                 styles.categoryButtonText,
                 selectedCategory === category.key && styles.categoryButtonTextSelected,
               ]}
+              allowFontScaling={false}
             >
               {category.label}
             </Text>
@@ -90,30 +99,30 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
           >
             <View style={styles.recipeHeader}>
               <View>
-                <Text style={styles.recipeCategory}>{recipe.category}</Text>
-                <Text style={styles.recipeTitle}>{recipe.title}</Text>
+                <Text style={styles.recipeCategory} allowFontScaling={false}>{recipe.category}</Text>
+                <Text style={styles.recipeTitle} allowFontScaling={false}>{recipe.title}</Text>
               </View>
-              <Text style={styles.recipeDuration}>⏱️ {recipe.duration} min</Text>
+              <Text style={styles.recipeDuration} allowFontScaling={false}>⏱️ {recipe.duration} min</Text>
             </View>
             
-            <Text style={styles.recipeDescription} numberOfLines={2}>
+            <Text style={styles.recipeDescription} numberOfLines={2} allowFontScaling={false}>
               {recipe.description}
             </Text>
             
             <View style={styles.recipeFooter}>
               <View style={styles.nutritionBadges}>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{recipe.nutrition.calories} cal</Text>
+                  <Text style={styles.badgeText} allowFontScaling={false}>{recipe.nutrition.calories} cal</Text>
                 </View>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{recipe.nutrition.protein}g protein</Text>
+                  <Text style={styles.badgeText} allowFontScaling={false}>{recipe.nutrition.protein}g protein</Text>
                 </View>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{recipe.nutrition.carbs}g carbs</Text>
+                  <Text style={styles.badgeText} allowFontScaling={false}>{recipe.nutrition.carbs}g carbs</Text>
                 </View>
               </View>
               <View style={styles.servings}>
-                <Text style={styles.servingsText}>🍽️ {recipe.servings}</Text>
+                <Text style={styles.servingsText} allowFontScaling={false}>🍽️ {recipe.servings}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -121,9 +130,9 @@ export const RecipeBrowserScreen = ({ navigation }: { navigation: any }) => {
 
         {filteredRecipes.length === 0 && (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyStateIcon}>🔍</Text>
-            <Text style={styles.emptyStateTitle}>No recipes found</Text>
-            <Text style={styles.emptyStateText}>
+            <Text style={styles.emptyStateIcon} allowFontScaling={false}>🔍</Text>
+            <Text style={styles.emptyStateTitle} allowFontScaling={false}>No recipes found</Text>
+            <Text style={styles.emptyStateText} allowFontScaling={false}>
               Try adjusting your search or filter
             </Text>
           </View>

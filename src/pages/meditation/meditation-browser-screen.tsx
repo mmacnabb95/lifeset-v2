@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useBranding } from 'src/hooks/useBranding';
 import meditationsData from '../../data/meditations.json';
 
 interface MeditationSession {
@@ -36,6 +37,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function MeditationBrowserScreen() {
   const navigation = useNavigation();
+  const { primaryColor, isBranded } = useBranding();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const sessions = meditationsData.sessions as MeditationSession[];
@@ -52,12 +54,12 @@ export default function MeditationBrowserScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, isBranded && { borderBottomWidth: 3, borderBottomColor: primaryColor }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Text style={styles.backButtonText} allowFontScaling={false}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>🧘 Guided Meditations</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.title} allowFontScaling={false}>🧘 Guided Meditations</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           {filteredSessions.length} sessions available
         </Text>
       </View>
@@ -65,7 +67,7 @@ export default function MeditationBrowserScreen() {
       <ScrollView style={styles.scrollView}>
         {/* Category Filter */}
         <View style={styles.categorySection}>
-          <Text style={styles.categoryTitle}>Categories</Text>
+          <Text style={styles.categoryTitle} allowFontScaling={false}>Categories</Text>
           <View style={styles.categoryGrid}>
             <TouchableOpacity
               style={[
@@ -74,11 +76,13 @@ export default function MeditationBrowserScreen() {
               ]}
               onPress={() => setSelectedCategory(null)}
             >
-              <Text style={styles.categoryEmoji}>💪</Text>
+              <Text style={styles.categoryEmoji} allowFontScaling={false}>💪</Text>
               <Text style={[
                 styles.categoryName,
                 !selectedCategory && styles.categoryNameActive,
-              ]}>
+              ]}
+              allowFontScaling={false}
+              >
                 All
               </Text>
             </TouchableOpacity>
@@ -93,13 +97,15 @@ export default function MeditationBrowserScreen() {
                 ]}
                 onPress={() => setSelectedCategory(key)}
               >
-                <Text style={styles.categoryEmoji}>
+                <Text style={styles.categoryEmoji} allowFontScaling={false}>
                   {CATEGORY_EMOJIS[key]}
                 </Text>
                 <Text style={[
                   styles.categoryName,
                   selectedCategory === key && styles.categoryNameActive,
-                ]}>
+                ]}
+                allowFontScaling={false}
+                >
                   {cat.name}
                 </Text>
               </TouchableOpacity>
@@ -119,26 +125,26 @@ export default function MeditationBrowserScreen() {
               onPress={() => handleSessionPress(session)}
             >
               <View style={styles.sessionHeader}>
-                <Text style={styles.sessionEmoji}>
+                <Text style={styles.sessionEmoji} allowFontScaling={false}>
                   {CATEGORY_EMOJIS[session.category]}
                 </Text>
                 <View style={styles.sessionInfo}>
-                  <Text style={styles.sessionTitle}>{session.title}</Text>
-                  <Text style={styles.sessionCategory}>
+                  <Text style={styles.sessionTitle} allowFontScaling={false}>{session.title}</Text>
+                  <Text style={styles.sessionCategory} allowFontScaling={false}>
                     {categories[session.category as keyof typeof categories]?.name}
                   </Text>
                 </View>
                 <View style={styles.durationBadge}>
-                  <Text style={styles.durationText}>{session.duration} min</Text>
+                  <Text style={styles.durationText} allowFontScaling={false}>{session.duration} min</Text>
                 </View>
               </View>
               
-              <Text style={styles.sessionDescription} numberOfLines={2}>
+              <Text style={styles.sessionDescription} numberOfLines={2} allowFontScaling={false}>
                 {session.description}
               </Text>
               
               <View style={styles.playButton}>
-                <Text style={styles.playButtonText}>▶ Start Session</Text>
+                <Text style={styles.playButtonText} allowFontScaling={false}>▶ Start Session</Text>
               </View>
             </TouchableOpacity>
           ))}

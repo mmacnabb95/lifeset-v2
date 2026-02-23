@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setLanguage } from "src/redux/features/misc/slice";
 import { Language } from "src/translations/types";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
+import { useMode } from "src/hooks/useMode";
 import { useFocusEffect } from "@react-navigation/native";
 // Use simplified components to avoid runtime errors
 import { Button, ButtonTypes } from "src/components/common/button-simple";
@@ -14,7 +15,7 @@ import { getUserProfile, updateStreak, UserProfile } from "src/services/firebase
 import { getHabits, getStreak, getCompletions, Habit, Streak } from "src/services/firebase/habits";
 import { getJournalEntries, hasJournaledToday, JournalEntry } from "src/services/firebase/journal";
 import { getTodayWorkouts, getWorkoutStats, WorkoutLog, WorkoutStats } from "src/services/firebase/workouts";
-import { getActiveWorkoutPlans, WorkoutPlanProgress, WorkoutPlan } from "src/services/firebase/workout-plans";
+import { getActiveWorkoutPlans, getOrganisationWorkoutPlans, WorkoutPlanProgress, WorkoutPlan } from "src/services/firebase/workout-plans";
 import { getTodayMeditations, getMeditationStats, MeditationSession, MeditationStats } from "src/services/firebase/meditation";
 
 // Local data
@@ -41,6 +42,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
   
   // Get current user from Redux
   const { user, userId } = useFirebaseUser();
+  const { organisation } = useMode();
   
   // State for Firebase data
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -52,6 +54,7 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
   const [todayWorkouts, setTodayWorkouts] = useState<WorkoutLog[]>([]);
   const [workoutStats, setWorkoutStats] = useState<WorkoutStats | null>(null);
   const [activePlans, setActivePlans] = useState<(WorkoutPlanProgress & { plan: WorkoutPlan })[]>([]);
+  const [featuredOrgPlans, setFeaturedOrgPlans] = useState<WorkoutPlan[]>([]);
   const [todayMeditations, setTodayMeditations] = useState<MeditationSession[]>([]);
   const [meditationStats, setMeditationStats] = useState<MeditationStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -109,6 +112,21 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
       const activePlansData = await getActiveWorkoutPlans(userId);
       console.log('Active plans:', activePlansData.length);
 
+      // Fetch organisation featured plans when user belongs to an org
+      // Use organisation from useMode, or fall back to profileData (useMode may not have loaded yet)
+      const orgId = organisation?.organisationId || profileData?.organisationId || (profileData as { activeOrganisationId?: string })?.activeOrganisationId;
+      if (orgId) {
+        try {
+          const orgPlans = await getOrganisationWorkoutPlans(orgId);
+          setFeaturedOrgPlans(orgPlans);
+        } catch (err) {
+          console.error('Error fetching org workout plans:', err);
+          setFeaturedOrgPlans([]);
+        }
+      } else {
+        setFeaturedOrgPlans([]);
+      }
+
       // Fetch meditation data
       const todayMeditationsData = await getTodayMeditations(userId);
       const meditationStatsData = await getMeditationStats(userId);
@@ -144,18 +162,18 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
-  // Initial data load
+  // Initial data load (re-fetch when org changes so we get featured plans)
   useEffect(() => {
     console.log('HomeScreen mounted, userId:', userId);
     fetchUserData();
-  }, [userId]);
+  }, [userId, organisation?.organisationId]);
 
   // Refresh when screen comes into focus (e.g., when navigating back)
   useFocusEffect(
     React.useCallback(() => {
       console.log('HomeScreen focused - refreshing data');
       fetchUserData();
-    }, [userId])
+    }, [userId, organisation?.organisationId])
   );
 
   // Pull to refresh
@@ -464,6 +482,33 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
               </Text>
             </View>
           )}
+
+          {/* Featured by organisation - plans from user's studio they haven't started */}
+          {featuredOrgPlans.length > 0 && (() => {
+            const activePlanIds = new Set(activePlans.map((p) => p.plan.id));
+            const notStarted = featuredOrgPlans.filter((p) => !activePlanIds.has(p.id));
+            if (notStarted.length === 0) return null;
+            const orgName = organisation?.name || "your studio";
+            return (
+              <View style={styles.featuredOrgSection}>
+                <Text style={styles.featuredOrgTitle}>
+                  Featured by {orgName}
+                </Text>
+                {notStarted.slice(0, 3).map((plan) => (
+                  <TouchableOpacity
+                    key={plan.id}
+                    style={styles.featuredOrgCard}
+                    onPress={() => navigation.navigate('WorkoutPlanDetail' as never, { plan } as never)}
+                  >
+                    <Text style={styles.featuredOrgCardName}>{plan.name}</Text>
+                    <Text style={styles.featuredOrgCardMeta}>
+                      {plan.durationWeeks} weeks • {plan.daysPerWeek}x/week • {plan.difficulty}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            );
+          })()}
 
           <TouchableOpacity 
             style={styles.workoutButton}
@@ -997,6 +1042,33 @@ const styles = StyleSheet.create({
     color: '#e65100',
     textAlign: 'center',
     lineHeight: 20,
+  },
+  featuredOrgSection: {
+    marginBottom: 15,
+  },
+  featuredOrgTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 10,
+  },
+  featuredOrgCard: {
+    backgroundColor: '#e3f2fd',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#1976d2',
+  },
+  featuredOrgCardName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  featuredOrgCardMeta: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
   },
   workoutButton: {
     backgroundColor: '#673ab7',

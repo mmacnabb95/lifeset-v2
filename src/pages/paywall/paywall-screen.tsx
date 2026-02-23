@@ -8,9 +8,13 @@ import {
   Alert,
   ScrollView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import Purchases, { PurchasesPackage } from 'react-native-purchases';
 import { LinearGradient } from 'expo-linear-gradient';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const IS_TABLET = SCREEN_WIDTH >= 768; // iPad width threshold
 
 interface PaywallScreenProps {
   onComplete: () => void;
@@ -33,28 +37,63 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
     try {
       const offerings = await Purchases.getOfferings();
       if (offerings.current?.availablePackages) {
-        setPackages(offerings.current.availablePackages);
+        // Sort packages to show annual first (most prominent)
+        const sortedPackages = [...offerings.current.availablePackages].sort((a, b) => {
+          if (a.packageType === 'ANNUAL') return -1;
+          if (b.packageType === 'ANNUAL') return 1;
+          return 0;
+        });
+        setPackages(sortedPackages);
       }
     } catch (error: any) {
-      console.error('Error loading offerings:', error);
-      Alert.alert('Error', 'Failed to load subscription options');
+      // Expected in Expo Go - RevenueCat requires native build
+      if (__DEV__ && error.message?.includes('no singleton instance')) {
+        console.log('🔧 Development mode: RevenueCat unavailable in Expo Go (will work in production build)');
+        // Don't show error alert in dev mode for this expected error
+      } else {
+        console.error('Error loading offerings:', error);
+        // Only show alert in production or for unexpected errors
+        if (!__DEV__) {
+          Alert.alert('Error', 'Failed to load subscription options');
+        }
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Calculate savings percentage for annual vs monthly
+  const calculateSavings = (pkg: PurchasesPackage): number | null => {
+    if (pkg.packageType !== 'ANNUAL') return null;
+    
+    const monthlyPkg = packages.find(p => p.packageType === 'MONTHLY');
+    if (!monthlyPkg) return null;
+    
+    try {
+      const monthlyPrice = monthlyPkg.product.price;
+      const annualPrice = pkg.product.price;
+      const monthlyEquivalent = annualPrice / 12;
+      const savings = ((monthlyPrice - monthlyEquivalent) / monthlyPrice) * 100;
+      
+      return Math.round(savings);
+    } catch (error) {
+      console.error('Error calculating savings:', error);
+      return null;
     }
   };
 
   const handlePurchase = async (pkg: PurchasesPackage) => {
     let navigationCompleted = false;
     
-    // FAILSAFE: Force navigate after 3 seconds if something hangs
+    // FAILSAFE: Force navigate after 15 seconds if something hangs
     const failsafeTimer = setTimeout(() => {
       if (!navigationCompleted) {
-        console.log('⚠️ FAILSAFE: Forcing navigation after 3s timeout');
+        console.log('⚠️ FAILSAFE: Forcing navigation after 15s timeout');
         setPurchasing(false);
         navigationCompleted = true;
         onComplete();
       }
-    }, 3000);
+    }, 15000);
     
     try {
       setPurchasing(true);
@@ -160,19 +199,19 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
         colors={['#667eea', '#764ba2']}
         style={styles.headerGradient}
       >
-        <Text style={styles.headerEmoji}>✨</Text>
-        <Text style={styles.headerTitle}>LifeSet Premium</Text>
-        <Text style={styles.headerSubtitle}>
+        <Text style={styles.headerEmoji} allowFontScaling={false}>✨</Text>
+        <Text style={styles.headerTitle} allowFontScaling={false}>LifeSet Premium</Text>
+        <Text style={styles.headerSubtitle} allowFontScaling={false}>
           7-Day Free Trial • Auto-renews after trial
         </Text>
       </LinearGradient>
 
       <View style={styles.benefitsContainer}>
-        <Text style={styles.benefitsTitle}>Premium Benefits</Text>
+        <Text style={styles.benefitsTitle} allowFontScaling={false}>Premium Benefits</Text>
         {benefits.map((benefit, index) => (
           <View key={index} style={styles.benefit}>
-            <Text style={styles.benefitIcon}>{benefit.icon}</Text>
-            <Text style={styles.benefitText}>{benefit.text}</Text>
+            <Text style={styles.benefitIcon} allowFontScaling={false}>{benefit.icon}</Text>
+            <Text style={styles.benefitText} allowFontScaling={false}>{benefit.text}</Text>
           </View>
         ))}
       </View>
@@ -181,74 +220,74 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
         {packages.map((pkg) => {
           const isAnnual = pkg.packageType === 'ANNUAL';
           const billingPeriod = isAnnual ? 'year' : 'month';
+          const savingsPercent = calculateSavings(pkg);
           
           return (
             <TouchableOpacity
               key={pkg.identifier}
-              style={styles.packageCard}
+              style={[
+                styles.packageCard,
+                isAnnual && styles.packageCardAnnual, // Highlight annual option
+              ]}
               onPress={() => handlePurchase(pkg)}
               disabled={purchasing}
             >
               <View style={styles.packageHeader}>
-                <Text style={styles.packageTitle}>
+                <Text style={styles.packageTitle} allowFontScaling={false}>
                   {pkg.product.title.replace('(LifeSet)', '').trim()}
                 </Text>
-                {isAnnual && (
+                {isAnnual && savingsPercent !== null && savingsPercent > 0 && (
                   <View style={styles.saveBadge}>
-                    <Text style={styles.saveBadgeText}>SAVE 40%</Text>
+                    <Text style={styles.saveBadgeText} allowFontScaling={false}>SAVE {savingsPercent}%</Text>
                   </View>
                 )}
               </View>
               
               {/* FREE TRIAL - Prominent */}
               <View style={styles.trialBadge}>
-                <Text style={styles.trialBadgeText}>
+                <Text style={styles.trialBadgeText} allowFontScaling={false}>
                   🎁 7-Day Free Trial
                 </Text>
               </View>
               
               {/* PRICING - Clear and explicit */}
               <View style={styles.pricingContainer}>
-                <Text style={styles.pricingLabel}>Then:</Text>
-                <Text style={styles.packagePrice}>
+                <Text style={styles.pricingLabel} allowFontScaling={false}>Then:</Text>
+                <Text style={styles.packagePrice} allowFontScaling={false}>
                   {pkg.product.priceString}
-                  <Text style={styles.pricingPeriod}>/{billingPeriod}</Text>
+                  <Text style={styles.pricingPeriod} allowFontScaling={false}>/{billingPeriod}</Text>
                 </Text>
               </View>
               
               {/* AUTO-RENEWAL NOTICE */}
-              <Text style={styles.autoRenewNotice}>
+              <Text style={styles.autoRenewNotice} allowFontScaling={false}>
                 Auto-renews at {pkg.product.priceString}/{billingPeriod} unless cancelled
               </Text>
               
-              <Text style={styles.packageDescription}>
+              <Text style={styles.packageDescription} allowFontScaling={false}>
                 {isAnnual 
                   ? 'Billed annually after trial' 
                   : 'Billed monthly after trial'}
               </Text>
+              
+              {/* Subscribe Button */}
+              <TouchableOpacity
+                style={styles.subscribeButton}
+                onPress={() => handlePurchase(pkg)}
+                disabled={purchasing}
+              >
+                <Text style={styles.subscribeButtonText} allowFontScaling={false}>
+                  {purchasing ? 'Processing...' : 'Start Free Trial'}
+                </Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         })}
       </View>
 
       <View style={styles.trialNoticeContainer}>
-        <Text style={styles.trialNoticeTitle}>
-          ⚠️ Important Subscription Information
-        </Text>
-        <Text style={styles.trialNotice}>
-          • Your subscription includes a <Text style={styles.trialNoticeBold}>7-day free trial</Text>
-        </Text>
-        <Text style={styles.trialNotice}>
-          • After the trial, you will be automatically charged the subscription price
-        </Text>
-        <Text style={styles.trialNotice}>
-          • You can cancel anytime before the trial ends to avoid charges
-        </Text>
-        <Text style={styles.trialNotice}>
-          • Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period
-        </Text>
-        <Text style={styles.trialNotice}>
-          • Manage your subscription in your Apple ID account settings
+        <Text style={styles.trialNoticeText} allowFontScaling={false}>
+          <Text style={styles.trialNoticeBold} allowFontScaling={false}>7-day free trial</Text> included. After trial, subscription auto-renews at {packages.find(p => p.packageType !== 'ANNUAL')?.product.priceString || packages[0]?.product.priceString || '$5.99'}/month unless cancelled at least 24 hours before the end of the current period. Cancel anytime in your Apple ID account settings.
         </Text>
       </View>
 
@@ -257,7 +296,7 @@ export const PaywallScreen: React.FC<PaywallScreenProps> = ({
         onPress={handleRestore}
         disabled={purchasing}
       >
-        <Text style={styles.restoreButtonText}>Restore Purchases</Text>
+        <Text style={styles.restoreButtonText} allowFontScaling={false}>Restore Purchases</Text>
       </TouchableOpacity>
 
       <View style={styles.legalLinks}>
@@ -297,38 +336,40 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   headerGradient: {
-    paddingTop: Platform.OS === 'ios' ? 80 : 60,
-    paddingBottom: 40,
-    paddingHorizontal: 30,
+    paddingTop: Platform.OS === 'ios' ? (IS_TABLET ? 100 : 80) : (IS_TABLET ? 80 : 60),
+    paddingBottom: IS_TABLET ? 50 : 40,
+    paddingHorizontal: IS_TABLET ? 60 : 30,
     alignItems: 'center',
   },
   headerEmoji: {
-    fontSize: 60,
-    marginBottom: 16,
+    fontSize: IS_TABLET ? 80 : 60,
+    marginBottom: IS_TABLET ? 20 : 16,
   },
   headerTitle: {
-    fontSize: 32,
+    fontSize: IS_TABLET ? 40 : 32,
     fontWeight: '800',
     color: '#fff',
-    marginBottom: 8,
+    marginBottom: IS_TABLET ? 12 : 8,
   },
   headerSubtitle: {
-    fontSize: 20,
+    fontSize: IS_TABLET ? 24 : 20,
     color: '#fff',
     fontWeight: '600',
     opacity: 0.9,
   },
   benefitsContainer: {
     backgroundColor: '#fff',
-    marginHorizontal: 20,
+    marginHorizontal: IS_TABLET ? 60 : 20,
     marginTop: -20,
     borderRadius: 16,
-    padding: 24,
+    padding: IS_TABLET ? 32 : 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 5,
+    maxWidth: IS_TABLET ? 600 : undefined,
+    alignSelf: IS_TABLET ? 'center' : 'stretch',
   },
   benefitsTitle: {
     fontSize: 20,
@@ -351,14 +392,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   packagesContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: IS_TABLET ? 60 : 20,
     marginTop: 24,
+    maxWidth: IS_TABLET ? 600 : undefined,
+    alignSelf: IS_TABLET ? 'center' : 'stretch',
   },
   packageCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 20,
-    marginBottom: 12,
+    padding: IS_TABLET ? 28 : 20,
+    marginBottom: IS_TABLET ? 16 : 12,
     borderWidth: 2,
     borderColor: '#667eea',
     shadowColor: '#000',
@@ -366,6 +409,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+  },
+  packageCardAnnual: {
+    borderColor: '#10b981', // Green border to highlight annual
+    borderWidth: 3,
+    shadowColor: '#10b981',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 5,
   },
   packageHeader: {
     flexDirection: 'row',
@@ -377,6 +428,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#1a1a1a',
+    flex: 1,
+    marginRight: 8,
   },
   saveBadge: {
     backgroundColor: '#ff6b6b',
@@ -435,37 +488,53 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 4,
-  },
-  trialNoticeContainer: {
-    marginHorizontal: 20,
-    marginTop: 24,
-    backgroundColor: '#fff3cd',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#ffc107',
-  },
-  trialNoticeTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#856404',
     marginBottom: 12,
   },
-  trialNotice: {
-    fontSize: 13,
-    color: '#856404',
-    lineHeight: 20,
-    marginBottom: 6,
+  subscribeButton: {
+    backgroundColor: '#667eea',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 8,
+    shadowColor: '#667eea',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  subscribeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  trialNoticeContainer: {
+    marginHorizontal: IS_TABLET ? 60 : 20,
+    marginTop: 16,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    padding: IS_TABLET ? 16 : 12,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+    maxWidth: IS_TABLET ? 600 : undefined,
+    alignSelf: IS_TABLET ? 'center' : 'stretch',
+  },
+  trialNoticeText: {
+    fontSize: 11,
+    color: '#6c757d',
+    lineHeight: 16,
+    textAlign: 'center',
   },
   trialNoticeBold: {
     fontWeight: '700',
-    color: '#856404',
+    color: '#495057',
   },
   restoreButton: {
-    marginHorizontal: 20,
+    marginHorizontal: IS_TABLET ? 60 : 20,
     marginTop: 20,
-    paddingVertical: 14,
+    paddingVertical: IS_TABLET ? 16 : 14,
     alignItems: 'center',
+    maxWidth: IS_TABLET ? 600 : undefined,
+    alignSelf: IS_TABLET ? 'center' : 'stretch',
   },
   restoreButtonText: {
     fontSize: 16,
@@ -473,8 +542,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   legalLinks: {
-    marginHorizontal: 20,
+    marginHorizontal: IS_TABLET ? 60 : 20,
     marginTop: 20,
+    maxWidth: IS_TABLET ? 600 : undefined,
+    alignSelf: IS_TABLET ? 'center' : 'stretch',
   },
   legalText: {
     fontSize: 12,

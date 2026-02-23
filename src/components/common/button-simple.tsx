@@ -11,20 +11,25 @@ interface SimpleButtonProps extends TouchableOpacityProps {
   title: string;
   type?: ButtonTypes;
   loading?: boolean;
+  /** Override primary button colour (e.g. from organisation branding) */
+  primaryColor?: string;
 }
 
 export const Button: React.FC<SimpleButtonProps> = ({
   title,
   type = ButtonTypes.Primary,
   loading = false,
+  primaryColor,
   style,
   ...props
 }) => {
   const buttonStyle = [
     styles.button,
     type === ButtonTypes.Primary && styles.primary,
+    type === ButtonTypes.Primary && primaryColor && { backgroundColor: primaryColor, borderColor: primaryColor },
     type === ButtonTypes.Secondary && styles.secondary,
     type === ButtonTypes.Tertiary && styles.tertiary,
+    type === ButtonTypes.Tertiary && primaryColor && { borderColor: primaryColor },
     style,
   ];
 

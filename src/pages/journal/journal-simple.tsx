@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
+import { useBranding } from "src/hooks/useBranding";
 import { 
   getJournalEntries,
   createJournalEntry,
@@ -19,6 +20,7 @@ const MOODS = [
 
 export const JournalSimpleScreen = ({ navigation }: { navigation: any }) => {
   const { userId } = useFirebaseUser();
+  const { primaryColor, isBranded } = useBranding();
   
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +74,7 @@ export const JournalSimpleScreen = ({ navigation }: { navigation: any }) => {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#ffd54f" />
+        <ActivityIndicator size="large" color={primaryColor} />
       </View>
     );
   }
@@ -80,7 +82,7 @@ export const JournalSimpleScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, isBranded && { borderBottomWidth: 3, borderBottomColor: primaryColor }]}>
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Text style={styles.backButtonText}>← Back</Text>

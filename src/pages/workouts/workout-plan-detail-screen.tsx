@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useFirebaseUser } from 'src/hooks/useFirebaseUser';
-import { WorkoutPlan, startWorkoutPlan, duplicateWorkoutPlan, getActiveWorkoutPlans, completeWorkoutSession, WorkoutPlanProgress, deleteWorkoutPlan } from 'src/services/firebase/workout-plans';
+import { WorkoutPlan, WorkoutPlanExercise, startWorkoutPlan, duplicateWorkoutPlan, getActiveWorkoutPlans, completeWorkoutSession, WorkoutPlanProgress, deleteWorkoutPlan, getOrganisationExercises } from 'src/services/firebase/workout-plans';
 import { useXPRewards } from 'src/hooks/useXPRewards';
 import exercisesData from '../../data/exercises.json';
 import { db } from 'src/services/firebase/config';
@@ -28,6 +28,17 @@ interface Exercise {
   duration: number | null;
 }
 
+interface OrgExercise {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+  videoUrl?: string;
+  durationSeconds?: number;
+}
+
+type PlanExerciseWithDetails = WorkoutPlanExercise & { exerciseDetails?: Exercise; orgExercise?: OrgExercise };
+
 export default function WorkoutPlanDetailScreen() {
   const route = useRoute();
   const navigation = useNavigation();
@@ -40,6 +51,13 @@ export default function WorkoutPlanDetailScreen() {
   const [completing, setCompleting] = useState(false);
 
   const exercises = exercisesData as Exercise[];
+  const [orgExercises, setOrgExercises] = useState<OrgExercise[]>([]);
+
+  // Load org exercises when plan has organisationId
+  useEffect(() => {
+    if (!plan.organisationId) return;
+    getOrganisationExercises(plan.organisationId).then(setOrgExercises);
+  }, [plan.organisationId]);
 
   // Check if this plan is active
   useEffect(() => {
@@ -63,14 +81,20 @@ export default function WorkoutPlanDetailScreen() {
     checkIfActive();
   }, [userId, plan.id]);
 
-  // Get exercise details for each exercise in the plan
-  const planExercises = plan.exercises
+  // Get exercise details for each exercise in the plan (global or org)
+  const planExercises: PlanExerciseWithDetails[] = plan.exercises
     .sort((a, b) => a.order - b.order)
     .map((planExercise) => {
-      const exerciseDetails = exercises.find((ex) => ex.id === planExercise.exerciseId);
+      const exerciseDetails = planExercise.exerciseId != null
+        ? exercises.find((ex) => ex.id === planExercise.exerciseId)
+        : undefined;
+      const orgExercise = planExercise.organisationExerciseId
+        ? orgExercises.find((ex) => ex.id === planExercise.organisationExerciseId)
+        : undefined;
       return {
         ...planExercise,
         exerciseDetails,
+        orgExercise,
       };
     });
 
@@ -292,9 +316,48 @@ export default function WorkoutPlanDetailScreen() {
     );
   };
 
-  const handleExercisePress = (exercise: Exercise) => {
-    navigation.navigate('ExerciseDetail' as never, { exercise } as never);
+  const handleExercisePress = (planExercise: PlanExerciseWithDetails) => {
+    if (planExercise.exerciseDetails) {
+      navigation.navigate(
+        'ExerciseDetail' as never,
+        {
+          exercise: planExercise.exerciseDetails,
+          exerciseConfig: {
+            durationSeconds: planExercise.durationSeconds ?? null,
+          },
+        } as never
+      );
+      return;
+    }
+    if (planExercise.orgExercise) {
+      navigation.navigate(
+        'ExerciseDetail' as never,
+        {
+          exercise: {
+            id: 0,
+            name: planExercise.orgExercise.name,
+            category: planExercise.orgExercise.category,
+            description: planExercise.orgExercise.description ?? '',
+            difficulty: 'beginner',
+            equipment: [],
+            muscleGroups: [],
+            videoUrl: planExercise.orgExercise.videoUrl ?? '',
+            thumbnailUrl: null,
+            duration: planExercise.orgExercise.durationSeconds ?? null,
+          },
+          exerciseConfig: {
+            durationSeconds: planExercise.durationSeconds ?? planExercise.orgExercise.durationSeconds ?? null,
+          },
+        } as never
+      );
+    }
   };
+
+  const getExerciseDisplayName = (planEx: PlanExerciseWithDetails) =>
+    planEx.exerciseDetails?.name ?? planEx.orgExercise?.name ?? `Exercise ID ${planEx.exerciseId ?? planEx.organisationExerciseId ?? '?'} (not found)`;
+
+  const hasExerciseDetails = (planEx: PlanExerciseWithDetails) =>
+    !!planEx.exerciseDetails || !!planEx.orgExercise;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -309,12 +372,14 @@ export default function WorkoutPlanDetailScreen() {
     }
   };
 
-  // Group exercises by day (extract day name from note)
+  // Group exercises by day (dayIndex or extract day name from note)
   const groupedExercises = planExercises.reduce((acc, ex) => {
-    // Extract day name from note (e.g., "Push Day - Exercise Name" -> "Push Day")
     let dayName = 'Main Workout';
-    if (ex.note) {
-      // Check if note contains common day patterns
+    // Prefer dayIndex (admin/org plans)
+    if (ex.dayIndex != null && ex.dayIndex >= 0) {
+      dayName = `Day ${ex.dayIndex + 1}`;
+    } else if (ex.note) {
+      // Extract day name from note (e.g., "Push Day - Exercise Name" -> "Push Day")
       if (ex.note.includes('Push Day')) {
         dayName = 'Push Day';
       } else if (ex.note.includes('Pull Day')) {
@@ -326,21 +391,18 @@ export default function WorkoutPlanDetailScreen() {
       } else if (ex.note.includes('Lower Day')) {
         dayName = 'Lower Day';
       } else if (ex.note.match(/Day \d+/)) {
-        // Match "Day 1", "Day 2", etc.
         const match = ex.note.match(/(Day \d+)/);
         dayName = match ? match[1] : ex.note;
       } else {
-        // Use the note as-is if it doesn't match patterns above
-        dayName = ex.note.split(' - ')[0]; // Take first part before dash
+        dayName = ex.note.split(' - ')[0];
       }
     }
-    
     if (!acc[dayName]) {
       acc[dayName] = [];
     }
     acc[dayName].push(ex);
     return acc;
-  }, {} as Record<string, typeof planExercises>);
+  }, {} as Record<string, PlanExerciseWithDetails[]>);
 
   return (
     <View style={styles.container}>
@@ -358,6 +420,14 @@ export default function WorkoutPlanDetailScreen() {
                 <View style={styles.templateBadge}>
                   <Text style={styles.templateBadgeText}>✨ LifeSet Program</Text>
                 </View>
+              ) : plan.userId === userId ? (
+                <View style={styles.customBadgeDetail}>
+                  <Text style={styles.customBadgeDetailText}>📝 My Plan</Text>
+                </View>
+              ) : plan.organisationId ? (
+                <View style={styles.orgBadgeDetail}>
+                  <Text style={styles.orgBadgeDetailText}>🏢 Studio Plan</Text>
+                </View>
               ) : (
                 <View style={styles.customBadgeDetail}>
                   <Text style={styles.customBadgeDetailText}>📝 My Plan</Text>
@@ -365,8 +435,8 @@ export default function WorkoutPlanDetailScreen() {
               )}
             </View>
             
-            {/* Delete button for custom plans */}
-            {!plan.isTemplate && plan.userId === userId && (
+            {/* Delete button for custom plans (not org plans) */}
+            {!plan.isTemplate && !plan.organisationId && plan.userId === userId && (
               <TouchableOpacity
                 style={styles.headerDeleteButton}
                 onPress={handleDeletePlan}
@@ -462,12 +532,12 @@ export default function WorkoutPlanDetailScreen() {
               )}
               
               {exercises.map((planEx, index) => {
-                if (!planEx.exerciseDetails) {
+                const displayName = getExerciseDisplayName(planEx);
+                const isFound = hasExerciseDetails(planEx);
+                if (!isFound) {
                   return (
                     <View key={index} style={styles.exerciseCard}>
-                      <Text style={styles.exerciseName}>
-                        Exercise ID {planEx.exerciseId} (not found)
-                      </Text>
+                      <Text style={styles.exerciseName}>{displayName}</Text>
                     </View>
                   );
                 }
@@ -476,20 +546,21 @@ export default function WorkoutPlanDetailScreen() {
                   <TouchableOpacity
                     key={index}
                     style={styles.exerciseCard}
-                    onPress={() => handleExercisePress(planEx.exerciseDetails!)}
+                    onPress={() => handleExercisePress(planEx)}
                   >
                     <View style={styles.exerciseNumber}>
                       <Text style={styles.exerciseNumberText}>{index + 1}</Text>
                     </View>
                     <View style={styles.exerciseContent}>
-                      <Text style={styles.exerciseName}>
-                        {planEx.exerciseDetails.name}
-                      </Text>
+                      <Text style={styles.exerciseName}>{displayName}</Text>
                       <View style={styles.exerciseDetails}>
                         <Text style={styles.exerciseDetailText}>
-                          {planEx.exerciseDetails.category === 'cardio' || planEx.durationSeconds
-                            ? `${Math.floor((planEx.durationSeconds || 0) / 60)}:${String((planEx.durationSeconds || 0) % 60).padStart(2, '0')} min`
-                            : `${planEx.sets || 0} sets × ${planEx.reps || 0} reps`}
+                          {planEx.orgExercise?.durationSeconds ? `${planEx.sets ?? 1} sets × ${planEx.durationSeconds ?? planEx.orgExercise.durationSeconds ?? 0} sec` :
+                           (planEx.exerciseDetails?.category === 'cardio' || 
+                            planEx.exerciseDetails?.name?.toLowerCase().includes('plank') ||
+                            planEx.durationSeconds)
+                            ? `${planEx.sets ?? 1} sets × ${planEx.durationSeconds ?? 0} sec`
+                            : `${planEx.sets ?? 0} sets × ${planEx.reps ?? 0} reps`}
                         </Text>
                         {planEx.restSeconds > 0 && (
                           <>
@@ -556,7 +627,7 @@ export default function WorkoutPlanDetailScreen() {
         ) : (
           // Plan not active - show customize/edit + start buttons
           <>
-            {plan.isTemplate ? (
+            {plan.isTemplate || (plan.organisationId && plan.userId !== userId) ? (
               <TouchableOpacity
                 style={styles.customizeButton}
                 onPress={handleCustomise}
@@ -649,6 +720,18 @@ const styles = StyleSheet.create({
   customBadgeDetailText: {
     fontSize: 12,
     color: '#2e7d32',
+    fontWeight: '600',
+  },
+  orgBadgeDetail: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#e3f2fd',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  orgBadgeDetailText: {
+    fontSize: 12,
+    color: '#1565c0',
     fontWeight: '600',
   },
   headerDeleteButton: {

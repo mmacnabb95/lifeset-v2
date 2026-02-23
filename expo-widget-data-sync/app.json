@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "bundleIdentifier": "com.matthewmacnabb.expo-widget-data-sync"
+  },
+  "android": {
+    "package": "com.matthewmacnabb.expowidgetdatasync"
+  }
+}

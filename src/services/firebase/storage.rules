@@ -22,6 +22,18 @@ service firebase.storage {
       return request.resource.contentType.matches('audio/.*');
     }
     
+    // Helper: user is staff/admin of the given organisation
+    function isOrgStaffOrAdmin(orgId) {
+      let userDoc = firestore.get(/databases/(default)/documents/users/$(request.auth.uid));
+      let userData = userDoc.data;
+      return userDoc != null && 
+             userData != null && 
+             (userData.role == 'admin' || userData.role == 'staff' || userData.role == 'Admin' || userData.role == 'Staff') &&
+             (userData.organisationId == orgId || 
+              userData.activeOrganisationId == orgId ||
+              (userData.organisations != null && userData.organisations.hasAny([orgId])));
+    }
+    
     // Helper function to check file size (in MB)
     function fileSizeUnder(mb) {
       return request.resource.size < mb * 1024 * 1024;
@@ -96,6 +108,28 @@ service firebase.storage {
       allow read: if true;
       // Only admins can write via console
       allow write: if false;
+    }
+    
+    // Organisation logo (e.g. logo.png, logo.jpeg) - staff/admin can upload
+    match /organisations/{orgId}/{filename} {
+      allow read: if true; // Public read for join page, app
+      allow write, delete: if isAuthenticated() && 
+                              isImage() && 
+                              fileSizeUnder(2) &&
+                              isOrgStaffOrAdmin(orgId) &&
+                              filename.matches("logo\\..*");
+    }
+    
+    // Organisation exercise videos (max 100MB) - for pilates, yoga, etc.
+    match /organisations/{orgId}/exercises/{filename} {
+      // Authenticated org members can read
+      allow read: if isAuthenticated();
+      // Staff/admin of the org can upload (video only, max 100MB)
+      allow write: if isAuthenticated() && 
+                      isVideo() && 
+                      fileSizeUnder(100) &&
+                      isOrgStaffOrAdmin(orgId);
+      allow delete: if isAuthenticated() && isOrgStaffOrAdmin(orgId);
     }
     
     // Deny all other access by default

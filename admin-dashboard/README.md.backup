@@ -1,0 +1,53 @@
+# LifeSet Admin Dashboard
+
+Next.js admin dashboard for managing organisations, members, bookings, and memberships.
+
+## Setup
+
+```bash
+cd admin-dashboard
+npm install
+npm run dev
+```
+
+## Structure
+
+```
+admin-dashboard/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout
+│   │   ├── page.tsx            # Login page
+│   │   └── dashboard/
+│   │       ├── page.tsx        # Main dashboard
+│   │       ├── schedule/       # Class schedule management
+│   │       ├── members/        # Member management
+│   │       ├── memberships/    # Membership management
+│   │       ├── packs/          # Pack management
+│   │       ├── analytics/      # Analytics dashboard
+│   │       └── settings/       # Organisation settings
+│   ├── components/
+│   │   ├── Schedule/
+│   │   ├── Members/
+│   │   ├── Memberships/
+│   │   └── Analytics/
+│   └── lib/
+│       ├── firebase-admin.ts   # Firebase Admin SDK
+│       └── auth.ts             # Authentication
+```
+
+## Features
+
+- Organisation management
+- Class schedule management
+- Member management
+- Membership creation and management
+- Pack creation and management
+- Attendance tracking
+- Analytics dashboard
+- Stripe/GoCardless integration (future)
+
+## Authentication
+
+Uses Firebase Auth. Only users with `role: "admin"` or `role: "staff"` can access the dashboard.
+

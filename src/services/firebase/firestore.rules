@@ -18,71 +18,129 @@ service cloud.firestore {
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
-    // Users collection - users can read/write their own data
+    // Helper function to check if user belongs to organisation
+    function belongsToOrganisation(organisationId) {
+      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      let userData = userDoc != null ? userDoc.data : null;
+      return request.auth != null && 
+             userData != null &&
+             (userData.organisationId == organisationId || 
+              userData.activeOrganisationId == organisationId ||
+              (userData.organisations != null && userData.organisations.hasAny([organisationId])));
+    }
+    
+    // Helper function to check if user is staff or admin (case-insensitive)
+    function isStaffOrAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff', 'Admin', 'Staff'];
+    }
+    
+    // Helper function to check if user is staff, admin, or coach
+    function isStaffOrAdminOrCoach() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff', 'coach'];
+    }
+    
+    // Users collection - users can read/write/delete their own data
+    // Staff/Admin can read any user (they filter by organisationId in queries)
     match /users/{userId} {
       // Profile document
-      allow read: if isAuthenticated() && isOwner(userId);
-      allow write: if isAuthenticated() && isOwner(userId);
+      allow read: if isAuthenticated() && (isOwner(userId) || isStaffOrAdminOrCoach());
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isAuthenticated() && (isOwner(userId) || isStaffOrAdmin());
+      allow delete: if isAuthenticated() && isOwner(userId);
       
       // Habits subcollection
       match /habits/{habitId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Habit completions subcollection
       match /completions/{completionId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Streaks subcollection
       match /streaks/{streakId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Journal entries subcollection
       match /journal_entries/{entryId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Journal subcollection (alternative naming)
       match /journal/{entryId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Nutrition meals subcollection
       match /meals/{mealId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Water tracking subcollection
       match /water/{dateId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Nutrition goals and settings
       match /nutrition/{docId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Workouts subcollection
       match /workouts/{workoutId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Workout progress subcollection
       match /workout_progress/{progressId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // XP and gamification data
       match /xp/{xpId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
       
       // Meditation sessions
       match /meditation_sessions/{sessionId} {
-        allow read, write: if isAuthenticated() && isOwner(userId);
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
       }
+      
+      // Exercise records subcollection
+      match /exercise_records/{exerciseId} {
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
+      }
+      
+      // Goals subcollection
+      match /goals/{goalId} {
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
+      }
+      
+      // Subscription subcollection (for promo codes)
+      match /subscription/{subId} {
+        allow read, write, delete: if isAuthenticated() && isOwner(userId);
+      }
+    }
+    
+    // Promo codes - read-only for authenticated users (to validate codes)
+    match /promoCodes/{codeId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admins via console can create/modify codes
+    }
+    
+    // Promo redemptions - users can read/create their own redemptions
+    match /promoRedemptions/{redemptionId} {
+      // Allow read if user owns the redemption
+      // For queries, Firestore will check each document - this rule ensures users can only read their own
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Redemptions cannot be modified once created
     }
     
     // Community posts - readable by all authenticated users
@@ -135,13 +193,47 @@ service cloud.firestore {
     
     // Workout Plans
     match /workoutPlans/{planId} {
-      // Users can read all authenticated plans (templates don't have userId, custom plans check userId)
+      // Users can read: templates, their own plans, or org plans (if they belong to the org)
       allow read: if isAuthenticated();
-      // Users can create plans (must set userId to their own)
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      // Users can update/delete only their own plans, admins can update/delete any
+      // Users can create: their own plans (userId) or org plans (organisationId, staff/admin/coach)
+      allow create: if isAuthenticated() && 
+        (request.resource.data.userId == request.auth.uid || 
+         (request.resource.data.organisationId != null && isStaffOrAdminOrCoach()));
+      // Update/delete: own plans, org plans (staff/admin/coach of that org), or admin
       allow update, delete: if isAuthenticated() && 
-        (resource.data.userId == request.auth.uid || isAdmin());
+        (resource.data.userId == request.auth.uid || 
+         (resource.data.organisationId != null && isStaffOrAdminOrCoach()) ||
+         isAdmin());
+    }
+    
+    // Organisation exercises (yoga, pilates, etc.) - custom exercises per organisation
+    match /organisationExercises/{exerciseId} {
+      // Org members can read exercises for their organisation
+      allow read: if isAuthenticated() && belongsToOrganisation(resource.data.organisationId);
+      // Staff/admin/coach can create (must set organisationId to an org they belong to)
+      allow create: if isAuthenticated() && isStaffOrAdminOrCoach() && 
+        belongsToOrganisation(request.resource.data.organisationId);
+      // Staff/admin/coach can update/delete exercises in their org
+      allow update, delete: if isAuthenticated() && isStaffOrAdminOrCoach() && 
+        belongsToOrganisation(resource.data.organisationId);
+    }
+    
+    // Organisation habits - suggested habits per organisation (studio, gym, etc.)
+    match /organisationHabits/{habitId} {
+      allow read: if isAuthenticated() && belongsToOrganisation(resource.data.organisationId);
+      allow create: if isAuthenticated() && isStaffOrAdmin() && 
+        belongsToOrganisation(request.resource.data.organisationId);
+      allow update, delete: if isAuthenticated() && isStaffOrAdmin() && 
+        belongsToOrganisation(resource.data.organisationId);
+    }
+    
+    // Organisation goals - suggested goals per organisation
+    match /organisationGoals/{goalId} {
+      allow read: if isAuthenticated() && belongsToOrganisation(resource.data.organisationId);
+      allow create: if isAuthenticated() && isStaffOrAdmin() && 
+        belongsToOrganisation(request.resource.data.organisationId);
+      allow update, delete: if isAuthenticated() && isStaffOrAdmin() && 
+        belongsToOrganisation(resource.data.organisationId);
     }
     
     // Workout Plan Progress
@@ -156,6 +248,169 @@ service cloud.firestore {
       allow read, write: if isAuthenticated() && userId == request.auth.uid;
     }
     
+    // Organisations collection - Multi-tenant support
+    match /organisations/{organisationId} {
+      // Users can read their own organisation OR any organisation (needed for joining via invite code)
+      // The invite code system provides security - users can only join with valid codes
+      allow read: if isAuthenticated();
+      
+      // Only admins can write to their organisation
+      allow write: if isAuthenticated() && 
+        belongsToOrganisation(organisationId) && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Organisation invites - for joining by code
+    // Invite codes are system-generated and unique to each user
+    // Users can update invite codes when they're using them (marking as used)
+    match /organisationInvites/{inviteId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isStaffOrAdmin();
+      // Allow users to update invite codes when they're using them (setting usedBy to their own userId)
+      // This allows the join flow to mark invite codes as used/inactive
+      // Staff/admin can update any invite code (for manual management if needed)
+      allow update: if isAuthenticated() && 
+        (isStaffOrAdmin() || 
+         request.resource.data.usedBy == request.auth.uid);
+      allow delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Classes collection (gym mode)
+    match /classes/{classId} {
+      // Allow reading classes if user is authenticated
+      // The query already filters by organisationId, so we just need to check authentication
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isStaffOrAdmin();
+      allow update, delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Bookings collection
+    match /bookings/{bookingId} {
+      // Allow reading if:
+      // 1. User's own booking
+      // 2. Staff/admin can read any
+      // 3. User belongs to the same organisation as the booking (needed to show class availability & booking counts)
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || 
+         isStaffOrAdmin() ||
+         belongsToOrganisation(resource.data.organisationId));
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+    }
+    
+    // Waitlist entries (created via joinWaitlist Cloud Function; users can read their own)
+    match /waitlistEntries/{entryId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+    }
+    
+    // Memberships collection
+    match /memberships/{membershipId} {
+      // Allow reading:
+      // 1. User's own membership (resource.data.userId == request.auth.uid)
+      // 2. Membership tiers (product definitions where userId is null or missing) - needed for joining
+      // 3. Staff/admin can read any
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || 
+         !('userId' in resource.data) || // Membership tiers (products without userId field)
+         resource.data.userId == null || // Membership tiers (products with userId: null)
+         isStaffOrAdmin());
+      // Allow writing:
+      // 1. Staff/admin can write any
+      // 2. Users can create their own membership (when joining via invite code)
+      allow create: if isAuthenticated() && 
+        (isStaffOrAdmin() || request.resource.data.userId == request.auth.uid);
+      // Allow updating:
+      // 1. Staff/admin can update any membership
+      // 2. Users can update their own membership (needed right after creation to set membershipId)
+      allow update: if isAuthenticated() && 
+        (isStaffOrAdmin() || resource.data.userId == request.auth.uid);
+      allow delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Packs collection
+    match /packs/{packId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Pack purchases collection
+    match /packPurchases/{purchaseId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      // Allow users to create their own pack purchases (when joining via invite code)
+      allow create: if isAuthenticated() && 
+        (isStaffOrAdmin() || request.resource.data.userId == request.auth.uid);
+      allow update: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Payments collection (manual/cash recording for POS)
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow create: if isAuthenticated() && isStaffOrAdmin();
+      allow update, delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Attendance collection
+    match /attendance/{attendanceId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow create: if isAuthenticated() && 
+        (request.resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow update, delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+    
+    // Pending purchases collection
+    match /pendingPurchases/{purchaseId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && isStaffOrAdmin();
+      allow delete: if isAuthenticated() && isStaffOrAdmin();
+    }
+
+    // Webhook logs (admin only)
+    match /webhookLogs/{logId} {
+      allow read, write: if isAuthenticated() && isStaffOrAdmin();
+    }
+
+    // Pending members collection (for members not yet joined)
+    match /pendingMembers/{pendingMemberId} {
+      // Allow reading pending members:
+      // 1. Staff/admin of the organisation
+      // 2. Users can read pending members with their email (needed when joining via invite code)
+      allow read: if isAuthenticated() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff'] &&
+         resource.data.organisationId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organisationId) ||
+        // Allow users to read pending members with their email (for joining flow)
+        (resource.data.email == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.email)
+      );
+      // Only staff/admin can create/update (must belong to same organisation)
+      allow create: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff'] &&
+        request.resource.data.organisationId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organisationId;
+      allow update: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff'] &&
+        resource.data.organisationId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organisationId;
+      // Allow users to delete pending members with their email (when they join)
+      allow delete: if isAuthenticated() && (
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'staff'] &&
+         resource.data.organisationId == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.organisationId) ||
+        // Allow users to delete their own pending member record when joining
+        (resource.data.email == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.email)
+      );
+    }
+
     // Deny all other access by default
     match /{document=**} {
       allow read, write: if false;

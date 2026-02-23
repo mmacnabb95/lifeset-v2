@@ -33,8 +33,11 @@ export default function ExerciseDetailScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { userId } = useFirebaseUser();
-  const { exercise } = route.params as { exercise: Exercise };
+  const { exercise, exerciseConfig } = route.params as { exercise: Exercise; exerciseConfig?: { durationSeconds?: number | null } };
   
+  const planDurationSeconds = exerciseConfig?.durationSeconds ?? null;
+  const initialExerciseDuration = planDurationSeconds ?? 60;
+
   const video = useRef<Video>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [record, setRecord] = useState<ExerciseRecord | null>(null);
@@ -49,8 +52,16 @@ export default function ExerciseDetailScreen() {
   const [timeLeft, setTimeLeft] = useState(60);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerComplete, setTimerComplete] = useState(false);
+  
+  // Exercise timer for time-based exercises (separate from rest timer)
+  const [exerciseDuration, setExerciseDuration] = useState(initialExerciseDuration);
+  const [exerciseTimeLeft, setExerciseTimeLeft] = useState(initialExerciseDuration);
+  const [exerciseTimerRunning, setExerciseTimerRunning] = useState(false);
+  const [exerciseTimerComplete, setExerciseTimerComplete] = useState(false);
 
-  const isCardio = exercise.category === 'cardio';
+  // Check if exercise is time-based (cardio or planks)
+  const isCardio = exercise.category === 'cardio' || exercise.name.toLowerCase().includes('plank');
+  const showExerciseTimer = isCardio || (planDurationSeconds !== null && planDurationSeconds > 0);
 
   // Load exercise record
   useEffect(() => {
@@ -73,6 +84,16 @@ export default function ExerciseDetailScreen() {
     loadRecord();
   }, [userId, exercise.id, isCardio]);
 
+  // Sync exercise timer with plan duration if provided
+  useEffect(() => {
+    if (planDurationSeconds && planDurationSeconds > 0) {
+      setExerciseDuration(planDurationSeconds);
+      if (!exerciseTimerRunning) {
+        setExerciseTimeLeft(planDurationSeconds);
+      }
+    }
+  }, [planDurationSeconds, exerciseTimerRunning]);
+
   // Rest timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -89,6 +110,23 @@ export default function ExerciseDetailScreen() {
       if (interval) clearInterval(interval);
     };
   }, [timerRunning, timeLeft]);
+
+  // Exercise timer effect (for time-based exercises)
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (exerciseTimerRunning && exerciseTimeLeft > 0) {
+      interval = setInterval(() => {
+        setExerciseTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (exerciseTimerRunning && exerciseTimeLeft === 0) {
+      Vibration.vibrate(600);
+      setExerciseTimerRunning(false);
+      setExerciseTimerComplete(true);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [exerciseTimerRunning, exerciseTimeLeft]);
 
   const handleSaveRecord = async () => {
     if (!userId) {
@@ -183,6 +221,37 @@ export default function ExerciseDetailScreen() {
     setTimerRunning(false);
     setTimerComplete(false);
     setTimeLeft(restDuration);
+  };
+
+  // Exercise timer handlers
+  const handleStartExerciseTimer = () => {
+    setExerciseTimerRunning(true);
+    setExerciseTimerComplete(false);
+  };
+
+  const handlePauseExerciseTimer = () => {
+    setExerciseTimerRunning(false);
+  };
+
+  const handleResetExerciseTimer = () => {
+    setExerciseTimerRunning(false);
+    setExerciseTimeLeft(exerciseDuration);
+    setExerciseTimerComplete(false);
+  };
+
+  const handleAdjustExerciseDuration = (text: string) => {
+    const value = parseInt(text);
+    if (!isNaN(value) && value >= 0) {
+      setExerciseDuration(value);
+      if (!exerciseTimerRunning) {
+        setExerciseTimeLeft(value);
+      }
+    } else if (text === '') {
+      setExerciseDuration(0);
+      if (!exerciseTimerRunning) {
+        setExerciseTimeLeft(0);
+      }
+    }
   };
 
   const handleAdjustDuration = (text: string) => {
@@ -421,6 +490,68 @@ export default function ExerciseDetailScreen() {
               </TouchableOpacity>
             )}
           </View>
+
+          {/* Exercise Timer - For time-based exercises */}
+          {showExerciseTimer && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>⏱️ Exercise Timer</Text>
+              <View style={styles.compactTimerCard}>
+                <View style={styles.timerInfoRow}>
+                  <View style={styles.timerInfo}>
+                    <Text style={styles.timerLabel}>Time remaining</Text>
+                    <Text style={styles.compactTimerDisplay}>{formatTime(exerciseTimeLeft)}</Text>
+                    {exerciseTimerComplete && (
+                      <Text style={styles.timerCompleteText}>Exercise complete!</Text>
+                    )}
+                  </View>
+                  <View style={styles.durationInputRow}>
+                    <Text style={styles.durationInputLabel}>Duration (sec)</Text>
+                    <TextInput
+                      style={styles.durationInput}
+                      keyboardType="number-pad"
+                      value={exerciseDuration.toString()}
+                      onChangeText={handleAdjustExerciseDuration}
+                      selectTextOnFocus
+                    />
+                  </View>
+                </View>
+                <View style={styles.timerButtonsRow}>
+                  <TouchableOpacity
+                    style={[styles.timerButtonSmall, styles.timerPrimaryButton]}
+                    onPress={handleStartExerciseTimer}
+                  >
+                    <Text style={styles.timerButtonSmallText}>
+                      {exerciseTimerRunning ? 'Restart' : 'Start'}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.timerButtonSmall,
+                      styles.timerSecondaryButton,
+                      !exerciseTimerRunning && styles.timerButtonDisabled,
+                    ]}
+                    onPress={handlePauseExerciseTimer}
+                    disabled={!exerciseTimerRunning}
+                  >
+                    <Text
+                      style={[
+                        styles.timerButtonSmallText,
+                        !exerciseTimerRunning && styles.timerButtonDisabledText,
+                      ]}
+                    >
+                      Pause
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.timerButtonSmall, styles.timerSecondaryButton]}
+                    onPress={handleResetExerciseTimer}
+                  >
+                    <Text style={styles.timerButtonSmallText}>Reset</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
 
           {/* Rest Timer - Compact */}
           <View style={styles.section}>

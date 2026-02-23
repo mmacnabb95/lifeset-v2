@@ -10,6 +10,9 @@ import {
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { useFirebaseUser } from 'src/hooks/useFirebaseUser';
+import { useBranding } from 'src/hooks/useBranding';
+import { useMode } from 'src/hooks/useMode';
+import { getUserProfile } from 'src/services/firebase/user';
 import { getWorkoutPlans, WorkoutPlan, getActiveWorkoutPlans, WorkoutPlanProgress, deleteWorkoutPlan } from 'src/services/firebase/workout-plans';
 import workoutPlansData from '../../data/workout-plans.json';
 
@@ -31,6 +34,8 @@ const difficulties = [
 export function WorkoutPlansScreen() {
   const navigation = useNavigation();
   const { userId } = useFirebaseUser();
+  const { organisation } = useMode();
+  const { primaryColor, isBranded } = useBranding();
   const [plans, setPlans] = useState<WorkoutPlan[]>([]);
   const [activePlans, setActivePlans] = useState<(WorkoutPlanProgress & { plan: WorkoutPlan })[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +46,7 @@ export function WorkoutPlansScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadPlans();
-    }, [userId])
+    }, [userId, organisation?.organisationId])
   );
 
   const loadPlans = async () => {
@@ -54,9 +59,18 @@ export function WorkoutPlansScreen() {
       // Fetch user's custom plans from Firebase
       if (userId) {
         try {
-          const firebasePlans = await getWorkoutPlans(userId);
-          // Combine templates with custom plans
-          setPlans([...localPlans, ...firebasePlans]);
+          // Use organisation from useMode, or fall back to user profile when useMode fails (e.g. mode config error)
+          let orgId = organisation?.organisationId;
+          if (!orgId) {
+            const profile = await getUserProfile(userId);
+            const userData = profile as { organisationId?: string; activeOrganisationId?: string; organisations?: string[] } | null;
+            orgId = userData?.activeOrganisationId || userData?.organisationId || userData?.organisations?.[0];
+          }
+          const firebasePlans = await getWorkoutPlans(userId, orgId ?? undefined);
+          // Combine templates with custom plans, org plans first
+          const combined = [...localPlans, ...firebasePlans];
+          combined.sort((a, b) => (a.organisationId ? 0 : 1) - (b.organisationId ? 0 : 1));
+          setPlans(combined);
           
           // Fetch active plans
           const activeData = await getActiveWorkoutPlans(userId);
@@ -141,8 +155,8 @@ export function WorkoutPlansScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#673ab7" />
-        <Text style={styles.loadingText}>Loading workout plans...</Text>
+        <ActivityIndicator size="large" color={primaryColor} />
+        <Text style={styles.loadingText} allowFontScaling={false}>Loading workout plans...</Text>
       </View>
     );
   }
@@ -150,14 +164,14 @@ export function WorkoutPlansScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, isBranded && { borderBottomWidth: 3, borderBottomColor: primaryColor }]}>
         <View style={styles.headerTop}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Text style={styles.backButtonText}>← Back</Text>
+            <Text style={styles.backButtonText} allowFontScaling={false}>← Back</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Workout Plans</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.title} allowFontScaling={false}>Workout Plans</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           {filteredPlans.length} programs available
         </Text>
       </View>
@@ -167,8 +181,8 @@ export function WorkoutPlansScreen() {
         {activePlans.length > 0 && (
           <View style={styles.activeSection}>
             <View style={styles.activeSectionHeader}>
-              <Text style={styles.activeSectionTitle}>🎯 My Active Plans</Text>
-              <Text style={styles.activeSectionCount}>{activePlans.length}</Text>
+              <Text style={styles.activeSectionTitle} allowFontScaling={false}>🎯 My Active Plans</Text>
+              <Text style={styles.activeSectionCount} allowFontScaling={false}>{activePlans.length}</Text>
             </View>
             
             {activePlans.map((progress) => {
@@ -182,8 +196,8 @@ export function WorkoutPlansScreen() {
                   onPress={() => handlePlanPress(progress.plan)}
                 >
                   <View style={styles.activePlanHeader}>
-                    <Text style={styles.activePlanName}>{progress.plan.name}</Text>
-                    <Text style={styles.activePlanPercent}>{percentComplete}%</Text>
+                    <Text style={styles.activePlanName} allowFontScaling={false}>{progress.plan.name}</Text>
+                    <Text style={styles.activePlanPercent} allowFontScaling={false}>{percentComplete}%</Text>
                   </View>
                   <View style={styles.activePlanProgressBar}>
                     <View 
@@ -194,11 +208,11 @@ export function WorkoutPlansScreen() {
                     />
                   </View>
                   <View style={styles.activePlanStats}>
-                    <Text style={styles.activePlanStatText}>
+                    <Text style={styles.activePlanStatText} allowFontScaling={false}>
                       {progress.completedWorkouts} / {progress.totalWorkoutsPlanned} workouts
                     </Text>
-                    <Text style={styles.activePlanStatDivider}>•</Text>
-                    <Text style={styles.activePlanStatText}>
+                    <Text style={styles.activePlanStatDivider} allowFontScaling={false}>•</Text>
+                    <Text style={styles.activePlanStatText} allowFontScaling={false}>
                       Week {Math.ceil(progress.completedWorkouts / progress.plan.daysPerWeek)} of {progress.plan.durationWeeks}
                     </Text>
                   </View>
@@ -206,7 +220,7 @@ export function WorkoutPlansScreen() {
                     style={styles.continueButton}
                     onPress={() => handlePlanPress(progress.plan)}
                   >
-                    <Text style={styles.continueButtonText}>Continue Program →</Text>
+                    <Text style={styles.continueButtonText} allowFontScaling={false}>Continue Program →</Text>
                   </TouchableOpacity>
                 </TouchableOpacity>
               );
@@ -219,26 +233,26 @@ export function WorkoutPlansScreen() {
           style={styles.createButton}
           onPress={handleCreatePlan}
         >
-          <Text style={styles.createButtonIcon}>+</Text>
+          <Text style={styles.createButtonIcon} allowFontScaling={false}>+</Text>
           <View style={styles.createButtonContent}>
-            <Text style={styles.createButtonTitle}>Create Custom Plan</Text>
-            <Text style={styles.createButtonSubtitle}>
+            <Text style={styles.createButtonTitle} allowFontScaling={false}>Create Custom Plan</Text>
+            <Text style={styles.createButtonSubtitle} allowFontScaling={false}>
               Build your own workout routine
             </Text>
           </View>
-          <Text style={styles.chevron}>›</Text>
+          <Text style={styles.chevron} allowFontScaling={false}>›</Text>
         </TouchableOpacity>
 
         {/* Browse All Plans Divider */}
         <View style={styles.browseDivider}>
           <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>Browse All Plans</Text>
+          <Text style={styles.dividerText} allowFontScaling={false}>Browse All Plans</Text>
           <View style={styles.dividerLine} />
         </View>
 
         {/* Category Filter */}
         <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Category</Text>
+          <Text style={styles.filterTitle} allowFontScaling={false}>Category</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -253,13 +267,14 @@ export function WorkoutPlansScreen() {
                 ]}
                 onPress={() => setSelectedCategory(cat.key)}
               >
-                <Text style={styles.filterEmoji}>{cat.emoji}</Text>
+                <Text style={styles.filterEmoji} allowFontScaling={false}>{cat.emoji}</Text>
                 <Text
                   style={[
                     styles.filterChipText,
                     selectedCategory === cat.key &&
                       styles.filterChipTextActive,
                   ]}
+                  allowFontScaling={false}
                 >
                   {cat.label}
                 </Text>
@@ -270,7 +285,7 @@ export function WorkoutPlansScreen() {
 
         {/* Difficulty Filter */}
         <View style={styles.filterSection}>
-          <Text style={styles.filterTitle}>Difficulty</Text>
+          <Text style={styles.filterTitle} allowFontScaling={false}>Difficulty</Text>
           <View style={styles.difficultyRow}>
             {difficulties.map((diff) => (
               <TouchableOpacity
@@ -288,6 +303,7 @@ export function WorkoutPlansScreen() {
                     selectedDifficulty === diff.key &&
                       styles.difficultyChipTextActive,
                   ]}
+                  allowFontScaling={false}
                 >
                   {diff.label}
                 </Text>
@@ -306,20 +322,32 @@ export function WorkoutPlansScreen() {
               >
               <View style={styles.planHeader}>
                 <View style={styles.planTitleRow}>
-                  <Text style={styles.planName}>{plan.name}</Text>
+                  <Text style={styles.planName} allowFontScaling={false}>{plan.name}</Text>
                   {plan.isTemplate ? (
                     <View style={styles.templateBadge}>
-                      <Text style={styles.templateBadgeText}>✨ LifeSet</Text>
+                      <Text style={styles.templateBadgeText} allowFontScaling={false}>✨ LifeSet</Text>
+                    </View>
+                  ) : (plan as WorkoutPlan & { assignedToUserId?: string }).assignedToUserId === userId ? (
+                    <View style={styles.coachBadge}>
+                      <Text style={styles.coachBadgeText} allowFontScaling={false}>👤 From your coach</Text>
+                    </View>
+                  ) : plan.userId === userId ? (
+                    <View style={styles.customBadge}>
+                      <Text style={styles.customBadgeText} allowFontScaling={false}>📝 My Plan</Text>
+                    </View>
+                  ) : plan.organisationId ? (
+                    <View style={styles.orgBadge}>
+                      <Text style={styles.orgBadgeText} allowFontScaling={false}>🏢 Studio</Text>
                     </View>
                   ) : (
                     <View style={styles.customBadge}>
-                      <Text style={styles.customBadgeText}>📝 My Plan</Text>
+                      <Text style={styles.customBadgeText} allowFontScaling={false}>📝 My Plan</Text>
                     </View>
                   )}
                 </View>
                 
-                {/* Delete button for custom plans */}
-                {!plan.isTemplate && plan.userId === userId && (
+                {/* Delete button for custom plans (not org plans) */}
+                {!plan.isTemplate && !plan.organisationId && plan.userId === userId && (
                   <TouchableOpacity
                     style={styles.deleteButtonInline}
                     onPress={(e) => {
@@ -327,12 +355,12 @@ export function WorkoutPlansScreen() {
                       handleDeletePlan(plan);
                     }}
                   >
-                    <Text style={styles.deleteButtonInlineText}>🗑️</Text>
+                    <Text style={styles.deleteButtonInlineText} allowFontScaling={false}>🗑️</Text>
                   </TouchableOpacity>
                 )}
               </View>
               
-              <Text style={styles.planDescription} numberOfLines={2}>
+              <Text style={styles.planDescription} numberOfLines={2} allowFontScaling={false}>
                 {plan.description}
               </Text>
 
@@ -343,22 +371,22 @@ export function WorkoutPlansScreen() {
                     { backgroundColor: getDifficultyColor(plan.difficulty) },
                   ]}
                 >
-                  <Text style={styles.difficultyBadgeText}>
+                  <Text style={styles.difficultyBadgeText} allowFontScaling={false}>
                     {plan.difficulty}
                   </Text>
                 </View>
                 <View style={styles.planStat}>
-                  <Text style={styles.planStatText}>
+                  <Text style={styles.planStatText} allowFontScaling={false}>
                     📅 {plan.durationWeeks} weeks
                   </Text>
                 </View>
                 <View style={styles.planStat}>
-                  <Text style={styles.planStatText}>
+                  <Text style={styles.planStatText} allowFontScaling={false}>
                     🗓️ {plan.daysPerWeek}x/week
                   </Text>
                 </View>
                 <View style={styles.planStat}>
-                  <Text style={styles.planStatText}>
+                  <Text style={styles.planStatText} allowFontScaling={false}>
                     💪 {plan.exercises.length} exercises
                   </Text>
                 </View>
@@ -720,6 +748,30 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 6,
     marginLeft: 8,
+  },
+  orgBadge: {
+    backgroundColor: '#e3f2fd',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginLeft: 8,
+  },
+  coachBadge: {
+    backgroundColor: '#f3e5f5',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginLeft: 8,
+  },
+  coachBadgeText: {
+    fontSize: 12,
+    color: '#7b1fa2',
+    fontWeight: '600',
+  },
+  orgBadgeText: {
+    fontSize: 12,
+    color: '#1565c0',
+    fontWeight: '600',
   },
   customBadgeText: {
     fontSize: 12,

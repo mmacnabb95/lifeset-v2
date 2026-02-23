@@ -86,7 +86,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#9c27b0" />
-        <Text style={styles.loadingText}>Loading journal...</Text>
+        <Text style={styles.loadingText} allowFontScaling={false}>Loading journal...</Text>
       </View>
     );
   }
@@ -94,7 +94,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>❌ {error}</Text>
+        <Text style={styles.errorText} allowFontScaling={false}>❌ {error}</Text>
         <Button
           type={ButtonTypes.Primary}
           title="Retry"
@@ -110,9 +110,9 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
+          <Text style={styles.backButtonText} allowFontScaling={false}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Journal</Text>
+        <Text style={styles.headerTitle} allowFontScaling={false}>My Journal</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -125,7 +125,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
       >
         {/* Summary */}
         <View style={styles.summary}>
-          <Text style={styles.summaryText}>
+          <Text style={styles.summaryText} allowFontScaling={false}>
             {entries.length} journal {entries.length !== 1 ? 'entries' : 'entry'}
           </Text>
         </View>
@@ -141,7 +141,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
                 onLongPress={() => handleDeleteEntry(entry.id!, entry.date)}
               >
                 <View style={styles.entryHeader}>
-                  <Text style={styles.entryDate}>
+                  <Text style={styles.entryDate} allowFontScaling={false}>
                     {new Date(entry.date).toLocaleDateString('en-US', { 
                       weekday: 'short', 
                       year: 'numeric', 
@@ -150,15 +150,15 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
                     })}
                   </Text>
                   {entry.mood && (
-                    <Text style={styles.entryMood}>{getMoodEmoji(entry.mood)}</Text>
+                    <Text style={styles.entryMood} allowFontScaling={false}>{getMoodEmoji(entry.mood)}</Text>
                   )}
                 </View>
                 
                 {entry.title && (
-                  <Text style={styles.entryTitle}>{entry.title}</Text>
+                  <Text style={styles.entryTitle} allowFontScaling={false}>{entry.title}</Text>
                 )}
                 
-                <Text style={styles.entryContent} numberOfLines={3}>
+                <Text style={styles.entryContent} numberOfLines={3} allowFontScaling={false}>
                   {entry.content}
                 </Text>
                 
@@ -166,7 +166,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
                   <View style={styles.entryTags}>
                     {entry.tags.slice(0, 3).map((tag, index) => (
                       <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>#{tag}</Text>
+                        <Text style={styles.tagText} allowFontScaling={false}>#{tag}</Text>
                       </View>
                     ))}
                   </View>
@@ -176,9 +176,9 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
           </View>
         ) : (
           <View style={styles.emptyState}>
-            <Text style={styles.emptyStateIcon}>📝</Text>
-            <Text style={styles.emptyStateTitle}>No journal entries yet!</Text>
-            <Text style={styles.emptyStateText}>
+            <Text style={styles.emptyStateIcon} allowFontScaling={false}>📝</Text>
+            <Text style={styles.emptyStateTitle} allowFontScaling={false}>No journal entries yet!</Text>
+            <Text style={styles.emptyStateText} allowFontScaling={false}>
               Start documenting your thoughts, feelings, and experiences.
             </Text>
           </View>
@@ -194,7 +194,7 @@ export const JournalListScreen = ({ navigation }: { navigation: any }) => {
 
         {/* Instructions */}
         <View style={styles.instructions}>
-          <Text style={styles.instructionsText}>
+          <Text style={styles.instructionsText} allowFontScaling={false}>
             💡 Tap to edit • Long press to delete
           </Text>
         </View>

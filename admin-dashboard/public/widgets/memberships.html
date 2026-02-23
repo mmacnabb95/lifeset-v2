@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership Purchase</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .membership-card {
+      border: 2px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    .membership-card:hover {
+      border-color: #6366f1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+    .membership-card h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .membership-card .price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6366f1;
+      margin: 10px 0;
+    }
+    .membership-card .description {
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .membership-card .features {
+      list-style: none;
+      margin-bottom: 15px;
+    }
+    .membership-card .features li {
+      padding: 5px 0;
+      color: #555;
+    }
+    .membership-card .features li:before {
+      content: "✓ ";
+      color: #10b981;
+      font-weight: bold;
+    }
+    .btn {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #4f46e5;
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Choose Your Membership</h1>
+    <div id="error" class="error" style="display: none;"></div>
+    <div id="success" class="success" style="display: none;"></div>
+    <div id="loading" class="loading">Loading memberships...</div>
+    <div id="memberships"></div>
+  </div>
+
+  <script>
+    // Get organisationId from URL or embed parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const organisationId = urlParams.get('organisationId') || new URLSearchParams(window.location.hash.substring(1)).get('organisationId');
+    const userId = urlParams.get('userId'); // Optional: if user is logged in
+    // Firebase Functions URL - Update with your actual region if different
+    const API_BASE = 'https://us-central1-lifeset-v2.cloudfunctions.net';
+
+    async function loadMemberships() {
+      try {
+        // Fetch active membership tiers
+        // Note: This would typically be done via a Cloud Function that returns public membership data
+        const response = await fetch(`${API_BASE}/getPublicMemberships?organisationId=${organisationId}`);
+        const memberships = await response.json();
+
+        document.getElementById('loading').style.display = 'none';
+
+        if (!memberships || memberships.length === 0) {
+          document.getElementById('memberships').innerHTML = '<p>No memberships available at this time.</p>';
+          return;
+        }
+
+        const membershipsHtml = memberships.map(membership => `
+          <div class="membership-card">
+            <h3>${membership.name}</h3>
+            <div class="price">$${membership.price} / ${membership.duration} days</div>
+            ${membership.description ? `<div class="description">${membership.description}</div>` : ''}
+            ${membership.features && membership.features.length > 0 ? `
+              <ul class="features">
+                ${membership.features.map(feature => `<li>${feature}</li>`).join('')}
+              </ul>
+            ` : ''}
+            <button class="btn" onclick="purchaseMembership('${membership.membershipId}')">
+              Purchase Membership
+            </button>
+          </div>
+        `).join('');
+
+        document.getElementById('memberships').innerHTML = membershipsHtml;
+      } catch (error) {
+        document.getElementById('loading').style.display = 'none';
+        showError('Failed to load memberships. Please try again later.');
+      }
+    }
+
+    async function purchaseMembership(membershipTierId) {
+      if (!userId) {
+        showError('Please log in to purchase a membership.');
+        return;
+      }
+
+      try {
+        const successUrl = `${window.location.origin}${window.location.pathname}?success=true&session_id={CHECKOUT_SESSION_ID}`;
+        const cancelUrl = `${window.location.origin}${window.location.pathname}?cancelled=true`;
+
+        const response = await fetch(`${API_BASE}/createMembershipCheckoutSession`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            organisationId,
+            membershipTierId,
+            userId,
+            successUrl,
+            cancelUrl,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+          // Redirect to Stripe Checkout
+          window.location.href = data.url;
+        } else {
+          showError('Failed to create checkout session.');
+        }
+      } catch (error) {
+        showError('An error occurred. Please try again.');
+      }
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Check for success/cancelled in URL
+    if (urlParams.get('success')) {
+      document.getElementById('success').textContent = 'Payment successful! Your membership is now active.';
+      document.getElementById('success').style.display = 'block';
+    } else if (urlParams.get('cancelled')) {
+      showError('Payment was cancelled.');
+    }
+
+    // Load memberships on page load
+    if (organisationId) {
+      loadMemberships();
+    } else {
+      document.getElementById('loading').style.display = 'none';
+      showError('Organisation ID is required.');
+    }
+  </script>
+</body>
+</html>
+

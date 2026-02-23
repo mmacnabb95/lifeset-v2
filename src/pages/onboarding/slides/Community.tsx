@@ -5,23 +5,23 @@ export const CommunitySlide = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.emoji}>🌍</Text>
-        <Text style={styles.title}>Join Top Self-Improvers</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.emoji} allowFontScaling={false}>🌍</Text>
+        <Text style={styles.title} allowFontScaling={false}>Join Top Self-Improvers</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           Earn XP, climb the ranks, and compete with the world's best self-improvers
         </Text>
         <View style={styles.featureList}>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>⚡</Text>
-            <Text style={styles.featureText}>Earn XP for every action</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>⚡</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Earn XP for every action</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🎖️</Text>
-            <Text style={styles.featureText}>Level up your rank</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>🎖️</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Level up your rank</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🏆</Text>
-            <Text style={styles.featureText}>Track your percentile</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>🏆</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Track your percentile</Text>
           </View>
         </View>
       </View>

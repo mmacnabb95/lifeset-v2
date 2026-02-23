@@ -4,10 +4,16 @@ import { useFirebaseUser } from "src/hooks/useFirebaseUser";
 import { useFocusEffect } from "@react-navigation/native";
 import commonConstants from "src/themes/constants";
 import { useXPRewards } from "src/hooks/useXPRewards";
+import { useMode } from "src/hooks/useMode";
+import { useBranding } from "src/hooks/useBranding";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "src/services/firebase/config";
 
 // Firebase services
-import { getUserProfile, updateStreak, UserProfile } from "src/services/firebase/user";
+import { getUserProfile, updateStreak, updateUserProfile, UserProfile } from "src/services/firebase/user";
 import { getHabits, getStreak, getCompletions, completeHabit, uncompleteHabit, Habit, Streak } from "src/services/firebase/habits";
+import { updateGoalProgress, getGoals } from "src/services/firebase/goals";
+import { syncAfterHabitCompletion, syncAfterGoalUpdate } from "src/services/widget-data-sync";
 import { getJournalEntries, hasJournaledToday } from "src/services/firebase/journal";
 import { getActiveWorkoutPlans, WorkoutPlanProgress, WorkoutPlan } from "src/services/firebase/workout-plans";
 import { getTodayMeditations, getMeditationStats } from "src/services/firebase/meditation";
@@ -18,11 +24,19 @@ import quotesData from "src/data/quotes.json";
 // Utils
 import { getPercentile, getTierName } from "src/utils/xpPercentileMapper";
 
+// Components
+import { TutorialOverlay } from "src/components/TutorialOverlay";
+import { WidgetPromptModal } from "src/components/WidgetPromptModal";
+
 // Debug overlay
 
 export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   const { user, userId } = useFirebaseUser();
   const { checkAllHabitsCompleted } = useXPRewards();
+  const { organisation, isConsumerMode, loading: modeLoading } = useMode();
+  const { primaryColor, logoUrl, isBranded, organisationName } = useBranding();
+  const [hasOrganisationFallback, setHasOrganisationFallback] = useState(false);
+  const [fallbackOrgData, setFallbackOrgData] = useState<{ name: string; logoUrl?: string; primaryColor?: string } | null>(null);
   
   // State
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -34,8 +48,59 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   const [meditatedToday, setMeditatedToday] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [showWidgetPrompt, setShowWidgetPrompt] = useState(false);
+  
+  // Track "today" as state so it updates when day changes
+  const [today, setToday] = useState(new Date().toISOString().split('T')[0]);
 
-  const today = new Date().toISOString().split('T')[0];
+  // Fallback check: If useMode fails, check user document directly and fetch org for logo
+  useEffect(() => {
+    const checkOrganisationFallback = async () => {
+      if (!userId) return;
+      
+      // If mode loading is done but we're in consumer mode, check directly
+      if (!modeLoading && isConsumerMode && !organisation) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", userId));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const orgId = userData?.activeOrganisationId || userData?.organisations?.[0] || userData?.organisationId;
+            const hasOrg = !!orgId;
+            
+            if (hasOrg) {
+              setHasOrganisationFallback(true);
+              // Fetch org data for logo when mode failed (e.g. FirebaseError)
+              try {
+                const orgDoc = await getDoc(doc(db, "organisations", orgId));
+                if (orgDoc.exists()) {
+                  const org = orgDoc.data();
+                  setFallbackOrgData({
+                    name: org?.name || "Org",
+                    logoUrl: org?.logoUrl || org?.landingPage?.logoUrl,
+                    primaryColor: org?.brandColours?.primary || "#4e8fea",
+                  });
+                } else {
+                  setFallbackOrgData({ name: "Org", primaryColor: "#4e8fea" });
+                }
+              } catch {
+                setFallbackOrgData({ name: "Org", primaryColor: "#4e8fea" });
+              }
+            } else {
+              setFallbackOrgData(null);
+            }
+          }
+        } catch (error) {
+          console.error("Error checking organisation fallback:", error);
+        }
+      } else if (organisation || (!isConsumerMode)) {
+        setHasOrganisationFallback(false);
+        setFallbackOrgData(null);
+      }
+    };
+    
+    checkOrganisationFallback();
+  }, [userId, modeLoading, isConsumerMode, organisation]);
   
   // Get daily rotating quote (changes each day)
   const getDailyQuote = () => {
@@ -75,6 +140,27 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
       setActivePlans(activePlansData);
       setMeditatedToday(meditationsToday.length > 0);
       
+      // Check if user should see tutorial (only show once, after onboarding)
+      if (profileData && !profileData.hasSeenTutorial && profileData.hasCompletedOnboarding) {
+        setShowTutorial(true);
+      }
+      
+      // Check if user should see widget prompt
+      // Show after they've completed onboarding, seen tutorial, and have some habits/streak
+      if (
+        profileData && 
+        profileData.hasCompletedOnboarding &&
+        profileData.hasSeenTutorial &&
+        !profileData.hasSeenWidgetPrompt &&
+        (streakData?.currentStreak || 0) >= 1 && // At least 1 day streak
+        habitsData.length > 0 // Has at least one habit
+      ) {
+        // Delay showing widget prompt by 2 seconds after screen loads
+        setTimeout(() => {
+          setShowWidgetPrompt(true);
+        }, 2000);
+      }
+      
       // Update streak on app open
       if (profileData) {
         await updateStreak(userId);
@@ -89,8 +175,15 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      // Check if the day has changed since last focus
+      const currentDay = new Date().toISOString().split('T')[0];
+      if (currentDay !== today) {
+        console.log('📅 New day detected on focus, updating today:', currentDay);
+        setToday(currentDay);
+        // fetchUserData will be called by the interval or we call it directly
+      }
       fetchUserData();
-    }, [userId])
+    }, [userId, today])
   );
 
   // Check for day change and refresh habits
@@ -98,7 +191,8 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
     const checkDayChange = setInterval(() => {
       const currentDay = new Date().toISOString().split('T')[0];
       if (currentDay !== today) {
-        console.log('🔄 Day changed - refreshing habits');
+        console.log('🔄 Day changed - updating today and refreshing habits');
+        setToday(currentDay);
         fetchUserData();
       }
     }, 60000); // Check every minute
@@ -112,6 +206,38 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   };
 
   // Handle habit completion toggle
+  // Handle tutorial completion
+  const handleTutorialComplete = async () => {
+    setShowTutorial(false);
+    if (userId && !userProfile?.hasSeenTutorial) {
+      try {
+        await updateUserProfile(userId, { hasSeenTutorial: true });
+        setUserProfile(prev => prev ? { ...prev, hasSeenTutorial: true } : null);
+      } catch (error) {
+        console.error('Error marking tutorial as seen:', error);
+        // Non-blocking - tutorial will still be dismissed
+      }
+    }
+  };
+
+  // Handle widget prompt actions
+  const handleWidgetPromptDismiss = async () => {
+    setShowWidgetPrompt(false);
+    if (userId) {
+      try {
+        await updateUserProfile(userId, { hasSeenWidgetPrompt: true });
+        setUserProfile(prev => prev ? { ...prev, hasSeenWidgetPrompt: true } : null);
+      } catch (error) {
+        console.error('Error marking widget prompt as seen:', error);
+      }
+    }
+  };
+
+  const handleWidgetPromptRemindLater = () => {
+    setShowWidgetPrompt(false);
+    // Don't mark as seen - will show again next time conditions are met
+  };
+
   const handleToggleHabit = async (habitId: string, isCompleted: boolean, e: any) => {
     e.stopPropagation(); // Prevent navigation
     
@@ -128,7 +254,36 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
           return newSet;
         });
       } else {
-        await completeHabit(userId, habitId);
+        // Try to complete - this will throw if already completed
+        let wasAlreadyCompleted = false;
+        let completedGoals: string[] = [];
+        
+        try {
+          await completeHabit(userId, habitId);
+          
+          // Only update goal progress if habit wasn't already completed
+          try {
+            completedGoals = await updateGoalProgress(userId, habitId);
+            // Sync widget data after goal update
+            syncAfterGoalUpdate(userId);
+          } catch (error) {
+            console.error('Error updating goal progress:', error);
+            // Don't block habit completion if goal update fails
+          }
+          
+          // Sync widget data after habit completion
+          syncAfterHabitCompletion(userId);
+        } catch (err: any) {
+          if (err.message && err.message.includes('already completed')) {
+            wasAlreadyCompleted = true;
+            console.log('Habit already completed, skipping goal progress update');
+          } else {
+            // Other error - show error and return
+            Alert.alert('Error', err.message || 'Failed to complete habit. Please try again.');
+            return;
+          }
+        }
+        
         const newCompletedSet = new Set(completedToday).add(habitId);
         setCompletedToday(newCompletedSet);
         
@@ -138,6 +293,11 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
           if (allCompleted) {
             Alert.alert('🎉 All Habits Complete!', 'You completed all your habits today!\n\n+15 XP bonus! 🌟');
           }
+        }
+        
+        // Show celebration if goal was completed
+        if (completedGoals.length > 0) {
+          Alert.alert('🎯 Goal Achieved!', `Congratulations! You completed: ${completedGoals.join(', ')}\n\n+50 XP bonus! 🌟`);
         }
       }
       
@@ -174,7 +334,7 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#667eea" />
+        <ActivityIndicator size="large" color={primaryColor} />
       </View>
     );
   }
@@ -194,16 +354,41 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
           />
         </TouchableOpacity>
         <View style={styles.headerText}>
-          <Text style={styles.welcomeText}>Welcome back</Text>
-          <Text style={styles.userName}>{userProfile?.username || 'User'}</Text>
+          <Text style={styles.welcomeText} allowFontScaling={false}>Welcome back</Text>
+          <Text style={styles.userName} allowFontScaling={false}>{userProfile?.username || 'User'}</Text>
         </View>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => navigation.navigate('Settings')}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.settingsIcon}>⚙️</Text>
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          {(isBranded || (hasOrganisationFallback && fallbackOrgData)) && (
+            <View style={styles.headerOrgLogoContainer}>
+              {(isBranded ? logoUrl : fallbackOrgData?.logoUrl) ? (
+                <Image
+                  source={{ uri: (isBranded ? logoUrl : fallbackOrgData?.logoUrl) || "" }}
+                  style={styles.headerOrgLogo}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Text
+                  style={[
+                    styles.headerOrgLogoFallback,
+                    { color: isBranded ? primaryColor : (fallbackOrgData?.primaryColor || "#4e8fea") },
+                  ]}
+                  allowFontScaling={false}
+                >
+                  {((isBranded ? organisationName || organisation?.name : fallbackOrgData?.name) || "?")
+                    .charAt(0)
+                    .toUpperCase()}
+                </Text>
+              )}
+            </View>
+          )}
+          <TouchableOpacity
+            style={styles.settingsButton}
+            onPress={() => navigation.navigate('Settings')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.settingsIcon} allowFontScaling={false}>⚙️</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Scrollable Content */}
@@ -219,24 +404,24 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
       {userProfile && (
         <View style={styles.percentileBadge}>
           <View style={styles.percentileBadgeTop}>
-            <Text style={styles.percentileText}>
+            <Text style={styles.percentileText} allowFontScaling={false}>
               🌍 Top {getPercentile(userProfile.xp || 0)}% of Self-Improvers Worldwide
             </Text>
           </View>
           <View style={styles.percentileStats}>
             <View style={styles.percentileStat}>
-              <Text style={styles.percentileStatValue}>⚡ {userProfile.xp || 0}</Text>
-              <Text style={styles.percentileStatLabel}>XP</Text>
+              <Text style={styles.percentileStatValue} allowFontScaling={false}>⚡ {userProfile.xp || 0}</Text>
+              <Text style={styles.percentileStatLabel} allowFontScaling={false}>XP</Text>
             </View>
             <View style={styles.percentileStatDivider} />
             <View style={styles.percentileStat}>
-              <Text style={styles.percentileStatValue}>🎖️ {userProfile.level || 1}</Text>
-              <Text style={styles.percentileStatLabel}>{getTierName(userProfile.xp || 0)}</Text>
+              <Text style={styles.percentileStatValue} allowFontScaling={false}>🎖️ {userProfile.level || 1}</Text>
+              <Text style={styles.percentileStatLabel} allowFontScaling={false}>{getTierName(userProfile.xp || 0)}</Text>
             </View>
             <View style={styles.percentileStatDivider} />
             <View style={styles.percentileStat}>
-              <Text style={styles.percentileStatValue}>🔥 {streak?.currentStreak || 0}</Text>
-              <Text style={styles.percentileStatLabel}>Day Streak</Text>
+              <Text style={styles.percentileStatValue} allowFontScaling={false}>🔥 {streak?.currentStreak || 0}</Text>
+              <Text style={styles.percentileStatLabel} allowFontScaling={false}>Day Streak</Text>
             </View>
           </View>
         </View>
@@ -244,10 +429,10 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
 
       {/* Daily Inspirational Quote */}
       <View style={styles.quoteContainer}>
-        <Text style={styles.quoteIcon}>💡</Text>
+        <Text style={styles.quoteIcon} allowFontScaling={false}>💡</Text>
         <View style={styles.quoteContent}>
-          <Text style={styles.quoteText}>"{dailyQuote.text}"</Text>
-          <Text style={styles.quoteAuthor}>— {dailyQuote.author}</Text>
+          <Text style={styles.quoteText} allowFontScaling={false}>"{dailyQuote.text}"</Text>
+          <Text style={styles.quoteAuthor} allowFontScaling={false}>— {dailyQuote.author}</Text>
         </View>
       </View>
 
@@ -255,15 +440,15 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
       <View style={styles.habitsCard}>
         <View style={styles.habitsHeader}>
           <View style={styles.habitsHeaderLeft}>
-            <Text style={styles.habitsTitle}>Today's Habits</Text>
-            <Text style={styles.habitsSubtitle}>
+            <Text style={styles.habitsTitle} allowFontScaling={false}>Today's Habits</Text>
+            <Text style={styles.habitsSubtitle} allowFontScaling={false}>
               {completedToday.size} of {habits.length} complete
             </Text>
           </View>
           {streak && streak.currentStreak > 0 && (
             <View style={styles.streakBadge}>
-              <Text style={styles.streakIcon}>🔥</Text>
-              <Text style={styles.streakText}>{streak.currentStreak}</Text>
+              <Text style={styles.streakIcon} allowFontScaling={false}>🔥</Text>
+              <Text style={styles.streakText} allowFontScaling={false}>{streak.currentStreak}</Text>
             </View>
           )}
         </View>
@@ -278,7 +463,7 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
               ]} 
             />
           </View>
-          <Text style={styles.progressBarText}>{completionPercentage}%</Text>
+          <Text style={styles.progressBarText} allowFontScaling={false}>{completionPercentage}%</Text>
         </View>
 
         {/* Habit List */}
@@ -294,16 +479,16 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
                   activeOpacity={0.7}
                 >
                   <View style={[styles.habitCheckbox, isCompleted && styles.habitCheckboxCompleted]}>
-                    {isCompleted && <Text style={styles.habitCheckmark}>✓</Text>}
+                    {isCompleted && <Text style={[styles.habitCheckmark, { color: primaryColor }]} allowFontScaling={false}>✓</Text>}
                   </View>
-                  <Text style={[styles.habitName, isCompleted && styles.habitNameCompleted]}>
+                  <Text style={[styles.habitName, isCompleted && styles.habitNameCompleted]} allowFontScaling={false}>
                     {habit.name}
                   </Text>
                 </TouchableOpacity>
               );
             })}
             {habits.length > 4 && (
-              <Text style={styles.moreHabitsText}>
+              <Text style={styles.moreHabitsText} allowFontScaling={false}>
                 +{habits.length - 4} more habits
               </Text>
             )}
@@ -313,7 +498,7 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
               style={styles.manageHabitsButton}
               onPress={() => navigation.navigate('Habits')}
             >
-              <Text style={styles.manageHabitsText}>
+              <Text style={styles.manageHabitsText} allowFontScaling={false}>
                 Manage Habits →
               </Text>
             </TouchableOpacity>
@@ -323,21 +508,66 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
             style={styles.noHabitsButton}
             onPress={() => navigation.navigate('Habits')}
           >
-            <Text style={styles.noHabitsText}>+ Add your first habit</Text>
+            <Text style={styles.noHabitsText} allowFontScaling={false}>+ Add your first habit</Text>
           </TouchableOpacity>
         )}
       </View>
 
+      {/* Organisation Card - Only show for organisation users */}
+      {((!isConsumerMode && organisation) || hasOrganisationFallback) && (
+        <TouchableOpacity 
+          style={styles.organisationCard}
+          onPress={() => navigation.navigate('MyOrganisation')}
+          activeOpacity={0.8}
+        >
+          <View style={styles.organisationCardContent}>
+            <View style={styles.organisationCardLeft}>
+              {organisation?.logoUrl ? (
+                <Image
+                  source={{ uri: organisation.logoUrl }}
+                  style={styles.organisationCardLogo}
+                  resizeMode="contain"
+                />
+              ) : (
+                <Text style={styles.organisationCardIcon} allowFontScaling={false}>👥</Text>
+              )}
+              <View style={styles.organisationCardText}>
+                <Text style={styles.organisationCardTitle} allowFontScaling={false}>
+                  {organisation?.name || 'My Organisation'}
+                </Text>
+                <Text style={styles.organisationCardSubtitle} allowFontScaling={false}>
+                  View membership, packs & more →
+                </Text>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
+
       {/* Widget Grid */}
       <View style={styles.widgetGrid}>
+        {/* Workout Widget */}
+        <TouchableOpacity 
+          style={[styles.widget, styles.workoutWidget]}
+          onPress={() => navigation.navigate('WorkoutPlans')}
+        >
+          <Text style={styles.widgetIcon} allowFontScaling={false}>💪</Text>
+          <Text style={styles.widgetTitle} allowFontScaling={false}>Workouts</Text>
+          <Text style={styles.widgetSubtitle} allowFontScaling={false}>
+            {activePlans.length > 0 
+              ? `Active: ${activePlans[0].plan.name.substring(0, 20)}${activePlans[0].plan.name.length > 20 ? '...' : ''}` 
+              : 'Browse workout plans'}
+          </Text>
+        </TouchableOpacity>
+
         {/* Journal Widget */}
         <TouchableOpacity 
           style={[styles.widget, styles.journalWidget]}
           onPress={() => navigation.navigate('Journal')}
         >
-          <Text style={styles.widgetIcon}>📓</Text>
-          <Text style={styles.widgetTitle}>Journal</Text>
-          <Text style={styles.widgetSubtitle}>
+          <Text style={styles.widgetIcon} allowFontScaling={false}>📓</Text>
+          <Text style={styles.widgetTitle} allowFontScaling={false}>Journal</Text>
+          <Text style={styles.widgetSubtitle} allowFontScaling={false}>
             {journaledToday ? '✓ Journaled today' : 'Reflect on your journey'}
           </Text>
         </TouchableOpacity>
@@ -347,24 +577,10 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
           style={[styles.widget, styles.meditationWidget]}
           onPress={() => navigation.navigate('Meditation')}
         >
-          <Text style={styles.widgetIcon}>🧘‍♂️</Text>
-          <Text style={styles.widgetTitle}>Meditation</Text>
-          <Text style={styles.widgetSubtitle}>
+          <Text style={styles.widgetIcon} allowFontScaling={false}>🧘‍♂️</Text>
+          <Text style={styles.widgetTitle} allowFontScaling={false}>Meditation</Text>
+          <Text style={styles.widgetSubtitle} allowFontScaling={false}>
             {meditatedToday ? '✓ Meditated today' : 'Take a moment to breathe'}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Workout Widget */}
-        <TouchableOpacity 
-          style={[styles.widget, styles.workoutWidget]}
-          onPress={() => navigation.navigate('WorkoutPlans')}
-        >
-          <Text style={styles.widgetIcon}>💪</Text>
-          <Text style={styles.widgetTitle}>Workouts</Text>
-          <Text style={styles.widgetSubtitle}>
-            {activePlans.length > 0 
-              ? `Active: ${activePlans[0].plan.name.substring(0, 20)}${activePlans[0].plan.name.length > 20 ? '...' : ''}` 
-              : 'Browse workout plans'}
           </Text>
         </TouchableOpacity>
 
@@ -373,12 +589,25 @@ export const HomeDashboard = ({ navigation }: { navigation: any }) => {
           style={[styles.widget, styles.nutritionWidget]}
           onPress={() => navigation.navigate('Recipes')}
         >
-          <Text style={styles.widgetIcon}>🥗</Text>
-          <Text style={styles.widgetTitle}>Nutrition</Text>
-          <Text style={styles.widgetSubtitle}>Discover healthy recipes</Text>
+          <Text style={styles.widgetIcon} allowFontScaling={false}>🥗</Text>
+          <Text style={styles.widgetTitle} allowFontScaling={false}>Nutrition</Text>
+          <Text style={styles.widgetSubtitle} allowFontScaling={false}>Discover healthy recipes</Text>
         </TouchableOpacity>
       </View>
       </ScrollView>
+
+      {/* Tutorial Overlay - Shows once for new users */}
+      <TutorialOverlay
+        visible={showTutorial}
+        onComplete={handleTutorialComplete}
+      />
+
+      {/* Widget Prompt Modal - Encourages users to add widget */}
+      <WidgetPromptModal
+        isVisible={showWidgetPrompt}
+        onDismiss={handleWidgetPromptDismiss}
+        onRemindLater={handleWidgetPromptRemindLater}
+      />
     </View>
   );
 };
@@ -429,6 +658,29 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  headerOrgLogoContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#f1f5f9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerOrgLogo: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+  },
+  headerOrgLogoFallback: {
+    fontSize: 18,
+    fontWeight: '700',
   },
   settingsButton: {
     padding: 8,
@@ -789,6 +1041,50 @@ const styles = StyleSheet.create({
     color: '#fff',
     opacity: 0.95,
     lineHeight: 16,
+    fontWeight: '500',
+  },
+  organisationCard: {
+    marginHorizontal: 20,
+    marginBottom: 15,
+    borderRadius: 16,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  organisationCardContent: {
+    padding: 18,
+  },
+  organisationCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  organisationCardIcon: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  organisationCardLogo: {
+    width: 40,
+    height: 40,
+    marginRight: 12,
+    borderRadius: 8,
+  },
+  organisationCardText: {
+    flex: 1,
+  },
+  organisationCardTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  organisationCardSubtitle: {
+    fontSize: 13,
+    color: '#6b7280',
     fontWeight: '500',
   },
 });

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { Button, ButtonTypes } from "src/components/common/button-simple";
-import { createHabit } from "src/services/firebase/habits";
+import { createHabit, getOrganisationHabits } from "src/services/firebase/habits";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
+import { useMode } from "src/hooks/useMode";
+import { getGoals, Goal, linkHabitToGoals } from "src/services/firebase/goals";
 
 const DAYS = [
   { key: 'monday', label: 'Mon' },
@@ -14,9 +16,20 @@ const DAYS = [
   { key: 'sunday', label: 'Sun' },
 ];
 
+interface OrgHabit {
+  id: string;
+  name: string;
+  description?: string;
+  category?: string;
+  streakTarget?: number;
+  schedule: Record<string, boolean>;
+}
+
 export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
   const { userId } = useFirebaseUser();
+  const { organisation } = useMode();
   
+  const [orgHabits, setOrgHabits] = useState<OrgHabit[]>([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -29,7 +42,31 @@ export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
     saturday: true,
     sunday: true,
   });
+  const [selectedGoals, setSelectedGoals] = useState<Set<string>>(new Set());
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [loadingGoals, setLoadingGoals] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadGoals = async () => {
+      if (!userId) return;
+      try {
+        setLoadingGoals(true);
+        const goalsData = await getGoals(userId);
+        setGoals(goalsData);
+      } catch (error) {
+        console.error('Error loading goals:', error);
+      } finally {
+        setLoadingGoals(false);
+      }
+    };
+    loadGoals();
+  }, [userId]);
+
+  useEffect(() => {
+    if (!organisation?.organisationId) return;
+    getOrganisationHabits(organisation.organisationId).then(setOrgHabits);
+  }, [organisation?.organisationId]);
 
   const toggleDay = (day: string) => {
     setSchedule(prev => ({
@@ -59,6 +96,18 @@ export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
       friday: true,
       saturday: false,
       sunday: false,
+    });
+  };
+
+  const toggleGoal = (goalId: string) => {
+    setSelectedGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(goalId)) {
+        newSet.delete(goalId);
+      } else {
+        newSet.add(goalId);
+      }
+      return newSet;
     });
   };
 
@@ -102,6 +151,16 @@ export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
       
       const habitId = await createHabit(habitData);
 
+      // Link habit to selected goals
+      if (selectedGoals.size > 0 && userId) {
+        try {
+          await linkHabitToGoals(userId, habitId, Array.from(selectedGoals), true); // Recalculate progress
+        } catch (error) {
+          console.error('Error linking habit to goals:', error);
+          // Don't fail the habit creation if goal linking fails
+        }
+      }
+
       console.log('Created habit:', habitId);
       Alert.alert('Success', 'Habit created successfully!', [
         { text: 'OK', onPress: () => navigation.goBack() }
@@ -126,6 +185,33 @@ export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
       </View>
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
+        {/* Studio suggestions */}
+        {orgHabits.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.label}>Suggested by your studio</Text>
+            <Text style={styles.sublabel}>Tap to use as a starting point</Text>
+            <View style={styles.suggestionChips}>
+              {orgHabits.map((h) => (
+                <TouchableOpacity
+                  key={h.id}
+                  style={styles.suggestionChip}
+                  onPress={() => {
+                    setName(h.name);
+                    setDescription(h.description || '');
+                    setCategory(h.category || '');
+                    setSchedule(h.schedule || {
+                      monday: true, tuesday: true, wednesday: true, thursday: true,
+                      friday: true, saturday: true, sunday: true,
+                    });
+                  }}
+                >
+                  <Text style={styles.suggestionChipText}>{h.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
         {/* Habit Name */}
         <View style={styles.section}>
           <Text style={styles.label}>Habit Name *</Text>
@@ -202,6 +288,47 @@ export const AddHabitScreen = ({ navigation }: { navigation: any }) => {
             ))}
           </View>
         </View>
+
+        {/* Link to Goals */}
+        {goals.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.label}>Link to Goals (Optional)</Text>
+            <Text style={styles.sublabel}>
+              Select goals this habit contributes to
+            </Text>
+            
+            {loadingGoals ? (
+              <ActivityIndicator size="small" color="#007AFF" style={{ marginTop: 10 }} />
+            ) : (
+              <View style={styles.goalsList}>
+                {goals.map((goal) => {
+                  const isSelected = selectedGoals.has(goal.id!);
+                  return (
+                    <TouchableOpacity
+                      key={goal.id}
+                      style={[styles.goalOption, isSelected && styles.goalOptionSelected]}
+                      onPress={() => toggleGoal(goal.id!)}
+                    >
+                      <View style={[styles.goalCheckbox, isSelected && styles.goalCheckboxSelected]}>
+                        {isSelected && <Text style={styles.goalCheckmark}>✓</Text>}
+                      </View>
+                      <View style={styles.goalInfo}>
+                        <Text style={[styles.goalOptionText, isSelected && styles.goalOptionTextSelected]}>
+                          {goal.title}
+                        </Text>
+                        {goal.description && (
+                          <Text style={styles.goalDescription} numberOfLines={1}>
+                            {goal.description}
+                          </Text>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            )}
+          </View>
+        )}
 
         {/* Create Button */}
         <Button
@@ -349,5 +476,77 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     lineHeight: 20,
+  },
+  goalsList: {
+    marginTop: 12,
+  },
+  goalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 8,
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+  },
+  goalOptionSelected: {
+    borderColor: '#007AFF',
+    backgroundColor: '#f0f7ff',
+  },
+  goalCheckbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#007AFF',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  goalCheckboxSelected: {
+    backgroundColor: '#007AFF',
+  },
+  goalCheckmark: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  goalInfo: {
+    flex: 1,
+  },
+  goalOptionText: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '500',
+  },
+  goalOptionTextSelected: {
+    fontWeight: '600',
+    color: '#007AFF',
+  },
+  goalDescription: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  suggestionChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 8,
+  },
+  suggestionChip: {
+    backgroundColor: '#e3f2fd',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#90caf9',
+  },
+  suggestionChipText: {
+    fontSize: 14,
+    color: '#1565c0',
+    fontWeight: '500',
   },
 });

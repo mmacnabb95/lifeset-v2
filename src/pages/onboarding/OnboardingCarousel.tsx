@@ -62,7 +62,7 @@ export const OnboardingCarousel: React.FC<OnboardingCarouselProps> = ({
       {/* Skip Button */}
       {!isLastSlide && (
         <TouchableOpacity style={styles.skipButton} onPress={onSkip}>
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText} allowFontScaling={false}>Skip</Text>
         </TouchableOpacity>
       )}
 
@@ -99,7 +99,7 @@ export const OnboardingCarousel: React.FC<OnboardingCarouselProps> = ({
       {/* Next/Done Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>
+          <Text style={styles.nextButtonText} allowFontScaling={false}>
             {isLastSlide ? 'Get Started' : 'Next'}
           </Text>
         </TouchableOpacity>

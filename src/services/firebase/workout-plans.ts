@@ -15,7 +15,9 @@ import { db } from './config';
 import workoutPlansData from '../../data/workout-plans.json';
 
 export interface WorkoutPlanExercise {
-  exerciseId: number;
+  exerciseId?: number | null; // Global exercise from exercises.json
+  organisationExerciseId?: string; // Organisation custom exercise
+  dayIndex?: number; // 0-based; Day 1 = 0, Day 2 = 1, etc.
   sets?: number; // Optional for cardio exercises
   reps?: number; // Optional for cardio exercises
   durationSeconds?: number; // For cardio and timed exercises
@@ -36,6 +38,9 @@ export interface WorkoutPlan {
   isTemplate: boolean; // True for pre-made plans
   createdBy: string; // User ID or "LifeSet" for templates
   userId?: string; // Only for user-created plans
+  organisationId?: string; // Organisation recommended plan
+  assignedToUserId?: string; // When set, plan is for this specific member (coach-assigned)
+  assignedBy?: string; // Staff/coach uid who assigned it
   imageUrl?: string | null;
   exercises: WorkoutPlanExercise[];
   tags: string[];
@@ -84,63 +89,133 @@ export const createWorkoutPlan = async (
 };
 
 /**
- * Get all workout plans (templates + user's custom plans)
+ * Get organisation exercises for a given organisation
+ */
+export const getOrganisationExercises = async (
+  organisationId: string
+): Promise<{ id: string; name: string; description?: string; category: string; videoUrl?: string; durationSeconds?: number }[]> => {
+  try {
+    const q = query(
+      collection(db, 'organisationExercises'),
+      where('organisationId', '==', organisationId)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    })) as { id: string; name: string; description?: string; category: string; videoUrl?: string; durationSeconds?: number }[];
+  } catch (error) {
+    console.error('Error fetching organisation exercises:', error);
+    return [];
+  }
+};
+
+/**
+ * Get all workout plans (templates + user's custom plans + org plans when organisationId provided)
  */
 export const getWorkoutPlans = async (
-  userId?: string
+  userId?: string,
+  organisationId?: string
 ): Promise<WorkoutPlan[]> => {
   try {
     const plansRef = collection(db, 'workoutPlans');
-    let q;
+    const docToPlan = (docSnap: { id: string; data: () => Record<string, unknown> }) => {
+      const data = docSnap.data();
+      const { id: _, ...dataWithoutId } = data;
+      const ts = (x: unknown) => (x && typeof (x as { toDate?: () => Date }).toDate === 'function' ? (x as { toDate: () => Date }).toDate() : x);
+      return {
+        id: docSnap.id,
+        ...dataWithoutId,
+        createdAt: ts(data.createdAt),
+        updatedAt: ts(data.updatedAt),
+      } as WorkoutPlan;
+    };
 
     if (userId) {
-      // Get templates + user's custom plans
-      q = query(
-        plansRef,
-        where('isTemplate', '==', true)
-      );
-      const templatesSnapshot = await getDocs(q);
-      
-      const userPlansQuery = query(
-        plansRef,
-        where('userId', '==', userId)
-      );
+      const templatesQuery = query(plansRef, where('isTemplate', '==', true));
+      const templatesSnapshot = await getDocs(templatesQuery);
+
+      const userPlansQuery = query(plansRef, where('userId', '==', userId));
       const userPlansSnapshot = await getDocs(userPlansQuery);
 
-      const allPlans = [
-        ...templatesSnapshot.docs,
-        ...userPlansSnapshot.docs,
-      ];
+      const allDocs = [...templatesSnapshot.docs, ...userPlansSnapshot.docs];
 
-      return allPlans.map((doc) => {
-        const data = doc.data();
-        const { id: _, ...dataWithoutId } = data;
-        return {
-          id: doc.id, // Always use Firestore document ID
-          ...dataWithoutId,
-          createdAt: data.createdAt?.toDate(),
-          updatedAt: data.updatedAt?.toDate(),
-        } as WorkoutPlan;
+      // Also fetch org plans when user belongs to an organisation
+      if (organisationId) {
+        const orgPlansQuery = query(
+          plansRef,
+          where('organisationId', '==', organisationId)
+        );
+        const orgPlansSnapshot = await getDocs(orgPlansQuery);
+        const existingIds = new Set(allDocs.map((d) => d.id));
+        orgPlansSnapshot.docs.forEach((d) => {
+          if (!existingIds.has(d.id)) {
+            allDocs.push(d);
+            existingIds.add(d.id);
+          }
+        });
+      }
+
+      // Fetch plans assigned to this user by a coach
+      const assignedPlansQuery = query(
+        plansRef,
+        where('assignedToUserId', '==', userId)
+      );
+      const assignedPlansSnapshot = await getDocs(assignedPlansQuery);
+      const existingIds = new Set(allDocs.map((d) => d.id));
+      assignedPlansSnapshot.docs.forEach((d) => {
+        if (!existingIds.has(d.id)) {
+          allDocs.push(d);
+          existingIds.add(d.id);
+        }
       });
+
+      return allDocs.map((d) =>
+        docToPlan({ id: d.id, data: () => d.data() })
+      );
     } else {
-      // Get only templates (for logged-out users)
-      q = query(plansRef, where('isTemplate', '==', true));
+      const q = query(plansRef, where('isTemplate', '==', true));
       const snapshot = await getDocs(q);
-
-      return snapshot.docs.map((doc) => {
-        const data = doc.data();
-        const { id: _, ...dataWithoutId } = data;
-        return {
-          id: doc.id, // Always use Firestore document ID
-          ...dataWithoutId,
-          createdAt: data.createdAt?.toDate(),
-          updatedAt: data.updatedAt?.toDate(),
-        } as WorkoutPlan;
-      });
+      return snapshot.docs.map((d) =>
+        docToPlan({ id: d.id, data: () => d.data() })
+      );
     }
   } catch (error) {
     console.error('Error fetching workout plans:', error);
     throw error;
+  }
+};
+
+/**
+ * Get workout plans created by an organisation (for featured section on home)
+ */
+export const getOrganisationWorkoutPlans = async (
+  organisationId: string
+): Promise<WorkoutPlan[]> => {
+  try {
+    const plansRef = collection(db, 'workoutPlans');
+    const q = query(
+      plansRef,
+      where('organisationId', '==', organisationId)
+    );
+    const snapshot = await getDocs(q);
+    const docToPlan = (docSnap: { id: string; data: () => Record<string, unknown> }) => {
+      const data = docSnap.data();
+      const { id: _, ...dataWithoutId } = data;
+      const ts = (x: unknown) => (x && typeof (x as { toDate?: () => Date }).toDate === 'function' ? (x as { toDate: () => Date }).toDate() : x);
+      return {
+        id: docSnap.id,
+        ...dataWithoutId,
+        createdAt: ts(data.createdAt),
+        updatedAt: ts(data.updatedAt),
+      } as WorkoutPlan;
+    };
+    return snapshot.docs.map((d) =>
+      docToPlan({ id: d.id, data: () => d.data() })
+    );
+  } catch (error) {
+    console.error('Error fetching organisation workout plans:', error);
+    return [];
   }
 };
 
@@ -394,6 +469,7 @@ export const duplicateWorkoutPlan = async (
       userId,
       createdBy: userId,
       isTemplate: false,
+      organisationId: planToDuplicate.organisationId, // Keep for org exercise resolution
     };
 
     const newPlanId = await createWorkoutPlan(userId, newPlan);

@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@bacons/apple-targets": "^3.0.6",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "^8.5.0",
     "@react-native-community/netinfo": "^11.4.1",
@@ -28,6 +29,7 @@
     "expo-notifications": "^0.32.12",
     "expo-secure-store": "^15.0.7",
     "expo-status-bar": "~3.0.8",
+    "expo-updates": "~29.0.13",
     "firebase": "^12.4.0",
     "formik": "^2.4.6",
     "jsonpath": "^1.1.1",
@@ -41,6 +43,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-paper": "^5.14.5",
     "react-native-purchases": "^9.6.0",
+    "react-native-qrcode-svg": "^6.3.21",
     "react-native-safe-area-context": "^5.6.1",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
@@ -60,6 +63,7 @@
     "@types/lodash": "^4.17.20",
     "@types/react": "~19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
+    "firebase-admin": "^13.6.0",
     "typescript": "~5.9.2"
   },
   "private": true

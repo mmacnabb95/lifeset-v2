@@ -10,14 +10,14 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { error } from "../../../redux/features/auth/slice";
+import { error, setUser } from "../../../redux/features/auth/slice";
 import {
   SignUpCredentials,
   checkUsername,
   isFulfilled,
   setData,
   signUpRegistrationToken,
-  signupUser,
+  // REMOVE: signupUser - we'll use Firebase instead
 } from "src/redux/features/signUp/slice";
 import {
   Body,
@@ -30,6 +30,11 @@ import { TypographyTypes } from "../../../components/common/typography";
 import { languagePreference } from "src/redux/features/misc/slice";
 import { passwordRegex, passwordStrengthMessage } from "../utils";
 
+// ADD: Import Firebase Auth
+import { signUp } from "src/services/firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "src/services/firebase/config";
+
 const useLayoutStyles = require("../../../themes/layout/styles/styles").default;
 const useFormStyles = require("../../../themes/form/styles/styles").default;
 
@@ -39,7 +44,6 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
   const { width: windowWidth } = useWindowDimensions();
 
   const _signUpRegistrationToken = useSelector(signUpRegistrationToken);
-
   const fulfilled = useSelector(isFulfilled);
   const language = useSelector(languagePreference);
   const passwordRequiredText = "Required";
@@ -49,6 +53,8 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
   const [usernameAvailable, setUsernameAvailable] = useState<
     undefined | boolean
   >(undefined);
+  const [signupError, setSignupError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     fullname: "",
@@ -56,6 +62,61 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
     phone: "",
     username: "",
     password: "",
+  };
+
+  // ADD: Firebase signup handler
+  const handleSignup = async () => {
+    try {
+      setSignupError("");
+      setLoading(true);
+      
+      console.log("Signing up with Firebase Auth:", {
+        email: formik.values.email,
+        username: formik.values.username,
+      });
+
+      // Create Firebase auth user
+      const user = await signUp(
+        formik.values.email.trim(),
+        formik.values.password,
+        formik.values.username
+      );
+
+      console.log("Firebase signup successful:", user.uid);
+
+      // Create user profile in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        email: user.email,
+        username: formik.values.username,
+        fullname: formik.values.fullname,
+        phone: formik.values.phone || "",
+        createdAt: new Date().toISOString(),
+        language: language,
+        xp: 0,
+        level: 1,
+      });
+
+      // Update Redux with Firebase user data
+      dispatch(setUser({
+        uid: user.uid,
+        email: user.email,
+        displayName: formik.values.username,
+        fullname: formik.values.fullname,
+      }));
+
+      // Navigate to email verification or dashboard
+      // You can skip verification for now and go straight to the app
+      navigation.navigate("Welcome");
+      
+      // OR if you want email verification:
+      // navigation.navigate("EmailVerification");
+
+    } catch (error: any) {
+      console.error("Firebase signup error:", error);
+      setSignupError(error.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formik = useFormik({
@@ -66,38 +127,44 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
         .min(5, "Must be 5 characters or more")
         .required("Required"),
       email: Yup.string().email("Invalid email").required("Required"),
-      // phone: Yup.string().required("Required"),
       username: Yup.string()
-        .max(30, "Must be 50 characters or less")
+        .max(30, "Must be 30 characters or less")
         .min(5, "Must be 5 characters or more")
-        .required("Required"),
+        .required("Required")
+        .matches(
+          /^[a-zA-Z0-9_]*$/,
+          "Username can only contain letters, numbers and underscores"
+        ),
       password: Yup.string()
         .required("Required")
         .matches(passwordRegex, passwordStrengthMessage)
         .required(passwordRequiredText),
     }),
-    onSubmit: () => {
+    onSubmit: async () => {
       if (usernameAvailable === true) {
-        const signupCredentials: SignUpCredentials = {
-          ...{ language },
-          ...formik.values,
-        };
+        // Store email/password for any future use
         dispatch(
           setData({
             email: formik.values.email,
             password: formik.values.password,
           }),
         );
-        dispatch(signupUser(signupCredentials));
+        
+        // Call Firebase signup
+        await handleSignup();
       }
     },
   });
 
+  // Keep username availability check (you can integrate with Firestore later)
   const checkUserNameAvailability = async (text: string) => {
     if (text?.length < 5) {
       setUsernameAvailable(undefined);
       return;
     }
+    
+    // For now, use the old check if it still works
+    // TODO: Later, check against Firestore users collection
     const result = await dispatch(checkUsername(text));
     if ((result as any).payload === true) {
       setUsernameAvailable(true);
@@ -112,16 +179,16 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
     }
   };
 
-  useEffect(() => {
-    if (fulfilled && _signUpRegistrationToken) {
-      console.log("_signUpRegistrationToken", _signUpRegistrationToken);
-      navigation.navigate("SignUpConfirmation", {
-        token: _signUpRegistrationToken,
-        then: "login",
-        source: "registration",
-      });
-    }
-  }, [_signUpRegistrationToken, fulfilled, navigation]);
+  // Remove or update the old signup flow
+  // useEffect(() => {
+  //   if (fulfilled && _signUpRegistrationToken) {
+  //     navigation.navigate("SignUpConfirmation", {
+  //       token: _signUpRegistrationToken,
+  //       then: "login",
+  //       source: "registration",
+  //     });
+  //   }
+  // }, [_signUpRegistrationToken, fulfilled, navigation]);
 
   if (
     Platform.OS === "web" &&
@@ -144,15 +211,6 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
           ]}
           testID="auth-page"
         >
-          {/* <View style={[layoutStyles.authImageContainer, { width: "100%" }]}>
-            <Image
-              source={require("../../../../assets/in-app-icon-with-text.png")}
-              style={{
-                width: "100%",
-                height: (windowWidth - 40) * 0.349,
-              }}
-            />
-          </View> */}
           <View style={[formStyles.form]}>
             <Typography
               style={layoutStyles.pageTitle}
@@ -192,20 +250,6 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
                   : undefined
               }
             />
-            {/* <Input
-              testID="phone"
-              placeholder="Phone Number"
-              onChangeText={formik.handleChange("phone")}
-              onBlur={formik.handleBlur("phone")}
-              value={formik.values.phone}
-              onKeyPress={handleKeyDown}
-              autoComplete={"off"}
-              errorMessage={
-                formik.touched.phone && formik.errors.phone
-                  ? formik.errors.phone
-                  : undefined
-              }
-            /> */}
             <View style={{ width: "100%" }}>
               <Input
                 testID="username"
@@ -271,7 +315,7 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
             />
 
             <View style={{ height: 60 }}>
-              <Text>
+              <Text style={{ color: 'red' }}>
                 {formik.errors.password &&
                 formik.errors.password !== passwordRequiredText
                   ? (formik.errors.password as string)
@@ -284,9 +328,12 @@ export default function SignUpScreen1({ navigation }: { navigation: any }) {
                 onPress={() => formik.handleSubmit()}
                 testID={"SignUp"}
                 title="Next"
+                loading={loading}
               />
               <View>
-                <Text>{err ? (err as string) : ""}</Text>
+                <Text style={{ color: 'red', marginTop: 10 }}>
+                  {signupError || (err ? (err as string) : "")}
+                </Text>
               </View>
             </View>
           </View>

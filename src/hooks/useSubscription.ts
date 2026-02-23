@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import Purchases, { CustomerInfo, PurchasesEntitlementInfo } from 'react-native-purchases';
 import { useFirebaseUser } from './useFirebaseUser';
+import { checkPromoSubscription } from 'src/services/firebase/promo-codes';
+
+// ⚠️ DEV BYPASS: Set to true to skip subscription check during development
+// IMPORTANT: Set back to false before submitting to App Store!
+const DEV_BYPASS_SUBSCRIPTION = true;
 
 export interface SubscriptionStatus {
   isSubscribed: boolean;
@@ -15,13 +20,29 @@ export interface SubscriptionStatus {
  */
 export const useSubscription = (): SubscriptionStatus => {
   const { userId } = useFirebaseUser();
+  
+  // Initialize with bypass state if in dev mode
+  const shouldBypass = DEV_BYPASS_SUBSCRIPTION && __DEV__;
+  
   const [status, setStatus] = useState<SubscriptionStatus>({
-    isSubscribed: false,
+    isSubscribed: shouldBypass ? true : false,
     isInTrial: false,
     expirationDate: null,
-    loading: true,
+    loading: shouldBypass ? false : true,
     error: null,
   });
+  
+  // DEV BYPASS: Return early without running effects
+  if (shouldBypass) {
+    console.log('🔧 DEV BYPASS: Subscription check bypassed - treating as subscribed');
+    return {
+      isSubscribed: true,
+      isInTrial: false,
+      expirationDate: null,
+      loading: false,
+      error: null,
+    };
+  }
 
   useEffect(() => {
     // Wait for user to be authenticated before checking subscription
@@ -100,11 +121,25 @@ export const useSubscription = (): SubscriptionStatus => {
           error: null,
         });
       } else {
-        console.log('❌ NO active entitlements found - user is not subscribed');
-        console.log('💳 This could mean:');
-        console.log('   - User subscription expired');
-        console.log('   - RevenueCat hasn\'t synced yet');
-        console.log('   - Entitlement not configured in RevenueCat dashboard');
+        console.log('❌ NO active RevenueCat entitlements - checking promo codes...');
+        
+        // Check for promo code subscription in Firebase
+        if (userId) {
+          const promoStatus = await checkPromoSubscription(userId);
+          if (promoStatus.hasPromo) {
+            console.log('🎁 Active promo subscription found!', promoStatus.type);
+            setStatus({
+              isSubscribed: true,
+              isInTrial: false,
+              expirationDate: promoStatus.expiresAt || null,
+              loading: false,
+              error: null,
+            });
+            return;
+          }
+        }
+        
+        console.log('❌ No subscription found (RevenueCat or promo)');
         setStatus({
           isSubscribed: false,
           isInTrial: false,

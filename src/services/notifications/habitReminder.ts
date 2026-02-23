@@ -5,9 +5,12 @@ import { getHabits, getCompletions } from '../firebase/habits';
 import moment from 'moment';
 
 // Configure notification behavior
+// Note: NotificationProvider also sets this handler, but we want shouldSetBadge: false
+// The handler in NotificationProvider will be set first, so we override it here
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true, // Show notification banner when app is in foreground
+    shouldShowList: true, // Show in notification list
     shouldPlaySound: true,
     shouldSetBadge: false, // Disable badge to prevent red notification dot
   }),
@@ -35,27 +38,38 @@ const REMINDER_MESSAGES = [
 export const requestNotificationPermissions = async (): Promise<boolean> => {
   try {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    console.log(`📱 Current notification permission status: ${existingStatus}`);
     let finalStatus = existingStatus;
 
     if (existingStatus !== 'granted') {
+      console.log('📱 Requesting notification permissions...');
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
+      console.log(`📱 Permission request result: ${finalStatus}`);
     }
 
     if (finalStatus !== 'granted') {
-      console.log('Notification permission denied');
+      console.log('❌ Notification permission denied');
       return false;
     }
 
+    console.log('✅ Notification permissions granted');
+
     // For Android, create a notification channel
     if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('habit-reminders', {
-        name: 'Habit Reminders',
-        importance: Notifications.AndroidImportance.HIGH,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#667eea',
-        sound: 'default',
-      });
+      try {
+        await Notifications.setNotificationChannelAsync('habit-reminders', {
+          name: 'Habit Reminders',
+          importance: Notifications.AndroidImportance.HIGH,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#667eea',
+          sound: 'default',
+        });
+        console.log('✅ Android notification channel created');
+      } catch (error) {
+        console.error('Error creating Android notification channel:', error);
+        // Continue anyway - channel might already exist
+      }
     }
 
     return true;
@@ -148,7 +162,20 @@ export const scheduleDailyReminder = async (
       [NOTIFICATION_TIME_KEY, JSON.stringify({ hour, minute })],
     ]);
 
-    console.log(`✅ Daily reminder scheduled for ${hour}:${minute.toString().padStart(2, '0')}`);
+    console.log(`✅ Daily reminder scheduled for ${hour}:${minute.toString().padStart(2, '0')} - Notification ID: ${notificationId}`);
+    
+    // Verify the notification was scheduled
+    const allScheduled = await Notifications.getAllScheduledNotificationsAsync();
+    console.log(`📋 Total scheduled notifications: ${allScheduled.length}`);
+    const ourNotification = allScheduled.find(n => n.identifier === notificationId);
+    if (ourNotification) {
+      console.log(`✅ Verified notification is scheduled:`, {
+        identifier: ourNotification.identifier,
+        trigger: ourNotification.trigger,
+      });
+    } else {
+      console.warn(`⚠️ Warning: Notification ${notificationId} not found in scheduled list`);
+    }
   } catch (error) {
     console.error('Error scheduling daily reminder:', error);
     throw error;

@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Notifications from 'expo-notifications';
 import { useFirebaseUser } from 'src/hooks/useFirebaseUser';
 import {
   scheduleDailyReminder,
@@ -64,11 +65,26 @@ export const NotificationSettings = () => {
         // Enable notifications
         const hour = time.getHours();
         const minute = time.getMinutes();
-        await scheduleDailyReminder(userId, hour, minute);
-        Alert.alert(
-          'Notifications Enabled',
-          `You'll receive daily reminders at ${formatTime(hour, minute)} to complete your habits!`
-        );
+        try {
+          await scheduleDailyReminder(userId, hour, minute);
+          
+          // Verify notification was scheduled
+          const allScheduled = await Notifications.getAllScheduledNotificationsAsync();
+          console.log(`📋 Scheduled notifications after enabling: ${allScheduled.length}`);
+          
+          Alert.alert(
+            'Notifications Enabled',
+            `You'll receive daily reminders at ${formatTime(hour, minute)} to complete your habits!`
+          );
+        } catch (error: any) {
+          console.error('Failed to schedule notification:', error);
+          setEnabled(false); // Revert toggle
+          Alert.alert(
+            'Error',
+            error.message || 'Failed to enable notifications. Please check your device settings and try again.'
+          );
+          return;
+        }
       } else {
         // Disable notifications
         await cancelDailyReminder();

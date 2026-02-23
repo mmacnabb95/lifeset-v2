@@ -67,20 +67,35 @@ export default function EditWorkoutPlanScreen() {
     }
   };
 
+  // Helper function to check if exercise is time-based
+  const isTimeBasedExercise = (exercise: Exercise | undefined): boolean => {
+    if (!exercise) return false;
+    // Cardio exercises are time-based
+    if (exercise.category === 'cardio') return true;
+    // Plank exercises are time-based (hold duration, not reps)
+    if (exercise.name.toLowerCase().includes('plank')) return true;
+    return false;
+  };
+
   const handleAddExercise = (exerciseId: number) => {
     if (!plan) return;
 
-    // Find exercise details to check if it's cardio
+    // Find exercise details to check if it's time-based by default
     const exerciseDetails = exercises.find(ex => ex.id === exerciseId);
-    const isCardio = exerciseDetails?.category === 'cardio';
+    const isTimeBased = isTimeBasedExercise(exerciseDetails);
 
     const newExercise: WorkoutPlanExercise = {
       exerciseId,
-      ...(isCardio 
-        ? { durationSeconds: 1800 } // Default 30 minutes for cardio
+      // Default to time-based for cardio/planks, rep-based for others
+      // User can toggle after adding
+      ...(isTimeBased 
+        ? { 
+            sets: 3, // Sets for time-based exercises too
+            durationSeconds: exerciseDetails?.name.toLowerCase().includes('plank') ? 60 : 1800 // 60s for planks, 30min for cardio
+          }
         : { sets: 3, reps: 10 }      // Default sets/reps for strength
       ),
-      restSeconds: isCardio ? 0 : 60, // No rest for cardio
+      restSeconds: isTimeBased ? 0 : 60, // No rest for time-based exercises
       order: plan.exercises.length + 1,
       note: selectedDay, // Add the day/split info
     };
@@ -308,39 +323,118 @@ export default function EditWorkoutPlanScreen() {
                 </View>
 
                 <View style={styles.exerciseInputs}>
-                  {exerciseDetails.category === 'cardio' ? (
-                    // Duration input for cardio
-                    <View style={styles.inputGroup}>
-                      <Text style={styles.inputLabel}>Duration (min)</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={String(Math.floor((planEx.durationSeconds || 0) / 60))}
-                        onChangeText={(text) => {
-                          if (text === '') {
-                            handleUpdateExercise(index, { durationSeconds: 0 });
-                            return;
-                          }
-                          const minutes = parseInt(text);
-                          if (!isNaN(minutes) && minutes >= 0) {
-                            handleUpdateExercise(index, { durationSeconds: minutes * 60 });
-                          }
-                        }}
-                        keyboardType="number-pad"
-                        maxLength={3}
-                        selectTextOnFocus={true}
-                      />
-                    </View>
-                  ) : (
-                    // Sets and Reps for strength exercises
-                    <>
+                  {/* Toggle between time-based and rep-based */}
+                  <View style={styles.toggleContainer}>
+                    <TouchableOpacity
+                      style={[
+                        styles.toggleButton,
+                        !planEx.durationSeconds && (planEx.sets || planEx.reps) && styles.toggleButtonActive
+                      ]}
+                      onPress={() => {
+                        // Switch to rep-based - remove durationSeconds, keep sets, set reps
+                        if (!plan) return;
+                        const updatedExercises = [...plan.exercises];
+                        const exercise = { ...updatedExercises[index] };
+                        delete exercise.durationSeconds;
+                        updatedExercises[index] = {
+                          ...exercise,
+                          sets: planEx.sets || 3, // Keep sets
+                          reps: planEx.reps || 10,
+                        };
+                        setPlan({ ...plan, exercises: updatedExercises });
+                      }}
+                    >
+                      <Text style={[
+                        styles.toggleButtonText,
+                        !planEx.durationSeconds && (planEx.sets || planEx.reps) && styles.toggleButtonTextActive
+                      ]}>
+                        Reps
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.toggleButton,
+                        !!planEx.durationSeconds && styles.toggleButtonActive
+                      ]}
+                      onPress={() => {
+                        // Switch to time-based - remove reps, keep sets, set durationSeconds
+                        if (!plan) return;
+                        const updatedExercises = [...plan.exercises];
+                        const exercise = { ...updatedExercises[index] };
+                        delete exercise.reps;
+                        updatedExercises[index] = {
+                          ...exercise,
+                          sets: planEx.sets || 3, // Keep sets for time-based exercises
+                          durationSeconds: planEx.durationSeconds || 60,
+                        };
+                        setPlan({ ...plan, exercises: updatedExercises });
+                      }}
+                    >
+                      <Text style={[
+                        styles.toggleButtonText,
+                        !!planEx.durationSeconds && styles.toggleButtonTextActive
+                      ]}>
+                        Time
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {planEx.durationSeconds ? (
+                    // Sets and Duration for time-based exercises
+                    <View style={{ flexDirection: 'row', gap: 12 }}>
                       <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>Sets</Text>
                         <TextInput
                           style={styles.input}
-                          value={String(planEx.sets || 0)}
+                          value={planEx.sets ? String(planEx.sets) : ''}
                           onChangeText={(text) => {
                             if (text === '') {
-                              handleUpdateExercise(index, { sets: 1 });
+                              handleUpdateExercise(index, { sets: undefined });
+                              return;
+                            }
+                            const num = parseInt(text);
+                            if (!isNaN(num) && num > 0) {
+                              handleUpdateExercise(index, { sets: num });
+                            }
+                          }}
+                          keyboardType="number-pad"
+                          maxLength={2}
+                          selectTextOnFocus={true}
+                        />
+                      </View>
+
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Duration (sec)</Text>
+                        <TextInput
+                          style={styles.input}
+                          value={planEx.durationSeconds ? String(planEx.durationSeconds) : ''}
+                          onChangeText={(text) => {
+                            if (text === '') {
+                              handleUpdateExercise(index, { durationSeconds: undefined });
+                              return;
+                            }
+                            const seconds = parseInt(text);
+                            if (!isNaN(seconds) && seconds >= 0) {
+                              handleUpdateExercise(index, { durationSeconds: seconds });
+                            }
+                          }}
+                          keyboardType="number-pad"
+                          maxLength={4}
+                          selectTextOnFocus={true}
+                        />
+                      </View>
+                    </View>
+                  ) : (
+                    // Sets and Reps for rep-based exercises
+                    <View style={{ flexDirection: 'row', gap: 12 }}>
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Sets</Text>
+                        <TextInput
+                          style={styles.input}
+                          value={planEx.sets ? String(planEx.sets) : ''}
+                          onChangeText={(text) => {
+                            if (text === '') {
+                              handleUpdateExercise(index, { sets: undefined });
                               return;
                             }
                             const num = parseInt(text);
@@ -358,10 +452,10 @@ export default function EditWorkoutPlanScreen() {
                         <Text style={styles.inputLabel}>Reps</Text>
                         <TextInput
                           style={styles.input}
-                          value={String(planEx.reps || 0)}
+                          value={planEx.reps ? String(planEx.reps) : ''}
                           onChangeText={(text) => {
                             if (text === '') {
-                              handleUpdateExercise(index, { reps: 1 });
+                              handleUpdateExercise(index, { reps: undefined });
                               return;
                             }
                             const num = parseInt(text);
@@ -374,7 +468,7 @@ export default function EditWorkoutPlanScreen() {
                           selectTextOnFocus={true}
                         />
                       </View>
-                    </>
+                    </View>
                   )}
 
                   <View style={styles.inputGroup}>
@@ -691,8 +785,33 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   exerciseInputs: {
-    flexDirection: 'row',
     gap: 12,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    padding: 4,
+    marginBottom: 8,
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  toggleButtonActive: {
+    backgroundColor: '#667eea',
+  },
+  toggleButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+  },
+  toggleButtonTextActive: {
+    color: '#fff',
   },
   inputGroup: {
     flex: 1,

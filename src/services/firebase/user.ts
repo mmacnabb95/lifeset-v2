@@ -12,9 +12,27 @@ export interface UserProfile {
   profilePictureUrl?: string; // Firebase Storage URL for profile picture
   lastAllHabitsCompleteBonusDate?: string; // YYYY-MM-DD - Track when all-habits bonus was last awarded
   hasCompletedOnboarding?: boolean; // Track if user has seen onboarding
+  hasSeenTutorial?: boolean; // Track if user has seen the interactive tutorial
+  hasSeenWidgetPrompt?: boolean; // Track if user has seen the widget prompt
   lastActiveDate?: string;
   createdAt?: any;
   updatedAt?: any;
+  // Multi-tenant organisation fields (optional, backward compatible)
+  organisationId?: string | null;
+  role?: "member" | "staff" | "admin" | "employee";
+  mode?: string; // Derived from organisation.type
+  // Grace period fields (for admin-initiated removal)
+  removedAt?: any; // Timestamp when admin removed user
+  gracePeriodExpiresAt?: any; // Timestamp when grace period ends (7 days after removal)
+  removalType?: "admin" | "user"; // Track who initiated the removal
+  // CRM fields (for organisation members)
+  fullName?: string;
+  phone?: string;
+  address?: string;
+  dateOfBirth?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  notes?: string;
 }
 
 /**
@@ -202,6 +220,20 @@ export const getOnboardingStatus = async (userId: string): Promise<boolean> => {
   } catch (error) {
     console.error('Get onboarding status error:', error);
     return false;
+  }
+};
+
+/**
+ * Reset onboarding status (for testing purposes)
+ */
+export const resetOnboardingStatus = async (userId: string) => {
+  try {
+    await updateUserProfile(userId, {
+      hasCompletedOnboarding: false,
+    });
+  } catch (error) {
+    console.error('Reset onboarding status error:', error);
+    throw new Error('Failed to reset onboarding status');
   }
 };
 

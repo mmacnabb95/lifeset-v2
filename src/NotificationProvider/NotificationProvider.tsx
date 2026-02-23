@@ -19,11 +19,13 @@ import { Settings } from "../../../../types/domain/flat-types";
 //to test: https://expo.dev/notifications
 
 //show notifications whilst the app is open
+// Note: habitReminder.ts will override this to set shouldSetBadge: false
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true, // Show notification banner when app is in foreground
+    shouldShowList: true, // Show in notification list
     shouldPlaySound: true,
-    shouldSetBadge: true,
+    shouldSetBadge: false, // Changed to false to prevent red notification badge
   }),
 });
 

@@ -5,23 +5,23 @@ export const WorkoutsSlide = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.emoji}>💪</Text>
-        <Text style={styles.title}>Workout Plans</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.emoji} allowFontScaling={false}>💪</Text>
+        <Text style={styles.title} allowFontScaling={false}>Workout Plans</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           Follow structured workout programs or create your own custom routines
         </Text>
         <View style={styles.featureList}>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>📋</Text>
-            <Text style={styles.featureText}>Pre-built workout plans</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>📋</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Pre-built workout plans</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🎥</Text>
-            <Text style={styles.featureText}>Video exercise guides</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>🎥</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Video exercise guides</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>📈</Text>
-            <Text style={styles.featureText}>Track your progress</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>📈</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Track your progress</Text>
           </View>
         </View>
       </View>

@@ -4,6 +4,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { 
+  Auth,
   getAuth,
   initializeAuth, 
   getReactNativePersistence, 
@@ -35,7 +36,7 @@ export const db = getFirestore(app);
 
 // Initialize Auth with platform-specific persistence
 // Use try-catch in case auth is already initialized (prevents duplicate init error)
-let auth;
+let auth: Auth;
 try {
   auth = initializeAuth(app, {
     persistence: Platform.OS === 'web' 
@@ -57,7 +58,8 @@ try {
 export { auth };
 
 export const storage = getStorage(app);
-export const functions = getFunctions(app);
+// Initialize Functions with us-central1 region (matches deployed functions)
+export const functions = getFunctions(app, "us-central1");
 
 // Connect to emulators in development (optional)
 // Uncomment these lines to use Firebase emulators locally

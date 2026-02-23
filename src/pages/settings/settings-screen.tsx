@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator, Platform, Image } from "react-native";
 import { Button, ButtonTypes } from "src/components/common/button-simple";
 import { logOut } from "src/services/firebase/auth";
 import { useFirebaseUser } from "src/hooks/useFirebaseUser";
 import { useSubscription, restorePurchases } from "src/hooks/useSubscription";
 import { NotificationSettings } from "src/components/NotificationSettings";
+import { deleteAccount } from "src/services/firebase/account-deletion";
+import { useMode } from "src/hooks/useMode";
+import { useBranding } from "src/hooks/useBranding";
 
 export const SettingsScreen = ({ navigation }: { navigation: any }) => {
   const { user, userId } = useFirebaseUser();
   const { isSubscribed, isInTrial, expirationDate, loading: subLoading } = useSubscription();
+  const { organisation, isConsumerMode, loading: modeLoading } = useMode();
+  const { primaryColor, isBranded } = useBranding();
   const [restoring, setRestoring] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleLogout = () => {
     Alert.alert(
@@ -56,6 +62,73 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
     }
   };
 
+  const getSubscriptionReminder = () => {
+    if (Platform.OS === 'android') {
+      return 'If you have an active subscription, cancel it in Google Play (Play Store > Payments & subscriptions > Subscriptions).';
+    }
+    return 'If you have an active subscription, cancel it in your device settings (Settings > Apple ID > Subscriptions).';
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete Account',
+      `Are you sure you want to permanently delete your account? This action cannot be undone and will delete:\n\n• All your habits and progress\n• All journal entries\n• All workout plans and records\n• All your data\n\n⚠️ IMPORTANT: ${getSubscriptionReminder()}\n\nThis will permanently remove your account and all associated data.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            // Second confirmation
+            Alert.alert(
+              'Final Confirmation',
+              `This is your last chance to cancel. Your account and all data will be permanently deleted. This cannot be undone.\n\nRemember: ${getSubscriptionReminder()}`,
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Yes, Delete My Account',
+                  style: 'destructive',
+                  onPress: async () => {
+                    if (!userId) {
+                      Alert.alert('Error', 'Unable to identify your account');
+                      return;
+                    }
+
+                    try {
+                      setDeleting(true);
+                      await deleteAccount(userId);
+                      
+                      // Navigate to welcome screen
+                      navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Welcome' }],
+                      });
+                      
+                      Alert.alert(
+                        'Account Deleted',
+                        'Your account and all data have been permanently deleted.\n\nIf you had an active subscription, please cancel it in your device settings (Settings > Apple ID > Subscriptions) to avoid future charges.',
+                        [{ text: 'OK' }]
+                      );
+                    } catch (error: any) {
+                      console.error('Delete account error:', error);
+                      Alert.alert(
+                        'Deletion Failed',
+                        error.message || 'Failed to delete account. Please try again or contact support.',
+                        [{ text: 'OK' }]
+                      );
+                    } finally {
+                      setDeleting(false);
+                    }
+                  },
+                },
+              ]
+            );
+          },
+        },
+      ]
+    );
+  };
+
   const getSubscriptionStatus = () => {
     if (subLoading) return 'Loading...';
     if (!isSubscribed) return 'Free (7-Day Trial Available)';
@@ -75,7 +148,7 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, isBranded && { borderBottomWidth: 3, borderBottomColor: primaryColor }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
@@ -136,6 +209,53 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
 
+        {/* Organisation Section - Show for all users */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Organisation</Text>
+          <View style={styles.card}>
+            {modeLoading ? (
+              <View style={styles.settingItem}>
+                <Text style={styles.settingLabel}>🏢 Loading...</Text>
+                <ActivityIndicator size="small" color="#6366f1" />
+              </View>
+            ) : isConsumerMode ? (
+              // Show "Join Organisation" for Consumer Mode users
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={() => navigation.navigate('JoinOrganisation')}
+              >
+                <View>
+                  <Text style={styles.settingLabel}>🏢 Join Organisation</Text>
+                  <Text style={styles.settingSubtext}>Join a gym, studio, or corporate program</Text>
+                </View>
+                <Text style={styles.settingValue}>→</Text>
+              </TouchableOpacity>
+            ) : (
+              // Show "My Organisation" for organisation users
+              <TouchableOpacity 
+                style={styles.settingItem}
+                onPress={() => navigation.navigate('MyOrganisation')}
+              >
+                <View style={styles.settingItemLeft}>
+                  {organisation?.logoUrl ? (
+                    <>
+                      <Image
+                        source={{ uri: organisation.logoUrl }}
+                        style={styles.organisationSettingLogo}
+                        resizeMode="contain"
+                      />
+                      <Text style={styles.settingLabel}>My Organisation</Text>
+                    </>
+                  ) : (
+                    <Text style={styles.settingLabel}>🏢 My Organisation</Text>
+                  )}
+                </View>
+                <Text style={styles.settingValue}>→</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
         {/* Notifications Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Notifications</Text>
@@ -168,11 +288,30 @@ export const SettingsScreen = ({ navigation }: { navigation: any }) => {
           </View>
         </View>
 
+        {/* Account Actions */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Account</Text>
+          <View style={styles.card}>
+            <TouchableOpacity 
+              style={[styles.settingItem, styles.dangerItem]}
+              onPress={handleDeleteAccount}
+              disabled={deleting}
+            >
+              <Text style={[styles.settingLabel, styles.dangerText]}>
+                🗑️ Delete Account
+              </Text>
+              {deleting && <ActivityIndicator size="small" color="#F44336" />}
+              {!deleting && <Text style={[styles.settingValue, styles.dangerText]}>→</Text>}
+            </TouchableOpacity>
+          </View>
+        </View>
+
         {/* Logout Button */}
         <Button
           type={ButtonTypes.Primary}
           title="Logout"
           onPress={handleLogout}
+          primaryColor={isBranded ? primaryColor : undefined}
           style={styles.logoutButton}
         />
 
@@ -292,11 +431,26 @@ const styles = StyleSheet.create({
     color: '#999',
     marginTop: 4,
   },
+  settingSubtext: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 4,
+  },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
+  },
+  settingItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  organisationSettingLogo: {
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    marginRight: 10,
   },
   settingLabel: {
     fontSize: 16,
@@ -322,5 +476,12 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 14,
     color: '#999',
+  },
+  dangerItem: {
+    borderLeftWidth: 3,
+    borderLeftColor: '#F44336',
+  },
+  dangerText: {
+    color: '#F44336',
   },
 });

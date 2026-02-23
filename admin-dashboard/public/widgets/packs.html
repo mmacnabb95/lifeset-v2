@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pack Purchase</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .pack-card {
+      border: 2px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    .pack-card:hover {
+      border-color: #6366f1;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+    .pack-card h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .pack-card .price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6366f1;
+      margin: 10px 0;
+    }
+    .pack-card .description {
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .pack-card .details {
+      color: #555;
+      margin-bottom: 15px;
+    }
+    .btn {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #4f46e5;
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Purchase Class Pack</h1>
+    <div id="error" class="error" style="display: none;"></div>
+    <div id="success" class="success" style="display: none;"></div>
+    <div id="loading" class="loading">Loading packs...</div>
+    <div id="packs"></div>
+  </div>
+
+  <script>
+    // Get organisationId from URL or embed parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const organisationId = urlParams.get('organisationId') || new URLSearchParams(window.location.hash.substring(1)).get('organisationId');
+    const userId = urlParams.get('userId'); // Optional: if user is logged in
+    // Firebase Functions URL - Update with your actual region if different
+    const API_BASE = 'https://us-central1-lifeset-v2.cloudfunctions.net';
+
+    async function loadPacks() {
+      try {
+        // Fetch active packs
+        const response = await fetch(`${API_BASE}/getPublicPacks?organisationId=${organisationId}`);
+        const packs = await response.json();
+
+        document.getElementById('loading').style.display = 'none';
+
+        if (!packs || packs.length === 0) {
+          document.getElementById('packs').innerHTML = '<p>No packs available at this time.</p>';
+          return;
+        }
+
+        const packsHtml = packs.map(pack => `
+          <div class="pack-card">
+            <h3>${pack.name}</h3>
+            <div class="price">$${pack.price}</div>
+            ${pack.description ? `<div class="description">${pack.description}</div>` : ''}
+            <div class="details">
+              <strong>${pack.classCount}</strong> classes<br>
+              Valid for <strong>${pack.validityDays}</strong> days
+            </div>
+            <button class="btn" onclick="purchasePack('${pack.packId}')">
+              Purchase Pack
+            </button>
+          </div>
+        `).join('');
+
+        document.getElementById('packs').innerHTML = packsHtml;
+      } catch (error) {
+        document.getElementById('loading').style.display = 'none';
+        showError('Failed to load packs. Please try again later.');
+      }
+    }
+
+    async function purchasePack(packId) {
+      if (!userId) {
+        showError('Please log in to purchase a pack.');
+        return;
+      }
+
+      try {
+        const successUrl = `${window.location.origin}${window.location.pathname}?success=true&session_id={CHECKOUT_SESSION_ID}`;
+        const cancelUrl = `${window.location.origin}${window.location.pathname}?cancelled=true`;
+
+        const response = await fetch(`${API_BASE}/createPackCheckoutSession`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            organisationId,
+            packId,
+            userId,
+            successUrl,
+            cancelUrl,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+          // Redirect to Stripe Checkout
+          window.location.href = data.url;
+        } else {
+          showError('Failed to create checkout session.');
+        }
+      } catch (error) {
+        showError('An error occurred. Please try again.');
+      }
+    }
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Check for success/cancelled in URL
+    if (urlParams.get('success')) {
+      document.getElementById('success').textContent = 'Payment successful! Your pack is now active.';
+      document.getElementById('success').style.display = 'block';
+    } else if (urlParams.get('cancelled')) {
+      showError('Payment was cancelled.');
+    }
+
+    // Load packs on page load
+    if (organisationId) {
+      loadPacks();
+    } else {
+      document.getElementById('loading').style.display = 'none';
+      showError('Organisation ID is required.');
+    }
+  </script>
+</body>
+</html>
+

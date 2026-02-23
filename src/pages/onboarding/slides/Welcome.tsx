@@ -5,10 +5,10 @@ export const WelcomeSlide = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.emoji}>✨</Text>
-        <Text style={styles.title}>Welcome to LifeSet</Text>
-        <Text style={styles.subtitle}>
-          Your personal companion for building better habits, achieving fitness goals, and living your best life
+        <Text style={styles.emoji} allowFontScaling={false}>✨</Text>
+        <Text style={styles.title} allowFontScaling={false}>Welcome to LifeSet</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
+          Your personal companion for building better habits, achieving goals, and transforming your lifestyle.
         </Text>
       </View>
     </View>

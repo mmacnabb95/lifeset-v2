@@ -11,6 +11,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { signUp } from 'src/services/firebase/auth';
 import { createUserProfile } from 'src/services/firebase/user';
 
@@ -49,11 +50,11 @@ export const SignUpScreen = ({ navigation }: { navigation: any }) => {
       // Create user profile in Firestore
       await createUserProfile(user.uid, email.trim(), name.trim());
 
-      Alert.alert(
-        'Success!',
-        'Your account has been created. Welcome to LifeSet!',
-        [{ text: 'Continue', onPress: () => navigation.replace('Onboarding') }]
-      );
+      // Set flag so Onboarding screen knows to show Join Organisation first
+      await AsyncStorage.setItem('justSignedUp', Date.now().toString());
+
+      // Navigate to Onboarding - it will check the flag and show Join Organisation first
+      navigation.replace('Onboarding');
     } catch (error: any) {
       console.error('Sign up error:', error);
       Alert.alert('Sign Up Failed', error.message || 'Failed to create account');

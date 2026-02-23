@@ -5,23 +5,23 @@ export const HabitsSlide = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.emoji}>✅</Text>
-        <Text style={styles.title}>Track Your Habits</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.emoji} allowFontScaling={false}>✅</Text>
+        <Text style={styles.title} allowFontScaling={false}>Track Your Habits</Text>
+        <Text style={styles.subtitle} allowFontScaling={false}>
           Build lasting habits with daily tracking, streaks, and completion insights
         </Text>
         <View style={styles.featureList}>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>📊</Text>
-            <Text style={styles.featureText}>Visual progress tracking</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>📊</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Visual progress tracking</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🔥</Text>
-            <Text style={styles.featureText}>Maintain your streak</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>🔥</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Maintain your streak</Text>
           </View>
           <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🎯</Text>
-            <Text style={styles.featureText}>Set custom goals</Text>
+            <Text style={styles.featureIcon} allowFontScaling={false}>🎯</Text>
+            <Text style={styles.featureText} allowFontScaling={false}>Set custom goals</Text>
           </View>
         </View>
       </View>

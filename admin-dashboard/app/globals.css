@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  /* LifeSet brand colours - subtle admin theme */
+  --lifeset-primary: #4e8fea;
+  --lifeset-primary-light: #e8f0fc;
+  --lifeset-primary-dark: #3b7ad6;
+  --lifeset-teal: #26c6da;
+  --lifeset-teal-light: #e0f7fa;
+  --lifeset-accent: #6b7fd7;
+  --lifeset-bg: #f5f8fc;
+  --lifeset-sidebar: #fafbfd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Ensure form inputs have black text for readability */
+input,
+select,
+textarea {
+  color: #111827 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
+}
+
+/* LifeSet primary button - use across admin dashboard */
+.btn-lifeset {
+  @apply px-4 py-2 rounded-md font-medium transition-colors;
+  background-color: var(--lifeset-primary);
+  color: white;
+}
+.btn-lifeset:hover:not(:disabled) {
+  background-color: var(--lifeset-primary-dark);
+}
+.btn-lifeset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
