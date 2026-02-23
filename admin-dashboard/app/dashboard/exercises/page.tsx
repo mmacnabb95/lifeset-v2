@@ -38,7 +38,7 @@ function ExerciseModalContent({
   setNewExercise: React.Dispatch<React.SetStateAction<{ name: string; description: string; category: string; durationSeconds: number }>>;
   videoFile: File | null;
   videoError: string | null;
-  videoInputRef: React.RefObject<HTMLInputElement | null>;
+  videoInputRef: React.RefObject<HTMLInputElement>;
   handleVideoSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   editingExercise: { videoUrl?: string } | null;
   onCancel: () => void;

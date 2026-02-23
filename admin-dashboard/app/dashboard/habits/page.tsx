@@ -38,7 +38,7 @@ function HabitModalContent({
 }: {
   formHabit: { name: string; description: string; category: string; streakTarget: number; schedule: Record<string, boolean> };
   setFormHabit: React.Dispatch<React.SetStateAction<typeof formHabit>>;
-  toggleDay: (day: string) => void;
+  toggleDay: (day: keyof typeof DEFAULT_SCHEDULE) => void;
   saving: boolean;
   onCancel: () => void;
   onSave: () => void;
@@ -148,7 +148,13 @@ export default function HabitsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingHabit, setEditingHabit] = useState<OrganisationHabit | null>(null);
-  const [formHabit, setFormHabit] = useState({
+  const [formHabit, setFormHabit] = useState<{
+    name: string;
+    description: string;
+    category: string;
+    streakTarget: number;
+    schedule: Record<string, boolean>;
+  }>({
     name: "",
     description: "",
     category: "Fitness",
@@ -282,7 +288,7 @@ export default function HabitsPage() {
     });
   };
 
-  const toggleDay = (day: string) => {
+  const toggleDay = (day: keyof typeof DEFAULT_SCHEDULE) => {
     setFormHabit((prev) => ({
       ...prev,
       schedule: { ...prev.schedule, [day]: !prev.schedule[day] },
@@ -361,7 +367,7 @@ export default function HabitsPage() {
                         description: habit.description || "",
                         category: habit.category || "Fitness",
                         streakTarget: habit.streakTarget || 0,
-                        schedule: habit.schedule || { ...DEFAULT_SCHEDULE },
+                        schedule: { ...DEFAULT_SCHEDULE, ...(habit.schedule || {}) },
                       });
                       setShowEditModal(true);
                     }}

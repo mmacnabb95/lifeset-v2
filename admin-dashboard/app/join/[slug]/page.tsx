@@ -244,7 +244,7 @@ export default function JoinPage() {
                   }`}
                   style={
                     selectedMembershipId === m.membershipId
-                      ? { borderColor: primary, backgroundColor: `${primary}12`, ringColor: primary }
+                      ? { borderColor: primary, backgroundColor: `${primary}12`, boxShadow: `0 0 0 2px ${primary}` }
                       : {}
                   }
                 >
@@ -294,7 +294,7 @@ export default function JoinPage() {
                   }`}
                   style={
                     selectedPackId === p.packId
-                      ? { borderColor: primary, backgroundColor: `${primary}12`, ringColor: primary }
+                      ? { borderColor: primary, backgroundColor: `${primary}12`, boxShadow: `0 0 0 2px ${primary}` }
                       : {}
                   }
                 >

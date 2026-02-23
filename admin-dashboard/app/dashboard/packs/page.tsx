@@ -666,6 +666,7 @@ export default function PacksPage() {
                     setNewPack({
                       name: "",
                       description: "",
+                      features: "",
                       price: 0,
                       currency: "USD",
                       classCount: 10,
