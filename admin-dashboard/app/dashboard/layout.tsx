@@ -6,6 +6,7 @@ import { onAuthChange, logout } from "@/lib/auth";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase-client";
 import Link from "next/link";
+import { SUPPORT_CONFIG } from "@/lib/support-config";
 
 const NAV_ITEMS: { href: string; label: string; roles?: string[] }[] = [
   { href: "/dashboard", label: "Dashboard", roles: ["admin", "staff", "coach"] },
@@ -171,6 +172,15 @@ export default function DashboardLayout({
                 {organisation.name}
               </p>
             )}
+            <div className="mb-3">
+              <p className="text-xs font-medium text-gray-500 mb-1.5">Experiencing a problem?</p>
+              <a
+                href={`mailto:${SUPPORT_CONFIG.email}`}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Email
+              </a>
+            </div>
             <button
               onClick={handleLogout}
               className="w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900 py-2"
@@ -235,6 +245,15 @@ export default function DashboardLayout({
             {organisation && (
               <p className="text-sm text-gray-600 truncate mb-2">{organisation.name}</p>
             )}
+            <div className="mb-3">
+              <p className="text-xs font-medium text-gray-500 mb-1.5">Experiencing a problem?</p>
+              <a
+                href={`mailto:${SUPPORT_CONFIG.email}`}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Email
+              </a>
+            </div>
             <button
               onClick={handleLogout}
               className="w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900 py-2"
