@@ -19,6 +19,7 @@ import { expireMembershipsDaily } from "./api/expire-memberships";
 import { sendClassReminders } from "./api/send-class-reminders";
 import { completeWebSignup } from "./api/complete-web-signup";
 import { createCoachAccount } from "./api/create-coach-account";
+import { importMembers } from "./api/import-members";
 
 // Export all Cloud Functions
 export { 
@@ -49,5 +50,6 @@ export {
   sendClassReminders,
   completeWebSignup,
   createCoachAccount,
+  importMembers,
 };
 

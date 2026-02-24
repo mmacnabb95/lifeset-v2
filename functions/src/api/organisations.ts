@@ -1,20 +1,19 @@
 // Organisation CRUD endpoints (for admin dashboard)
 import { onRequest } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
+import cors from "cors";
 import { db, auth } from "../config";
 import { sendNewGymSignupNotification } from "../services/email";
 
+const corsHandler = cors({
+  origin: true,
+  methods: ["POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+});
+
 export const createOrganisation = onRequest(async (req, res) => {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  if (req.method === "OPTIONS") {
-    res.status(204).send("");
-    return;
-  }
-
-  if (req.method !== "POST") {
+  corsHandler(req, res, async () => {
+    if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
   }
@@ -112,5 +111,6 @@ export const createOrganisation = onRequest(async (req, res) => {
     console.error("Error creating organisation:", error);
     res.status(500).json({ error: "Internal server error", message: error.message });
   }
+  });
 });
 

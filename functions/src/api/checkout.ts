@@ -167,24 +167,33 @@ export const createMembershipCheckoutSession = onCall(
         };
       }
 
-      const session = await stripe.checkout.sessions.create({
+      const sessionConfig: any = {
         mode: isRecurring ? "subscription" : "payment", // Subscription for recurring, payment for one-time
         payment_method_types: ["card"],
         customer_email: email || undefined, // Pre-fill email in Stripe Checkout
         line_items: lineItems,
-        // Append session_id and purchaseId to successUrl (handle both ? and & cases)
         success_url: `${successUrl}${successUrl.includes('?') ? '&' : '?'}session_id={CHECKOUT_SESSION_ID}&purchaseId=${pendingPurchaseId}`,
         cancel_url: cancelUrl,
         client_reference_id: pendingPurchaseId,
         metadata: {
           organisationId,
           email: email || "",
-          userId: userId || "", // Optional: for existing users
+          userId: userId || "",
           membershipTierId,
           purchaseId: pendingPurchaseId,
           type: "membership",
         },
-      });
+      };
+
+      // Platform fee: 0.75% on top of Stripe fees
+      if (isRecurring) {
+        sessionConfig.subscription_data = { application_fee_percent: 0.75 };
+      } else {
+        const priceInCents = Math.round(membershipData.price * 100);
+        sessionConfig.payment_intent_data = { application_fee_amount: Math.round(priceInCents * 0.0075) };
+      }
+
+      const session = await stripe.checkout.sessions.create(sessionConfig);
 
       return {
         sessionId: session.id,
@@ -286,6 +295,7 @@ export const createPackCheckoutSession = onCall(
       packProductData.description = packDescription;
     }
 
+    const packPriceInCents = Math.round(packData.price * 100);
     const session = await stripe.checkout.sessions.create({
       mode: "payment", // One-time payment
       payment_method_types: ["card"],
@@ -295,19 +305,19 @@ export const createPackCheckoutSession = onCall(
           price_data: {
             currency: packData.currency.toLowerCase(),
             product_data: packProductData,
-            unit_amount: Math.round(packData.price * 100), // Convert to cents
+            unit_amount: packPriceInCents,
           },
           quantity: 1,
         },
       ],
-      // Append session_id and purchaseId to successUrl (handle both ? and & cases)
+      payment_intent_data: { application_fee_amount: Math.round(packPriceInCents * 0.0075) }, // 0.75% platform fee
       success_url: `${successUrl}${successUrl.includes('?') ? '&' : '?'}session_id={CHECKOUT_SESSION_ID}&purchaseId=${pendingPurchaseId}`,
       cancel_url: cancelUrl,
       client_reference_id: pendingPurchaseId,
       metadata: {
         organisationId,
         email: email || "",
-        userId: userId || "", // Optional: for existing users
+        userId: userId || "",
         packId,
         purchaseId: pendingPurchaseId,
         type: "pack",

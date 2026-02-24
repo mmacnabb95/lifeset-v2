@@ -139,6 +139,11 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
+          <p className="text-center text-sm">
+            <Link href="/forgot-password" className="font-medium text-lifeset-primary hover:text-lifeset-primary-dark">
+              Forgot password?
+            </Link>
+          </p>
           <p className="text-center text-sm text-gray-600">
             New gym?{" "}
             <Link href="/signup/gym" className="font-medium text-lifeset-primary hover:text-lifeset-primary-dark">

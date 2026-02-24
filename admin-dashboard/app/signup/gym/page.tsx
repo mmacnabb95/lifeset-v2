@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signup } from "@/lib/auth";
+import { signup, login } from "@/lib/auth";
 import { db } from "@/lib/firebase-client";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -39,21 +39,30 @@ export default function GymSignupPage() {
         throw new Error("Password must be at least 6 characters");
       }
 
-      // 1. Create Firebase Auth user
-      const user = await signup(email, password);
-
-      // 2. Create user document in Firestore (required before createOrganisation)
-      await setDoc(doc(db, "users", user.uid), {
-        email,
-        username: email.split("@")[0],
-        role: null,
-        xp: 0,
-        level: 1,
-        streak: 0,
-        hasCompletedOnboarding: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      // 1. Create Firebase Auth user (or sign in if email already exists from incomplete signup)
+      let user;
+      try {
+        user = await signup(email, password);
+        // 2. Create user document in Firestore (required before createOrganisation)
+        await setDoc(doc(db, "users", user.uid), {
+          email,
+          username: email.split("@")[0],
+          role: null,
+          xp: 0,
+          level: 1,
+          streak: 0,
+          hasCompletedOnboarding: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      } catch (err: any) {
+        // Email already in use - sign in and complete org creation (fixes orphaned users from failed signups)
+        if (err?.message?.includes("email-already-in-use") || err?.code === "auth/email-already-in-use") {
+          user = await login(email, password);
+        } else {
+          throw err;
+        }
+      }
 
       // 3. Call createOrganisation to create org and link user as admin
       const token = await user.getIdToken();

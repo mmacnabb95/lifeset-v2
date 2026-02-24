@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword, 
   signOut,
+  sendPasswordResetEmail,
   onAuthStateChanged,
   User
 } from "firebase/auth";
@@ -31,6 +32,14 @@ export const logout = async () => {
     await signOut(auth);
   } catch (error: any) {
     throw new Error(error.message || "Logout failed");
+  }
+};
+
+export const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error: any) {
+    throw new Error(error.message || "Failed to send reset email");
   }
 };
 

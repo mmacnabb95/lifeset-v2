@@ -150,7 +150,7 @@ export const createPublicCheckoutSession = onRequest(
           quantity: 1,
         }];
 
-        const session = await stripe.checkout.sessions.create({
+        const sessionConfig: any = {
           mode: isRecurring ? "subscription" : "payment",
           payment_method_types: ["card"],
           customer_email: email,
@@ -166,7 +166,13 @@ export const createPublicCheckoutSession = onRequest(
             purchaseId: pendingPurchaseId,
             type: "membership",
           },
-        });
+        };
+        if (isRecurring) {
+          sessionConfig.subscription_data = { application_fee_percent: 0.75 };
+        } else {
+          sessionConfig.payment_intent_data = { application_fee_amount: Math.round(membershipData.price * 100 * 0.0075) };
+        }
+        const session = await stripe.checkout.sessions.create(sessionConfig);
 
         res.json({ url: session.url, sessionId: session.id, pendingPurchaseId });
       } else if (packId) {
@@ -206,6 +212,7 @@ export const createPublicCheckoutSession = onRequest(
           description: packData.description?.trim() || `${packData.classCount} classes`,
         };
 
+        const packPriceInCents = Math.round(packData.price * 100);
         const session = await stripe.checkout.sessions.create({
           mode: "payment",
           payment_method_types: ["card"],
@@ -214,10 +221,11 @@ export const createPublicCheckoutSession = onRequest(
             price_data: {
               currency: packData.currency?.toLowerCase() || "eur",
               product_data: productData,
-              unit_amount: Math.round(packData.price * 100),
+              unit_amount: packPriceInCents,
             },
             quantity: 1,
           }],
+          payment_intent_data: { application_fee_amount: Math.round(packPriceInCents * 0.0075) }, // 0.75% platform fee
           success_url: `${successUrl}${successUrl.includes("?") ? "&" : "?"}session_id={CHECKOUT_SESSION_ID}&purchaseId=${pendingPurchaseId}&email=${encodeURIComponent(email)}&type=pack`,
           cancel_url: cancelUrl,
           client_reference_id: pendingPurchaseId,

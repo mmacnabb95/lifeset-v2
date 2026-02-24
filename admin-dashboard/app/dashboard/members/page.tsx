@@ -100,6 +100,16 @@ export default function MembersPage() {
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [payAtDeskMode, setPayAtDeskMode] = useState(false);
 
+  // Import members (Mindbody/Glofox-style CSV migration)
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importCsvHeaders, setImportCsvHeaders] = useState<string[]>([]);
+  const [importCsvRows, setImportCsvRows] = useState<string[][]>([]);
+  const [importColumnMap, setImportColumnMap] = useState<Record<string, string>>({});
+  const [importSendWelcomeEmails, setImportSendWelcomeEmails] = useState(false);
+  const [importDefaultTierId, setImportDefaultTierId] = useState<string>("");
+  const [importing, setImporting] = useState(false);
+  const [importResults, setImportResults] = useState<{ summary: { created: number; skipped: number; errors: number; total: number }; results: { email: string; status: string; inviteCode?: string; message?: string }[] } | null>(null);
+
   useEffect(() => {
     loadMembers();
     loadInvites();
@@ -1036,6 +1046,124 @@ export default function MembersPage() {
     }
   };
 
+  /** Parse CSV text - handles quoted fields (Mindbody/Glofox export style) */
+  const parseCSV = (text: string): { headers: string[]; rows: string[][] } => {
+    const lines = text.split(/\r?\n/).filter((l) => l.trim());
+    if (lines.length === 0) return { headers: [], rows: [] };
+    const parseLine = (line: string): string[] => {
+      const result: string[] = [];
+      let current = "";
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') inQuotes = !inQuotes;
+        else if (c === "," && !inQuotes) {
+          result.push(current.trim());
+          current = "";
+        } else current += c;
+      }
+      result.push(current.trim().replace(/^"|"$/g, ""));
+      return result;
+    };
+    const headers = parseLine(lines[0]);
+    const rows = lines.slice(1).map(parseLine).filter((r) => r.some((c) => c.length > 0));
+    return { headers, rows };
+  };
+
+  /** Auto-detect common Mindbody/Glofox column names */
+  const autoDetectColumnMap = (headers: string[]): Record<string, string> => {
+    const map: Record<string, string> = {};
+    const lower = (h: string) => h.toLowerCase().trim();
+    for (const h of headers) {
+      const l = lower(h);
+      if (!map.email && (l === "email" || l === "e-mail" || l === "email address" || l.includes("email"))) map.email = h;
+      else if (!map.fullName && (l === "name" || l === "full name" || l === "client name" || l === "member name")) map.fullName = h;
+      else if (!map.fullName && (l === "first name" || l === "firstname")) map.fullName = h; // Will combine with last name if present
+      else if (!map.fullName && (l === "last name" || l === "lastname")) map.fullName = h;
+      else if (!map.phone && (l === "phone" || l === "mobile" || l === "mobile phone" || l === "phone number" || l.includes("phone"))) map.phone = h;
+      else if (!map.membershipExpiresAt && (l === "membership end date" || l === "end date" || l === "expiry" || l === "expiration date" || l === "expires" || l.includes("expir"))) map.membershipExpiresAt = h;
+    }
+    // If we have first + last but not fullName, use first for fullName (will combine in UI)
+    if (!map.fullName && headers.some((x) => lower(x) === "first name")) {
+      const fn = headers.find((x) => lower(x) === "first name");
+      const ln = headers.find((x) => lower(x) === "last name");
+      if (fn) map.fullName = ln ? `${fn} + ${ln}` : fn;
+    }
+    return map;
+  };
+
+  const handleImportFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const { headers, rows } = parseCSV(text);
+      setImportCsvHeaders(headers);
+      setImportCsvRows(rows);
+      setImportColumnMap(autoDetectColumnMap(headers));
+      setImportResults(null);
+    };
+    reader.readAsText(file, "UTF-8");
+    e.target.value = "";
+  };
+
+  const getImportPreviewRows = (): { email: string; fullName?: string; phone?: string; membershipTierId?: string; membershipExpiresAt?: string }[] => {
+    const emailIdx = importColumnMap.email ? importCsvHeaders.indexOf(importColumnMap.email) : -1;
+    const fullNameIdx = importColumnMap.fullName ? importCsvHeaders.indexOf(importColumnMap.fullName) : -1;
+    const phoneIdx = importColumnMap.phone ? importCsvHeaders.indexOf(importColumnMap.phone) : -1;
+    const expiryIdx = importColumnMap.membershipExpiresAt ? importCsvHeaders.indexOf(importColumnMap.membershipExpiresAt) : -1;
+    const fullNameParts = importColumnMap.fullName?.split(" + ").map((s) => s.trim()).filter(Boolean) || [];
+    const fnIdx = fullNameParts[0] ? importCsvHeaders.indexOf(fullNameParts[0]) : -1;
+    const lnIdx = fullNameParts[1] ? importCsvHeaders.indexOf(fullNameParts[1]) : -1;
+
+    return importCsvRows.map((row) => {
+      const email = emailIdx >= 0 ? (row[emailIdx] || "").trim() : "";
+      let fullName = "";
+      if (fullNameIdx >= 0) fullName = (row[fullNameIdx] || "").trim();
+      else if (fnIdx >= 0 || lnIdx >= 0) fullName = [fnIdx >= 0 ? row[fnIdx] : "", lnIdx >= 0 ? row[lnIdx] : ""].filter(Boolean).join(" ").trim();
+      const phone = phoneIdx >= 0 ? (row[phoneIdx] || "").trim() : undefined;
+      const membershipExpiresAt = expiryIdx >= 0 ? (row[expiryIdx] || "").trim() || undefined : undefined;
+      const membershipTierId = importDefaultTierId && membershipExpiresAt ? importDefaultTierId : undefined;
+      return { email, fullName: fullName || undefined, phone, membershipTierId, membershipExpiresAt };
+    }).filter((r) => r.email);
+  };
+
+  const handleRunImport = async () => {
+    if (!organisationId) return;
+    const rows = getImportPreviewRows();
+    if (rows.length === 0) {
+      alert("No valid rows with email. Please map the Email column.");
+      return;
+    }
+    setImporting(true);
+    setImportResults(null);
+    try {
+      const importMembersFn = httpsCallable(functions, "importMembers");
+      const result = await importMembersFn({
+        organisationId,
+        members: rows.map((r) => ({
+          email: r.email,
+          fullName: r.fullName,
+          phone: r.phone,
+          membershipTierId: r.membershipTierId,
+          membershipExpiresAt: r.membershipExpiresAt,
+        })),
+        sendWelcomeEmails: importSendWelcomeEmails,
+      });
+      const data = result.data as any;
+      setImportResults({ summary: data.summary, results: data.results });
+      if (data.summary?.created > 0) {
+        await loadMembers();
+        await loadInvites();
+      }
+    } catch (err: any) {
+      alert(`Import failed: ${err.message || err}`);
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const filteredMembers = members.filter((member) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -1129,6 +1257,19 @@ export default function MembersPage() {
                     className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                   >
                     {showInvitesList ? "Hide" : "Show"} Invite Codes ({invites.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowImportModal(true);
+                      setShowMoreMenu(false);
+                      setImportResults(null);
+                      setImportCsvHeaders([]);
+                      setImportCsvRows([]);
+                      setImportColumnMap({});
+                    }}
+                    className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 border-t border-gray-100"
+                  >
+                    📥 Import Members (CSV)
                   </button>
                 </div>
               </>
@@ -2326,6 +2467,224 @@ export default function MembersPage() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import Members Modal (Mindbody/Glofox-style CSV migration) */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white mb-20">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">📥 Import Members (CSV)</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Migrate members from Mindbody, Glofox, or other CRMs. Upload a CSV with Email (required), Name, Phone, and optional Membership End Date.
+            </p>
+
+            {importCsvHeaders.length === 0 ? (
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleImportFileSelect}
+                  className="hidden"
+                  id="import-csv-input"
+                />
+                <label
+                  htmlFor="import-csv-input"
+                  className="cursor-pointer text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Choose CSV file to upload
+                </label>
+                <p className="mt-2 text-xs text-gray-500">
+                  Supports Mindbody (Reports → Mailing Lists), Glofox, and similar exports
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">
+                    {importCsvRows.length} rows, {importCsvHeaders.length} columns
+                  </span>
+                  <button
+                    onClick={() => { setImportCsvHeaders([]); setImportCsvRows([]); setImportColumnMap({}); setImportResults(null); }}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    Choose different file
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email column *</label>
+                    <select
+                      value={importColumnMap.email || ""}
+                      onChange={(e) => setImportColumnMap({ ...importColumnMap, email: e.target.value })}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">— Select —</option>
+                      {importCsvHeaders.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Name column</label>
+                    <select
+                      value={importColumnMap.fullName || ""}
+                      onChange={(e) => setImportColumnMap({ ...importColumnMap, fullName: e.target.value })}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">— Skip —</option>
+                      {importCsvHeaders.some((x) => x.toLowerCase().includes("first")) && importCsvHeaders.some((x) => x.toLowerCase().includes("last")) && (
+                        <option value={`${importCsvHeaders.find((x) => /first\s*name/i.test(x)) || ""} + ${importCsvHeaders.find((x) => /last\s*name/i.test(x)) || ""}`}>
+                          First Name + Last Name
+                        </option>
+                      )}
+                      {importCsvHeaders.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone column</label>
+                    <select
+                      value={importColumnMap.phone || ""}
+                      onChange={(e) => setImportColumnMap({ ...importColumnMap, phone: e.target.value })}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">— Skip —</option>
+                      {importCsvHeaders.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Membership end date</label>
+                    <select
+                      value={importColumnMap.membershipExpiresAt || ""}
+                      onChange={(e) => setImportColumnMap({ ...importColumnMap, membershipExpiresAt: e.target.value })}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">— Skip —</option>
+                      {importCsvHeaders.map((h) => (
+                        <option key={h} value={h}>{h}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="import-send-emails"
+                    checked={importSendWelcomeEmails}
+                    onChange={(e) => setImportSendWelcomeEmails(e.target.checked)}
+                    className="rounded border-gray-300"
+                  />
+                  <label htmlFor="import-send-emails" className="text-sm text-gray-700">
+                    Send welcome emails with invite codes
+                  </label>
+                </div>
+
+                {importColumnMap.membershipExpiresAt && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Default membership tier (for rows with expiry date)</label>
+                    <select
+                      value={importDefaultTierId}
+                      onChange={(e) => setImportDefaultTierId(e.target.value)}
+                      className="block w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">— No membership —</option>
+                      {membershipTiers.map((tier) => (
+                        <option key={tier.membershipId} value={tier.membershipId}>
+                          {tier.name}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                      If set, imported members with an expiry date will get this tier
+                    </p>
+                  </div>
+                )}
+
+                {getImportPreviewRows().length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Preview ({getImportPreviewRows().length} rows with email)</h4>
+                    <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-md">
+                      <table className="min-w-full text-sm">
+                        <thead className="bg-gray-50 sticky top-0">
+                          <tr>
+                            <th className="px-3 py-2 text-left font-medium text-gray-600">Email</th>
+                            <th className="px-3 py-2 text-left font-medium text-gray-600">Name</th>
+                            <th className="px-3 py-2 text-left font-medium text-gray-600">Phone</th>
+                            <th className="px-3 py-2 text-left font-medium text-gray-600">Expiry</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {getImportPreviewRows().slice(0, 20).map((r, i) => (
+                            <tr key={i}>
+                              <td className="px-3 py-1.5">{r.email}</td>
+                              <td className="px-3 py-1.5">{r.fullName || "—"}</td>
+                              <td className="px-3 py-1.5">{r.phone || "—"}</td>
+                              <td className="px-3 py-1.5">{r.membershipExpiresAt || "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {getImportPreviewRows().length > 20 && (
+                        <p className="px-3 py-2 text-xs text-gray-500 bg-gray-50">
+                          … and {getImportPreviewRows().length - 20} more
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {importResults && (
+                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">Import results</h4>
+                    <p className="text-sm text-gray-600">
+                      Created: {importResults.summary.created} · Skipped: {importResults.summary.skipped} · Errors: {importResults.summary.errors}
+                    </p>
+                    {importResults.results.some((r) => r.status === "created" && r.inviteCode) && (
+                      <details className="mt-2">
+                        <summary className="text-sm text-blue-600 cursor-pointer">View invite codes</summary>
+                        <div className="mt-2 max-h-32 overflow-y-auto text-xs font-mono space-y-1">
+                          {importResults.results.filter((r) => r.status === "created" && r.inviteCode).map((r, i) => (
+                            <div key={i}>{r.email} → {r.inviteCode}</div>
+                          ))}
+                        </div>
+                      </details>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    onClick={() => { setShowImportModal(false); setImportResults(null); setImportCsvHeaders([]); setImportCsvRows([]); }}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                  >
+                    {importResults ? "Close" : "Cancel"}
+                  </button>
+                  {!importResults && (
+                    <button
+                      onClick={handleRunImport}
+                      disabled={importing || !importColumnMap.email || getImportPreviewRows().length === 0}
+                      className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {importing ? "Importing…" : `Import ${getImportPreviewRows().length} members`}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={() => { setShowImportModal(false); setImportResults(null); setImportCsvHeaders([]); setImportCsvRows([]); }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}
